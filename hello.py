@@ -1,9 +1,6 @@
-from flask import Flask
 import sys
 import os
-
 import site
-
 
 # Add the site-packages of the chosen virtualenv to work with
 site.addsitedir('/var/www/env1/lib/python3.4/site-packages')
@@ -16,6 +13,7 @@ with open(activate_env) as f:
     code = compile(f.read(), activate_env, 'exec')
     exec(code, dict(__file__=activate_env))
 
+from flask import Flask
 import feedparser
 app = Flask(__name__)
 
