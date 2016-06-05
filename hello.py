@@ -1,6 +1,17 @@
 from flask import Flask
 import sys
+import os
 import feedparser
+import site
+
+
+# Add the site-packages of the chosen virtualenv to work with
+site.addsitedir('/root/.virtualenvs/env1/lib/python3.4/site-packages')
+
+# Activate your virtual env
+activate_env=os.path.expanduser("/root/.virtualenvs/env1/bin/activate_this.py")
+# execfile(activate_env, dict(__file__=activate_env))
+exec(compile(open(activate_env, "rb").read(), activate_env, 'exec'), dict(__file__=activate_env))
 
 app = Flask(__name__)
 
