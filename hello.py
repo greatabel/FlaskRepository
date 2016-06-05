@@ -4,7 +4,6 @@ import site
 
 # Add the site-packages of the chosen virtualenv to work with
 site.addsitedir('/var/www/env1/lib/python3.4/site-packages')
-
 # Activate your virtual env
 activate_env=os.path.expanduser("/var/www/env1/bin/activate_this.py")
 # execfile(activate_env, dict(__file__=activate_env))
