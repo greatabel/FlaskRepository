@@ -6,7 +6,7 @@
     <META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <style type="text/css">
 body { margin: 0px; overflow: hidden; }
-canvas { border: 1px solid yellow; }
+canvas { border: 2px solid yellow; }
 </style>
 
 <!--  
@@ -47,7 +47,7 @@ var previous_touches = [];
 
   
 
-
+canvas_int();
 
 
   function drawScreen() {
@@ -74,10 +74,8 @@ var previous_touches = [];
     // function eventSheetLoaded() {
     //     drawScreen();
     // };
-
-
-function update(touches) {
-  if (updateStarted) return;
+    function canvas_int() {
+        if (updateStarted) return;
   updateStarted = true;
   var nw = window.innerWidth;
   var nh = window.innerHeight;
@@ -89,6 +87,25 @@ function update(touches) {
     canvas.width = w;
     canvas.height = h;
   }
+  ctx.clearRect(0, 0, w, h);
+
+    }
+
+
+function update(touches) {
+  // if (updateStarted) return;
+  // updateStarted = true;
+  // var nw = window.innerWidth;
+  // var nh = window.innerHeight;
+  // if ((w != nw) || (h != nh)) {
+  //   w = nw ;
+  //   h = nh - 120;
+  //   canvas.style.width = w+'px';
+  //   canvas.style.height = h+'px';
+  //   canvas.width = w;
+  //   canvas.height = h;
+  // }
+  canvas_int();
   ctx.clearRect(0, 0, w, h);
   var i, len = touches.length;
   if (len > 3) {
