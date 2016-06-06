@@ -40,9 +40,9 @@ var previous_touches = [];
     var counter=0;
   var tileSheet=new Image();
   // tileSheet.addEventListener('load', eventSheetLoaded , false);
-  var imagepath = '{{ url_for('static', filename = '/images/ships.png') }}';
-  document.getElementById("test").innerHTML = "test:" + imagepath;
-  tileSheet.src= imagepath;
+  // var imagepath = '{{ url_for('static', filename = '/images/ships.png') }}';
+  // document.getElementById("test").innerHTML = "test:" + imagepath;
+  // tileSheet.src= imagepath;
 
   
 
@@ -323,5 +323,6 @@ var temp = 0;
 移动幅度：
 <div id="content">content here</div>
 <div id="test"></div>
+<img src="{{ url_for('static', filename = '/images/ships.png') }}"/>
 </body>
 </html>
