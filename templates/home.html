@@ -38,8 +38,8 @@ var previous_touches = [];
       var context ;
 
     var counter=0;
-  var tileSheet=new Image();
-  tileSheet = document.getElementById('myimg');
+  // var tileSheet=new Image();
+  var tileSheet = document.getElementById('myimg');
   // tileSheet.addEventListener('load', eventSheetLoaded , false);
   // var imagepath = '{{ url_for('static', filename = '/images/ships.png') }}';
   // document.getElementById("test").innerHTML = "test:" + imagepath;
@@ -227,8 +227,9 @@ function moveDown(){
 function ol() {
   canvas = document.getElementById('canvas');
   ctx = canvas.getContext('2d');
-       tileSheet=new Image();
-         tileSheet.src="ships.png";
+       // tileSheet=new Image();
+       //   tileSheet.src="ships.png";
+         tileSheet = document.getElementById('myimg');
   update(touches);
   // timer = setInterval(update, 200);
   // var timer1 = setInterval(drawScreen, 200);
