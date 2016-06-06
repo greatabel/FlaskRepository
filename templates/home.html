@@ -40,7 +40,7 @@ var previous_touches = [];
     var counter=0;
   var tileSheet=new Image();
   // tileSheet.addEventListener('load', eventSheetLoaded , false);
-  tileSheet.src= '{{ url_for('static', filename = '/images/ships.png') }}';
+  tileSheet.src= '{{ url_for('static', filename = 'images/ships.png') }}';
   
 
 
@@ -319,6 +319,6 @@ var temp = 0;
 
 移动幅度：
 <div id="content">content here</div>
-<div>{{ url_for('static', filename = '/images/ships.png') }}</div>
+<div>{{ url_for('static', filename = 'images/ships.png') }}</div>
 </body>
 </html>
