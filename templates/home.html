@@ -40,7 +40,8 @@ var previous_touches = [];
     var counter=0;
   var tileSheet=new Image();
   // tileSheet.addEventListener('load', eventSheetLoaded , false);
-  tileSheet.src= '{{ url_for('static', filename = 'images/ships.png') }}';
+  var imagepath = {{ url_for('static', filename = 'images/ships.png') }};
+  tileSheet.src= '10.174.141.68' +imagepath;
   
 
 
