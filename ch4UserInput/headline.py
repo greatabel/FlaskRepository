@@ -94,4 +94,4 @@ def get_rate(frm, to):
 
 
 if __name__ == "__main__":
-    app.run(port=50001, debug=True)
+    app.run(port=50005, debug=True)
