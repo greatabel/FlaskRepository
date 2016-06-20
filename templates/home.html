@@ -96,7 +96,8 @@ function update(touches) {
   if (len > 3) {
     len = 3;
   }
-  var temp = '';
+  // var temp = '';
+  
   ctx.beginPath();
 
 
@@ -137,7 +138,7 @@ var cx = document.querySelector("canvas").getContext("2d");
     // ctx.strokeStyle = "rgba(0, 0, 200, 0.8)";
    
     console.log('＃' + px +',' + py);
-    temp += (i+'h:' + px +',' + py);
+    // temp += (i+'h:' + px +',' + py);
     // document.getElementById("content").innerHTML =  document.getElementById("content").innerHTML ＋ ',px=' +px +',py='+py;
   }
 
@@ -193,7 +194,7 @@ var cx = document.querySelector("canvas").getContext("2d");
 
   
 
-    temp += 'lena:'+ a +'r:' +r + 'radio:' + window.devicePixelRatio
+    // temp += 'lena:'+ a +'r:' +r + 'radio:' + window.devicePixelRatio
 
 
   }
@@ -274,6 +275,7 @@ var temp = 0;
 
                 touches = evt.touches;
                 if(touches.length == 3) {
+                  temp = 0;
                   previous_touches = touches
                   yA = centerY;
                   yB = centerY;
