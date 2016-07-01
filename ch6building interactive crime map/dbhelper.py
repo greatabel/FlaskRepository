@@ -20,10 +20,31 @@ class DBHelper:
         finally:
             connection.close()
 
+    def get_measure(self):
+        connection = self.connect()
+        try:
+            query = "SELECT * FROM Measure;"
+            with connection.cursor() as cursor:
+                cursor.execute(query)
+            return cursor.fetchall()
+        finally:
+            connection.close()
+
+    def add_measure(self, args):
+        connection = self.connect()
+        try:
+            query = "insert Measure(rawdataid, data, deviceid,createdate) values(%s, %s, %s, now());"
+            with connection.cursor() as cursor:
+                cursor.execute(query, (4, args['data'], args['deviceid']))
+                connection.commit()
+        finally:
+            connection.close()
+
     def add_input(self, data):
         connection = self.connect()
         try:
             query = "INSERT INTO crimes (description) VALUES (%s);"
+            print('query=', query)
             with connection.cursor() as cursor:
                 cursor.execute(query, data)
                 connection.commit()
