@@ -12,8 +12,8 @@ def login():
     password = request.form.get("password")
     print('#',email,password)
 
-    if email is not None and password is not None:
-        return redirect(url_for('account'))
+    if  email  and  password and (email == "abel") :
+        return redirect(url_for('measure'))
     return home()
 
 @app.route("/logout")
@@ -23,9 +23,13 @@ def logout():
     return redirect(url_for("home"))
 
 
-@app.route("/account")
-def account():
-    return "You are logged in"
+@app.route("/measure")
+def measure():
+    return render_template("measure.html")
+
+@app.route("/history")
+def history():
+    return render_template("history.html")
 
 
 @app.route("/register", methods=["POST"])
