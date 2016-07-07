@@ -20,25 +20,48 @@ class DBHelper:
         finally:
             connection.close()
 
-    def get_measure(self):
+    def get_rawmeasure(self, userid):
         connection = self.connect()
         try:
-            query = "SELECT * FROM Measure;"
+            query = "SELECT * FROM MeasureRaw;"
+            if userid is not None:
+                query = "SELECT MeasureRaw.* FROM MeasureRaw,Patient_User " \
+                        "where MeasureRaw.patientid = Patient_User.patientid and Patient_User.userid=" + userid + ";"
             with connection.cursor() as cursor:
                 cursor.execute(query)
             return cursor.fetchall()
         finally:
             connection.close()
 
-    def add_measure(self, args):
+    def add_rawmeasure(self, args):
         connection = self.connect()
         try:
-            query = "insert Measure(rawdataid, data, deviceid,createdate) values(%s, %s, %s, now());"
+            query = "insert MeasureRaw( rawdata, patientid, whicheye, createdate) values(%s, %s, %s, now());"
             with connection.cursor() as cursor:
-                cursor.execute(query, (4, args['data'], args['deviceid']))
+                cursor.execute(query, ( args['rawdata'], 0,args['whicheye']))
                 connection.commit()
         finally:
             connection.close()
+
+    # def get_measure(self):
+    #     connection = self.connect()
+    #     try:
+    #         query = "SELECT * FROM Measure;"
+    #         with connection.cursor() as cursor:
+    #             cursor.execute(query)
+    #         return cursor.fetchall()
+    #     finally:
+    #         connection.close()
+
+    # def add_measure(self, args):
+    #     connection = self.connect()
+    #     try:
+    #         query = "insert Measure(rawdataid, data, deviceid,createdate) values(%s, %s, %s, now());"
+    #         with connection.cursor() as cursor:
+    #             cursor.execute(query, (4, args['data'], args['deviceid']))
+    #             connection.commit()
+    #     finally:
+    #         connection.close()
 
     def add_input(self, data):
         connection = self.connect()
