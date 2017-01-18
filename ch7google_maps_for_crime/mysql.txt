@@ -1,0 +1,32 @@
+use crimemap;
+
+CREATE TABLE IF NOT EXISTS crimemap.Measure (
+     measureid int NOT NULL AUTO_INCREMENT,
+     rawdataid int,
+     data VARCHAR(100),
+     deviceid VARCHAR(100),
+     createdate TIMESTAMP,
+     PRIMARY KEY (measureid)
+     )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+CREATE TABLE IF NOT EXISTS crimemap.MeasureRaw  (
+     rawdataid int NOT NULL AUTO_INCREMENT,
+     rawdata VARCHAR(100),
+     patientid int,
+     whicheye  boolean not null default 0,
+     createdate TIMESTAMP,
+     PRIMARY KEY (rawdataid)
+     )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+CREATE TABLE IF NOT EXISTS crimemap.Patient_User   (
+     patientid int ,
+     userid int,
+      createdate TIMESTAMP,
+     PRIMARY KEY (patientid, userid)
+     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+# test data
+# insert Measure(rawdataid, data, deviceid,createdate) values(3,'250,151,152,153','88DAC8E9-08E5-81E5-D7AB-182B79D30698', now());
+# insert MeasureRaw(rawdata, patientid, whicheye,createdate) values('250,151,152,153',0, false, now());
+# insert Patient_User(patientid, userid, createdate) values(0,0,now());
