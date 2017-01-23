@@ -4,16 +4,15 @@
       <title>Crime Map</title>
     </head>
 
+     <link type="text/css" rel="stylesheet" href="{{url_for('static', filename='css/style.css') }}" /> 
+
     <h1>Crime Map</h1>
     <form action="/add" method="POST">
       <input type="text" name="userinput">
       <input type="submit" value="Submit">
     </form>
     <a href="/clear">clear</a>
-        
-    {% for userinput in data %}
-      <p>{{userinput}}</p>
-    {% endfor %}
+  
     
   </body>
 </html>
