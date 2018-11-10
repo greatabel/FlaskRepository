@@ -6,3 +6,8 @@ app = Flask(__name__)
 @app.route('/hello')
 def index():
     return '<h1>Hello Flask!</h1>'
+
+
+@app.route('/greet/<name>')
+def greet(name):
+    return '<h1>Hello, %s!</h>' % name
