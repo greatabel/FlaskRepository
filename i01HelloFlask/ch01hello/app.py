@@ -12,3 +12,8 @@ def index():
 @app.route('/greet/<name>')
 def greet(name):
     return '<h1>Hello, %s!</h>' % name
+
+@app.route('/greet0')
+@app.route('/greet0/<name>')
+def greet0(name='Programmer'):
+    return '<h1>Hello0, %s!</h>' % name
