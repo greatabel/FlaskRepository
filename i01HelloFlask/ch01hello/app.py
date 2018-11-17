@@ -2,10 +2,19 @@ from flask import Flask
 
 app = Flask(__name__)
 
+app.config['ADMIN_NAME'] = 'Peter'
+
+app.config.update(
+    TESTING=True,
+    SECRET_KEY='123test'
+    )
+
+
 @app.route('/hi')
 @app.route('/hello')
 def index():
-    return '<h1>Hello Flask!</h1>'
+    value = app.config['ADMIN_NAME']
+    return '<h1>Hello Flask! ' + value + '</h1>'
 
 
 @app.route('/greet', defaults={'name': 'Programmer'})
