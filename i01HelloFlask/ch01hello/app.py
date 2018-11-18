@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, url_for
 
 app = Flask(__name__)
 
@@ -9,6 +9,7 @@ app.config.update(
     SECRET_KEY='123test'
     )
 
+# print('url_for(index)=', url_for('index'))
 
 @app.route('/hi')
 @app.route('/hello')
@@ -25,4 +26,5 @@ def greet(name):
 @app.route('/greet0')
 @app.route('/greet0/<name>')
 def greet0(name='Programmer'):
+    print('url_for(index)=', url_for('index'))
     return '<h1>Hello0, %s!</h>' % name
