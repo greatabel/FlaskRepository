@@ -1,0 +1,11 @@
+flake8
+Flask
+Flask-Caching
+Flask-Cors
+Flask-Limiter
+Flask-Migrate
+Flask-RESTful
+Flask-Script
+Flask-SQLAlchemy
+itsdangerous
+Jinja2
