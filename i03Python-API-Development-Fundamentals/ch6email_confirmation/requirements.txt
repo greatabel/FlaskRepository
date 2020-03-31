@@ -1,0 +1,11 @@
+Flask
+Flask-RESTful
+Flask-SQLAlchemy
+Flask-Migrate
+Flask-JWT-Extended
+httpie
+itsdangerous
+marshmallow
+passlib
+PyMySQL
+webargs

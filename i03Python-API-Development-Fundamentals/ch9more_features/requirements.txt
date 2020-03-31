@@ -1,0 +1,15 @@
+Flask
+Flask-Caching
+Flask-RESTful
+Flask-Limiter
+Flask-SQLAlchemy
+Flask-Migrate
+Flask-JWT-Extended
+Flask-Uploads
+httpie
+itsdangerous
+marshmallow
+passlib
+Pillow
+PyMySQL
+webargs
