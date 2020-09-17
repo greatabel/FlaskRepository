@@ -15,7 +15,8 @@ class DevConfig(Config):
         user=environ.get('DB_USER', 'root'),
         pwd=environ.get('MYSQLCONNSTR_DB_PWD', ''),
         host=environ.get('DB_HOST', 'localhost'),
-        database=environ.get('DB_NAME', 'salary_db')
+        database=environ.get('DB_NAME', 'salary_db'),
+        charset='utf8mb4',  # The characterset you need
     )
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
