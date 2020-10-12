@@ -1,4 +1,4 @@
-# import json
+import json
 import sqlite3
 # from pprint import pprint
 
@@ -6,9 +6,9 @@ import sqlite3
 def create_table_schema():
     conn = sqlite3.connect("airbnb.db")
     c = conn.cursor()
-    c.execute("DROP TABLE IF EXISTS accomodation")
+    c.execute("DROP TABLE IF EXISTS accommodation")
     c.execute('''
-        CREATE TABLE accomodation
+        CREATE TABLE accommodation
         (id INTEGER PRIMARY KEY , name text, summary text,
             url text review_score_value INTEGER)''')
 
@@ -27,29 +27,29 @@ def create_table_schema():
     c.execute('''
         CREATE TABLE review
         (id INTEGER PRIMARY KEY autoincrement, rid INTEGER,
-            comment text, datetime text, accomodation_id INTEGER,
+            comment text, datetime text, accommodation_id INTEGER,
          CONSTRAINT fk_column
-            FOREIGN KEY (accomodation_id) REFERENCES accomodation (id)
+            FOREIGN KEY (accommodation_id) REFERENCES accommodation (id)
             FOREIGN KEY (rid) REFERENCES reviewer (rid)
         )''')
 
     c.execute("DROP TABLE IF EXISTS amenities")
     c.execute('''
         CREATE TABLE amenities
-        (accomodation_id INTEGER, type text,
-        PRIMARY KEY (accomodation_id, type)
+        (accommodation_id INTEGER, type text,
+        PRIMARY KEY (accommodation_id, type)
         CONSTRAINT fk_column
-            FOREIGN KEY (accomodation_id) REFERENCES accomodation (id)
+            FOREIGN KEY (accommodation_id) REFERENCES accommodation (id)
         )''')
 
-    c.execute("DROP TABLE IF EXISTS host_accomodation")
+    c.execute("DROP TABLE IF EXISTS host_accommodation")
     c.execute('''
-        CREATE TABLE host_accomodation
-        (host_id INTEGER, accomodation_id INTEGER,
-        PRIMARY KEY (host_id, accomodation_id)
+        CREATE TABLE host_accommodation
+        (host_id INTEGER, accommodation_id INTEGER,
+        PRIMARY KEY (host_id, accommodation_id)
         CONSTRAINT fk_column
             FOREIGN KEY (host_id) REFERENCES host (host_id)
-            FOREIGN KEY (accomodation_id) REFERENCES accomodation (id)
+            FOREIGN KEY (accommodation_id) REFERENCES accommodation (id)
 
         )''')
 
@@ -57,5 +57,14 @@ def create_table_schema():
     conn.close()
 
 
+def get_json(filename):
+    file = 'airbnb.json';
+    listing = []
+    with open(file, 'r',encoding="utf8") as myfile:
+        data=myfile.read()
+        listing = json.loads(data)
+
+
 if __name__ == "__main__":
     create_table_schema()
+    get_json('airbnb.json')
