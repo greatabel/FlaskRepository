@@ -17,3 +17,8 @@ print(response.mimetype == 'application/json')
 print(json.loads(response.data) == {'studentID':'20085272G'})
 
 
+response = tclient.get('/airbnb/reviews/')
+print(response.status_code == 200)
+print(response.mimetype == 'application/json')
+print(json.loads(response.data))
+print(json.loads(response.data)['Count'] == 1354)
