@@ -206,7 +206,8 @@ def import_amenities(listing):
     conn.close()
     print('insert ', len(insert_list), ' amenities')
 
-if __name__ == "__main__":
+
+def start():
     create_table_schema()
     listing = get_json('airbnb.json')
     import_accommodation(listing)
@@ -215,3 +216,7 @@ if __name__ == "__main__":
     import_reviewer(listing)
     import_review(listing)
     import_amenities(listing)
+
+
+if __name__ == "__main__":
+    start()
