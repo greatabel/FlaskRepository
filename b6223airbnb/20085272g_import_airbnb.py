@@ -93,20 +93,45 @@ def import_host(listing):
         h = i["host"]
 
         host_count = host_count_dict.get(h['host_id'], None)
-            # consider reviewer_id and reveiwer_name combined should be unique,
-            # we only store the 1st occurrence
+        # If a host (with certain host ID) has more than one accommodation,
+        # we only store the 1st occurrence
         if host_count is None:
             host_count_dict[h['host_id']] = 1
             insert_list.append((h['host_id'], h['host_url'], h['host_name'],
                                 h['host_about'], h['host_location']))
-        else:
-            print('## host exitsted', len(insert_list))
+        # else:
+        #     print('## host already exitsted, skip', len(insert_list))
 
     c.executemany("INSERT INTO host (host_id, host_url, host_name, host_about, host_location)\
                    VALUES (?, ?, ?, ?, ?)", insert_list)
     conn.commit()
     conn.close()
     print('insert ', len(insert_list), ' hosts')
+
+
+def import_host_accommodation(listing):
+    insert_list = []
+    host_count_dict = {}
+    conn = sqlite3.connect("airbnb.db")
+    c = conn.cursor()
+    for i in listing:
+        id = i["_id"]
+        h = i["host"]
+
+        host_count = host_count_dict.get(h['host_id'], None)
+        # If a host (with certain host ID) has more than one accommodation,
+        # we only store the 1st occurrence
+        if host_count is None:
+            host_count_dict[h['host_id']] = 1
+            insert_list.append((h['host_id'], id))
+        # else:
+        #     print('## host_accommodation already exitsted, skip', len(insert_list))
+
+    c.executemany("INSERT INTO host_accommodation (host_id, accommodation_id)\
+                   VALUES (?, ?)", insert_list)
+    conn.commit()
+    conn.close()
+    print('insert ', len(insert_list), ' host_accommodation')
 
 
 def import_reviewer(listing):
@@ -155,10 +180,38 @@ def import_review(listing):
     print('insert ', len(insert_list), ' reviews')
 
 
+def import_amenities(listing):
+    insert_list = []
+    
+    conn = sqlite3.connect("airbnb.db")
+    c = conn.cursor()
+    for i in listing:
+        id = i["_id"]
+        ams = i["amenities"]
+        # print(ams, ams[0])
+        type_count_dict = {}
+        for am in ams:
+            type_count = type_count_dict.get(am, None)
+            # If a reviewer (with certain reviewer ID) have more than one reviews,
+            # only the first occurrence of the reviewer data will be stored in the database.
+            if type_count is None:
+                type_count_dict[am] = 1
+                insert_list.append((am, id))
+            # else:
+            #     print(am, 'allready exitsted amenities', len(insert_list), '#'*10)
+
+    c.executemany("INSERT INTO amenities (accommodation_id, type)\
+                   VALUES (?, ?)", insert_list)
+    conn.commit()
+    conn.close()
+    print('insert ', len(insert_list), ' amenities')
+
 if __name__ == "__main__":
     create_table_schema()
     listing = get_json('airbnb.json')
     import_accommodation(listing)
     import_host(listing)
+    import_host_accommodation(listing)
     import_reviewer(listing)
     import_review(listing)
+    import_amenities(listing)
