@@ -1,5 +1,5 @@
 # import json
-import sqlite3      
+import sqlite3
 # from pprint import pprint
 
 
@@ -9,7 +9,8 @@ def create_table_schema():
     c.execute("DROP TABLE IF EXISTS accomodation")
     c.execute('''
         CREATE TABLE accomodation
-        (id INTEGER PRIMARY KEY , name text, summary text, url text review_score_value INTEGER)''')
+        (id INTEGER PRIMARY KEY , name text, summary text,
+            url text review_score_value INTEGER)''')
 
     c.execute("DROP TABLE IF EXISTS reviewer")
     c.execute('''
@@ -19,16 +20,18 @@ def create_table_schema():
     c.execute("DROP TABLE IF EXISTS host")
     c.execute('''
         CREATE TABLE host
-        (host_id INTEGER PRIMARY KEY , host_url text, host_name text, host_about text, host_location text)''')
+        (host_id INTEGER PRIMARY KEY , host_url text,
+            host_name text, host_about text, host_location text)''')
 
     c.execute("DROP TABLE IF EXISTS review")
     c.execute('''
         CREATE TABLE review
-        (id INTEGER PRIMARY KEY autoincrement, rid INTEGER, comment text, datetime text, accomodation_id INTEGER,
+        (id INTEGER PRIMARY KEY autoincrement, rid INTEGER,
+            comment text, datetime text, accomodation_id INTEGER,
          CONSTRAINT fk_column
             FOREIGN KEY (accomodation_id) REFERENCES accomodation (id)
             FOREIGN KEY (rid) REFERENCES reviewer (rid)
-        )''') #not properly normalized
+        )''')
 
     c.execute("DROP TABLE IF EXISTS amenities")
     c.execute('''
@@ -49,7 +52,6 @@ def create_table_schema():
             FOREIGN KEY (accomodation_id) REFERENCES accomodation (id)
 
         )''')
-        
 
     conn.commit()
     conn.close()
@@ -57,5 +59,3 @@ def create_table_schema():
 
 if __name__ == "__main__":
     create_table_schema()
-
-
