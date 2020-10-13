@@ -84,7 +84,7 @@ def import_accommodation(listing):
                    VALUES (?, ?, ?, ?, ?)", insert_list)
     conn.commit()
     conn.close()
-    print('insert ', len(insert_list), ' accommodation')
+    # print('insert ', len(insert_list), ' accommodation')
 
 
 def import_host(listing):
@@ -109,7 +109,7 @@ def import_host(listing):
                    VALUES (?, ?, ?, ?, ?)", insert_list)
     conn.commit()
     conn.close()
-    print('insert ', len(insert_list), ' hosts')
+    # print('insert ', len(insert_list), ' hosts')
 
 
 def import_host_accommodation(listing):
@@ -132,7 +132,7 @@ def import_host_accommodation(listing):
                    VALUES (?, ?)", insert_list)
     conn.commit()
     conn.close()
-    print('insert ', len(insert_list), ' host_accommodation')
+    # print('insert ', len(insert_list), ' host_accommodation')
 
 
 def import_reviewer(listing):
@@ -151,7 +151,7 @@ def import_reviewer(listing):
                    VALUES (?, ?)", insert_list)
     conn.commit()
     conn.close()
-    print('insert ', len(insert_list), ' reviewers')
+    # print('insert ', len(insert_list), ' reviewers')
 
 
 def import_review(listing):
@@ -177,7 +177,7 @@ def import_review(listing):
                    VALUES (?, ?, ?, ?)", insert_list)
     conn.commit()
     conn.close()
-    print('insert ', len(insert_list), ' reviews')
+    # print('insert ', len(insert_list), ' reviews')
 
 
 def import_amenities(listing):
@@ -203,7 +203,7 @@ def import_amenities(listing):
                    VALUES (?, ?)", insert_list)
     conn.commit()
     conn.close()
-    print('insert ', len(insert_list), ' amenities')
+    # print('insert ', len(insert_list), ' amenities')
 
 
 def start():
