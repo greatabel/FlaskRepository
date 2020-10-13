@@ -6,7 +6,7 @@ from collections import defaultdict
 
 
 app = Flask(__name__)
-app.config['DEBUG'] = True
+# app.config['DEBUG'] = True
 app.config['JSON_AS_ASCII'] = False
 
 def select_reviews(start, end):
