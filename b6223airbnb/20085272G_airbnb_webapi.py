@@ -23,10 +23,10 @@ def select_reviews(start, end):
         elif start is not None and end is not None:
             sql += """WHERE r.datetime > '""" + start + """' and r.datetime < '""" + end + """'"""
         sql += """ order by r.datetime desc , r.rid asc """
-        print(sql)
+        # print(sql)
         cursor.execute(sql)
         viewdata = cursor.fetchall()
-        print('#'*10, len(viewdata),viewdata[0])
+        # print('#'*10, len(viewdata),viewdata[0])
     db.commit()
     return viewdata
 
@@ -63,7 +63,7 @@ def select_reviewers(sort_by_review_count):
             sql += """ order by TotalCount asc, rv.rid asc """
         elif sort_by_review_count == 'descending':
             sql += """ order by TotalCount desc,  rv.rid asc """
-        print(sql)
+        # print(sql)
         cursor.execute(sql)
         viewdata = cursor.fetchall()
         # print('#'*10, len(viewdata),viewdata[0])
@@ -93,7 +93,7 @@ def select_reviews_per_reviewer(reviewer_id):
                 r2.rid = r3.rid 
                 where r2.rid = """ + reviewer_id + """ order by datetime desc """
 
-        print(sql)
+        # print(sql)
         cursor.execute(sql)
         viewdata = cursor.fetchall()
         # print('#'*10, len(viewdata),viewdata[0])
@@ -130,7 +130,7 @@ def select_hosts(sort_by_accommodation_count):
             sql += """ order by TotalCount asc, h.host_id asc """
         elif sort_by_accommodation_count == 'descending':
             sql += """ order by TotalCount desc, h.host_id asc """
-        print(sql)
+        # print(sql)
         cursor.execute(sql)
         viewdata = cursor.fetchall()
         # print('#'*10, len(viewdata),viewdata[0])
@@ -166,7 +166,7 @@ def select_hosts_per_hostid(host_id):
                            a.id = ha.accommodation_id 
                 where h.host_id = """ +  host_id +  """ order by a.id asc; """
 
-        print(sql)
+        # print(sql)
         cursor.execute(sql)
         viewdata = cursor.fetchall()
         # print('#'*10, len(viewdata),viewdata[0])
