@@ -42,7 +42,8 @@ def review_list_to_json(viewdata):
     "Count": len(viewdata),
     "Reviews":reviews
     }
-    return jsonify(results = r)
+    # return jsonify(results = r)
+    return jsonify(r)
 
 
 def select_reviewers(sort_by_review_count):
@@ -79,7 +80,7 @@ def reviewer_list_to_json(viewdata):
     "Count": len(viewdata),
     "Reviewers":reviewers
     }
-    return jsonify(results = r)
+    return jsonify(r)
 
 
 def select_reviews_per_reviewer(reviewer_id):
@@ -110,7 +111,7 @@ def reviews_per_reviewer_list_to_json(viewdata):
     "Reviewer Name": viewdata[0][4],
     "Reviews":reviews
     }
-    return jsonify(results = r)
+    return jsonify(r)
 
 
 def select_hosts(sort_by_accommodation_count):
@@ -149,7 +150,44 @@ def host_list_to_json(viewdata):
     "Count": len(viewdata),
     "Hosts":hosts
     }
-    return jsonify(results = r)
+    return jsonify(r)
+
+def select_hosts_per_hostid(host_id):
+    viewdata = []
+    with sqlite3.connect("airbnb.db") as db:
+        cursor = db.cursor()
+        sql = """SELECT  a.id, a.name ,
+                h.host_about ,h.host_id ,h.host_location ,h.host_name ,h.host_url 
+                FROM    host h
+                        INNER JOIN host_accommodation ha
+                            ON h.host_id = ha.host_id 
+                           INNER  JOIN accommodation a on
+                           a.id = ha.accommodation_id 
+                where h.host_id = """ +  host_id +  """ order by a.id asc; """
+
+        print(sql)
+        cursor.execute(sql)
+        viewdata = cursor.fetchall()
+        # print('#'*10, len(viewdata),viewdata[0])
+    db.commit()
+    return viewdata
+
+
+def hosts_per_hostid_list_to_json(viewdata):
+    accommodations = []
+    for item in viewdata:
+        accommodations.append({'Accommodation ID': item[0],
+                        'Accommodation Name': item[1]})
+    r = {
+    "Accommodation": accommodations,
+    "Accommodation Count": len(viewdata),
+    'Host About': item[2],
+    'Host ID': item[3],
+    'Host Location': item[4],
+    'Host Name': item[5],
+    'Host Url': item[6]
+    }
+    return jsonify(r)
 
 
 @app.route('/mystudentID/')
@@ -191,6 +229,16 @@ def hosts():
     v = select_hosts(sort_by_accommodation_count)
     j = host_list_to_json(v)
     return j, 200
+
+
+@app.route('/airbnb/hosts/<host_id>')
+def hosts_per_hostid(host_id):
+    v = select_hosts_per_hostid(host_id)
+    if len(v) > 0:
+        j = hosts_per_hostid_list_to_json(v)
+        return j, 200
+    else:
+        return { "Reasons": [ {"Message": "Host not found"}]}, 404
 
 
 if __name__ == '__main__':
