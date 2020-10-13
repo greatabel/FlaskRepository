@@ -81,6 +81,37 @@ def reviewer_list_to_json(viewdata):
     }
     return jsonify(results = r)
 
+
+def select_reviews_per_reviewer(reviewer_id):
+    viewdata = []
+    with sqlite3.connect("airbnb.db") as db:
+        cursor = db.cursor()
+        sql = """SELECT  accommodation_id, comment, r2.datetime, r3.rid, r3.rname  
+                from review r2 join reviewer r3 on
+                r2.rid = r3.rid 
+                where r2.rid = """ + reviewer_id + """ order by datetime desc """
+
+        print(sql)
+        cursor.execute(sql)
+        viewdata = cursor.fetchall()
+        # print('#'*10, len(viewdata),viewdata[0])
+    db.commit()
+    return viewdata
+
+def reviews_per_reviewer_list_to_json(viewdata):
+    reviews = []
+    for item in viewdata:
+        reviews.append({'Accommodation ID': item[0],
+                        'Comment': item[1],
+                        'DateTime': item[2]})
+    r = {
+    "Reviewer ID": viewdata[0][3],
+    "Reviewer Name": viewdata[0][4],
+    "Reviews":reviews
+    }
+    return jsonify(results = r)
+
+
 @app.route('/mystudentID/')
 def hello():
     return {"studentID": "20085272G"}, 200
@@ -96,13 +127,22 @@ def reviews():
     return j, 200
 
 
-
 @app.route('/airbnb/reviewers/')
 def reviewers():
     sort_by_review_count = request.args.get('sort_by_review_count')
     v = select_reviewers(sort_by_review_count)
     j = reviewer_list_to_json(v)
     return j, 200
+
+
+@app.route('/airbnb/reviewers/<reviewer_id>')
+def reviews_per_reviewer(reviewer_id):
+    v = select_reviews_per_reviewer(reviewer_id)
+    if len(v) > 0:
+        j = reviews_per_reviewer_list_to_json(v)
+        return j, 200
+    else:
+        return { "Reasons": [ {"Message": "Reviewer not found"}]}, 404
 
 
 if __name__ == '__main__':
