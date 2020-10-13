@@ -10,7 +10,7 @@ def create_table_schema():
     c.execute('''
         CREATE TABLE accommodation
         (id INTEGER PRIMARY KEY , name text, summary text,
-            url text review_score_value INTEGER)''')
+            url text, review_score_value INTEGER)''')
 
     c.execute("DROP TABLE IF EXISTS reviewer")
     c.execute('''
@@ -75,10 +75,13 @@ def import_accommodation(listing):
         name = i["name"]
         summary = i["summary"]
         url = i["listing_url"]
-        insert_list.append((id, name, summary, url))
+        review_score_value = None
+        if i['review_scores'] != {}:
+            review_score_value = i['review_scores'].get('review_scores_value', None)
+        insert_list.append((id, name, summary, url, review_score_value))
 
-    c.executemany("INSERT INTO accommodation (id, name, summary, url)\
-                   VALUES (?, ?, ?, ?)", insert_list)
+    c.executemany("INSERT INTO accommodation (id, name, summary, url, review_score_value)\
+                   VALUES (?, ?, ?, ?, ?)", insert_list)
     conn.commit()
     conn.close()
     print('insert ', len(insert_list), ' accommodation')
@@ -182,7 +185,6 @@ def import_review(listing):
 
 def import_amenities(listing):
     insert_list = []
-    
     conn = sqlite3.connect("airbnb.db")
     c = conn.cursor()
     for i in listing:
@@ -196,7 +198,7 @@ def import_amenities(listing):
             # only the first occurrence of the reviewer data will be stored in the database.
             if type_count is None:
                 type_count_dict[am] = 1
-                insert_list.append((am, id))
+                insert_list.append((id, am))
             # else:
             #     print(am, 'allready exitsted amenities', len(insert_list), '#'*10)
 

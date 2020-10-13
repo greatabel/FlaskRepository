@@ -30,7 +30,7 @@ def select_reviews(start, end):
     return viewdata
 
 
-def list_to_json(viewdata):
+def review_list_to_json(viewdata):
     reviews = []
     for item in viewdata:
         reviews.append({'Accommodation ID': item[3],
@@ -44,6 +44,29 @@ def list_to_json(viewdata):
     }
     return jsonify(results = r)
 
+
+def select_reviewers(start, end):
+    viewdata = []
+    with sqlite3.connect("airbnb.db") as db:
+        cursor = db.cursor()
+        sql = """SELECT r.rid, r.comment , r.datetime , r.accommodation_id, e.rname 
+                            FROM review r INNER JOIN reviewer e
+                                          ON r.rid = e.rid """
+        if start is not None and end is None:
+            sql += """ WHERE r.datetime > '""" + start + """'"""
+        elif start is None and end is not None:
+            sql += """ WHERE r.datetime < '""" + end + """'"""
+        elif start is not None and end is not None:
+            sql += """WHERE r.datetime > '""" + start + """' and r.datetime < '""" + end + """'"""
+        sql += """ order by r.datetime desc , r.rid asc """
+        print(sql)
+        cursor.execute(sql)
+        viewdata = cursor.fetchall()
+        print('#'*10, len(viewdata),viewdata[0])
+    db.commit()
+    return viewdata
+
+
 @app.route('/mystudentID/')
 def hello():
     return {"studentID": "20085272G"}, 200
@@ -55,9 +78,17 @@ def reviews():
     end = request.args.get('end')
 
     v = select_reviews(start, end)
-    j = list_to_json(v)
+    j = review_list_to_json(v)
     return j, 200
 
+
+
+@app.route('/airbnb/reviewers/')
+def reviews():
+    sort_by_review_count = request.args.get('sort_by_review_count')
+    v = select_reviewers(sort_by_review_count)
+    j = review_list_to_json(v)
+    return j, 200
 
 
 if __name__ == '__main__':
