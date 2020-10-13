@@ -1,6 +1,5 @@
 import json
 import sqlite3
-# from pprint import pprint
 
 
 def create_table_schema():
@@ -84,7 +83,7 @@ def import_accommodation(listing):
                    VALUES (?, ?, ?, ?, ?)", insert_list)
     conn.commit()
     conn.close()
-    # print('insert ', len(insert_list), ' accommodation')
+
 
 
 def import_host(listing):
@@ -102,14 +101,12 @@ def import_host(listing):
             host_count_dict[h['host_id']] = 1
             insert_list.append((h['host_id'], h['host_url'], h['host_name'],
                                 h['host_about'], h['host_location']))
-        # else:
-        #     print('## host already exitsted, skip', len(insert_list))
+
 
     c.executemany("INSERT INTO host (host_id, host_url, host_name, host_about, host_location)\
                    VALUES (?, ?, ?, ?, ?)", insert_list)
     conn.commit()
     conn.close()
-    # print('insert ', len(insert_list), ' hosts')
 
 
 def import_host_accommodation(listing):
@@ -120,19 +117,14 @@ def import_host_accommodation(listing):
     for i in listing:
         id = i["_id"]
         h = i["host"]
-
-        # host_count = host_count_dict.get(h['host_id'], None)
-        # if host_count is None:
-        #    # host_count_dict[h['host_id']] = 1
         insert_list.append((h['host_id'], id))
-        # else:
-        #     print('## host_accommodation already exitsted, skip', len(insert_list))
+
 
     c.executemany("INSERT INTO host_accommodation (host_id, accommodation_id)\
                    VALUES (?, ?)", insert_list)
     conn.commit()
     conn.close()
-    # print('insert ', len(insert_list), ' host_accommodation')
+
 
 
 def import_reviewer(listing):
@@ -151,7 +143,6 @@ def import_reviewer(listing):
                    VALUES (?, ?)", insert_list)
     conn.commit()
     conn.close()
-    # print('insert ', len(insert_list), ' reviewers')
 
 
 def import_review(listing):
@@ -167,17 +158,12 @@ def import_review(listing):
 
             # if reviewer_count is None:
             d = review['date']['$date']
-            # print('d=', d)
-            # reviewer_count_dict[review['reviewer_id']] = 1
             insert_list.append((review['reviewer_id'], review['comments'], d, id))
-            # else:
-            #     print('allready exitsted reviewer', len(insert_list))
 
     c.executemany("INSERT INTO review (rid, comment, datetime, accommodation_id)\
                    VALUES (?, ?, ?, ?)", insert_list)
     conn.commit()
     conn.close()
-    # print('insert ', len(insert_list), ' reviews')
 
 
 def import_amenities(listing):
@@ -196,14 +182,11 @@ def import_amenities(listing):
             if type_count is None:
                 type_count_dict[am] = 1
                 insert_list.append((id, am))
-            # else:
-            #     print(am, 'allready exitsted amenities', len(insert_list), '#'*10)
 
     c.executemany("INSERT INTO amenities (accommodation_id, type)\
                    VALUES (?, ?)", insert_list)
     conn.commit()
     conn.close()
-    # print('insert ', len(insert_list), ' amenities')
 
 
 def start():

@@ -3,13 +3,22 @@ from flask import request
 from flask import jsonify
 import sqlite3
 from collections import defaultdict 
+from datetime import datetime, timedelta
 
 
 app = Flask(__name__)
-# app.config['DEBUG'] = True
+app.config['DEBUG'] = True
 app.config['JSON_AS_ASCII'] = False
+app.config['JSON_SORT_KEYS'] = False
 
 def select_reviews(start, end):
+
+    # end 2017-03-21 changed into 2017-03-22, just 1 day more, for compare
+    if end is not None:
+        date = datetime.strptime(end, "%Y-%m-%d")
+        modified_date = date + timedelta(days=1)
+        end = datetime.strftime(modified_date, "%Y-%m-%d")
+
     viewdata = []
     with sqlite3.connect("airbnb.db") as db:
         cursor = db.cursor()
@@ -17,16 +26,16 @@ def select_reviews(start, end):
                             FROM review r INNER JOIN reviewer e
                                           ON r.rid = e.rid """
         if start is not None and end is None:
-            sql += """ WHERE r.datetime > '""" + start + """'"""
+            sql += """ WHERE r.datetime >= '""" + start + """'"""
         elif start is None and end is not None:
             sql += """ WHERE r.datetime < '""" + end + """'"""
         elif start is not None and end is not None:
-            sql += """WHERE r.datetime > '""" + start + """' and r.datetime < '""" + end + """'"""
+            sql += """WHERE r.datetime >= '""" + start + """' and r.datetime < '""" + end + """'"""
         sql += """ order by r.datetime desc , r.rid asc """
-        # print(sql)
+
         cursor.execute(sql)
         viewdata = cursor.fetchall()
-        # print('#'*10, len(viewdata),viewdata[0])
+
     db.commit()
     return viewdata
 
@@ -63,10 +72,10 @@ def select_reviewers(sort_by_review_count):
             sql += """ order by TotalCount asc, rv.rid asc """
         elif sort_by_review_count == 'descending':
             sql += """ order by TotalCount desc,  rv.rid asc """
-        # print(sql)
+
         cursor.execute(sql)
         viewdata = cursor.fetchall()
-        # print('#'*10, len(viewdata),viewdata[0])
+
     db.commit()
     return viewdata
 
@@ -93,10 +102,10 @@ def select_reviews_per_reviewer(reviewer_id):
                 r2.rid = r3.rid 
                 where r2.rid = """ + reviewer_id + """ order by datetime desc """
 
-        # print(sql)
+
         cursor.execute(sql)
         viewdata = cursor.fetchall()
-        # print('#'*10, len(viewdata),viewdata[0])
+
     db.commit()
     return viewdata
 
@@ -130,10 +139,10 @@ def select_hosts(sort_by_accommodation_count):
             sql += """ order by TotalCount asc, h.host_id asc """
         elif sort_by_accommodation_count == 'descending':
             sql += """ order by TotalCount desc, h.host_id asc """
-        # print(sql)
+
         cursor.execute(sql)
         viewdata = cursor.fetchall()
-        # print('#'*10, len(viewdata),viewdata[0])
+
     db.commit()
     return viewdata
 
@@ -166,10 +175,8 @@ def select_hosts_per_hostid(host_id):
                            a.id = ha.accommodation_id 
                 where h.host_id = """ +  host_id +  """ order by a.id asc; """
 
-        # print(sql)
         cursor.execute(sql)
         viewdata = cursor.fetchall()
-        # print('#'*10, len(viewdata),viewdata[0])
     db.commit()
     return viewdata
 
@@ -218,7 +225,6 @@ def select_accommodations_partI(min_review_score_value):
                     GROUP   BY r.accommodation_id """         
         cursor.execute(sql)
         viewdata = cursor.fetchall()
-        # print('#'*10, len(viewdata),viewdata[0])
     db.commit()
     return viewdata
 
@@ -236,7 +242,7 @@ def select_accommodations_partII(amenities):
             sql = """ select a2.accommodation_id, a2."type"   from amenities a2 order by a2."type" asc; """
         cursor.execute(sql)
         viewdata = cursor.fetchall()
-        # print('#'*10, len(viewdata),viewdata[0])
+
     db.commit()
     return viewdata
 
@@ -252,7 +258,7 @@ def select_accommodations(min_review_score_value, amenities):
     res = defaultdict(list) 
     for i, j in t2: 
         res[i].append(j)
-    # print("The merged dictionary is : " + str(dict(res)))
+
     combined = []
     for record in t1:
 
@@ -309,11 +315,11 @@ def select_single_accommodation_partI(accommodation_id):
             on a.id  = r.accommodation_id 
             inner join reviewer r2 
             on r.rid  = r2.rid 
-            where a.id ="""  + accommodation_id
+            where a.id ="""  + accommodation_id + """ order by r.datetime desc;  """
 
         cursor.execute(sql)
         viewdata = cursor.fetchall()
-        # print('#'*10, len(viewdata),viewdata[0])
+
     db.commit()
     return viewdata
 
@@ -324,7 +330,7 @@ def select_single_accommodation(accommodation_id):
     res = defaultdict(list) 
     for i, j in t2: 
         res[i].append(j)
-    # print("The merged dictionary is : " + str(dict(res)))
+
     myamenities = res[int(accommodation_id)]
 
     combined = []
@@ -354,6 +360,7 @@ def single_accommodation_list_to_json(viewdata):
     "Summary": viewdata[0][7],
     "URL": viewdata[0][8]
     }
+
     return jsonify(r)
 
 
@@ -412,7 +419,7 @@ def hosts_per_hostid(host_id):
 def accommodations():
     min_review_score_value = request.args.get('min_review_score_value')
     amenities = request.args.get('amenities')
-    print('amenities=', amenities)
+
     v = select_accommodations(min_review_score_value, amenities)
     if len(v) > 0:
         j = accommodations_list_to_json(v)
