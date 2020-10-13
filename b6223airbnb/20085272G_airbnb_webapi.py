@@ -98,6 +98,7 @@ def select_reviews_per_reviewer(reviewer_id):
     db.commit()
     return viewdata
 
+
 def reviews_per_reviewer_list_to_json(viewdata):
     reviews = []
     for item in viewdata:
@@ -108,6 +109,45 @@ def reviews_per_reviewer_list_to_json(viewdata):
     "Reviewer ID": viewdata[0][3],
     "Reviewer Name": viewdata[0][4],
     "Reviews":reviews
+    }
+    return jsonify(results = r)
+
+
+def select_hosts(sort_by_accommodation_count):
+    viewdata = []
+    with sqlite3.connect("airbnb.db") as db:
+        cursor = db.cursor()
+        sql = """SELECT  COUNT(*) TotalCount, 
+                 h.host_about ,h.host_id ,h.host_location ,h.host_name ,h.host_url 
+                FROM    host h
+                INNER JOIN host_accommodation ha
+                ON h.host_id = ha.host_id 
+                GROUP   BY ha.host_id """
+
+        if sort_by_accommodation_count == 'ascending':
+            sql += """ order by TotalCount asc, h.host_id asc """
+        elif sort_by_accommodation_count == 'descending':
+            sql += """ order by TotalCount desc, h.host_id asc """
+        print(sql)
+        cursor.execute(sql)
+        viewdata = cursor.fetchall()
+        # print('#'*10, len(viewdata),viewdata[0])
+    db.commit()
+    return viewdata
+
+
+def host_list_to_json(viewdata):
+    hosts = []
+    for item in viewdata:
+        hosts.append({'Accommodation Count': item[0],
+                        'Host About': item[1],
+                        'Host ID': item[2],
+                        'Host Location': item[3],
+                        'Host Name': item[4],
+                        'Host Url': item[5]})
+    r = {
+    "Count": len(viewdata),
+    "Hosts":hosts
     }
     return jsonify(results = r)
 
@@ -143,6 +183,14 @@ def reviews_per_reviewer(reviewer_id):
         return j, 200
     else:
         return { "Reasons": [ {"Message": "Reviewer not found"}]}, 404
+
+
+@app.route('/airbnb/hosts/')
+def hosts():
+    sort_by_accommodation_count = request.args.get('sort_by_accommodation_count')
+    v = select_hosts(sort_by_accommodation_count)
+    j = host_list_to_json(v)
+    return j, 200
 
 
 if __name__ == '__main__':

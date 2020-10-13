@@ -114,19 +114,17 @@ def import_host(listing):
 
 def import_host_accommodation(listing):
     insert_list = []
-    host_count_dict = {}
+    # host_count_dict = {}
     conn = sqlite3.connect("airbnb.db")
     c = conn.cursor()
     for i in listing:
         id = i["_id"]
         h = i["host"]
 
-        host_count = host_count_dict.get(h['host_id'], None)
-        # If a host (with certain host ID) has more than one accommodation,
-        # we only store the 1st occurrence
-        if host_count is None:
-            host_count_dict[h['host_id']] = 1
-            insert_list.append((h['host_id'], id))
+        # host_count = host_count_dict.get(h['host_id'], None)
+        # if host_count is None:
+        #    # host_count_dict[h['host_id']] = 1
+        insert_list.append((h['host_id'], id))
         # else:
         #     print('## host_accommodation already exitsted, skip', len(insert_list))
 
