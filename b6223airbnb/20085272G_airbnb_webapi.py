@@ -45,27 +45,41 @@ def review_list_to_json(viewdata):
     return jsonify(results = r)
 
 
-def select_reviewers(start, end):
+def select_reviewers(sort_by_review_count):
     viewdata = []
     with sqlite3.connect("airbnb.db") as db:
         cursor = db.cursor()
-        sql = """SELECT r.rid, r.comment , r.datetime , r.accommodation_id, e.rname 
-                            FROM review r INNER JOIN reviewer e
-                                          ON r.rid = e.rid """
-        if start is not None and end is None:
-            sql += """ WHERE r.datetime > '""" + start + """'"""
-        elif start is None and end is not None:
-            sql += """ WHERE r.datetime < '""" + end + """'"""
-        elif start is not None and end is not None:
-            sql += """WHERE r.datetime > '""" + start + """' and r.datetime < '""" + end + """'"""
-        sql += """ order by r.datetime desc , r.rid asc """
+        sql = """SELECT  COUNT(*) TotalCount, 
+                        rv.rid , 
+                        r.rname 
+                FROM    reviewer r 
+                        INNER JOIN review rv
+                            ON r.rid = rv.rid 
+                GROUP   BY rv.rid """
+
+        if sort_by_review_count == 'ascending':
+            sql += """ order by TotalCount asc, rv.rid asc """
+        elif sort_by_review_count == 'descending':
+            sql += """ order by TotalCount desc,  rv.rid asc """
         print(sql)
         cursor.execute(sql)
         viewdata = cursor.fetchall()
-        print('#'*10, len(viewdata),viewdata[0])
+        # print('#'*10, len(viewdata),viewdata[0])
     db.commit()
     return viewdata
 
+
+def reviewer_list_to_json(viewdata):
+    reviewers = []
+    for item in viewdata:
+        reviewers.append({'Review Count': item[0],
+                        'Reviewer ID': item[1],
+                        'Reviewer Name': item[2]})
+    r = {
+    "Count": len(viewdata),
+    "Reviewers":reviewers
+    }
+    return jsonify(results = r)
 
 @app.route('/mystudentID/')
 def hello():
@@ -84,10 +98,10 @@ def reviews():
 
 
 @app.route('/airbnb/reviewers/')
-def reviews():
+def reviewers():
     sort_by_review_count = request.args.get('sort_by_review_count')
     v = select_reviewers(sort_by_review_count)
-    j = review_list_to_json(v)
+    j = reviewer_list_to_json(v)
     return j, 200
 
 

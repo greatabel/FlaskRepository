@@ -158,21 +158,20 @@ def import_reviewer(listing):
 
 def import_review(listing):
     insert_list = []
-    reviewer_count_dict = {}
+    # reviewer_count_dict = {}
     conn = sqlite3.connect("airbnb.db")
     c = conn.cursor()
     for i in listing:
         id = i["_id"]
         reviews = i["reviews"]
         for review in reviews:
-            reviewer_count = reviewer_count_dict.get(review['reviewer_id'], None)
-            # If a reviewer (with certain reviewer ID) have more than one reviews,
-            # only the first occurrence of the reviewer data will be stored in the database.
-            if reviewer_count is None:
-                d = review['date']['$date']
-                # print('d=', d)
-                reviewer_count_dict[review['reviewer_id']] = 1
-                insert_list.append((review['reviewer_id'], review['comments'], d, id))
+            # reviewer_count = reviewer_count_dict.get(review['reviewer_id'], None)
+
+            # if reviewer_count is None:
+            d = review['date']['$date']
+            # print('d=', d)
+            # reviewer_count_dict[review['reviewer_id']] = 1
+            insert_list.append((review['reviewer_id'], review['comments'], d, id))
             # else:
             #     print('allready exitsted reviewer', len(insert_list))
 
