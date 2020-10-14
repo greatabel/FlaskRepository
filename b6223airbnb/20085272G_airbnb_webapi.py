@@ -297,7 +297,8 @@ def accommodations_list_to_json(viewdata):
 
             })
     r = {
-    "Accommodations": accommodations
+    "Accommodations": accommodations,
+    "Count": len(viewdata)
     }
     return jsonify(r)
 
