@@ -36,35 +36,7 @@ span[name*="title"] {
             <div id="tb1">
                 <table border="1">
                     <tr>
-                        <td><span name="title"></span>标题:</td>
-                        <td>
-                          <input name="title" value="" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>正文:</td>
-                        <td>
-                          <textarea name="content" rows="10" cols="50">
-                              
-                          </textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>法律问题归纳:<input name="title" value="" /></td>
-                        <td>年份:<input name="title" value="" /></td>
-                    </tr>
-
-                    <tr>
-                        <td>客户所在行业:<input name="title" value="" /></td>
-                        <td></td>
-                    </tr>
-                </table>
-            </div>
-
-            <div id="tb2">
-                <table border="1">
-                    <tr>
-                        <td><span name="title"></span>标题:</td>
+                        <td><span name="span_title"></span>标题:</td>
                         <td>
                           <input name="title" value="" />
                         </td>
@@ -93,10 +65,10 @@ span[name*="title"] {
                 </table>
             </div>
 
-            <div id="tb3">
+            <div id="tb2">
                 <table border="1">
                     <tr>
-                        <td><span name="title"></span>标题:</td>
+                        <td><span name="span_title"></span>标题:</td>
                         <td>
                           <input name="title" value="" />
                         </td>
@@ -110,25 +82,21 @@ span[name*="title"] {
                         </td>
                     </tr>
                     <tr>
-                        <td>合同类型:<input name="title" value="" /></td>
-                        <td>合同语言:<input name="title" value="" /></td>
+                        <td>法律问题归纳:<input name="title" value="" /></td>
+                        <td>年份:<input name="title" value="" /></td>
                     </tr>
 
                     <tr>
-                        <td>合同标的金额:<input name="title" value="" /></td>
-                        <td>合同双方谈判地位:<input name="title" value="" /></td>
-                    </tr>
-                    <tr>
-                        <td>合同双方所处行业:<input name="title" value="" /></td>
+                        <td>客户所在行业:<input name="title" value="" /></td>
                         <td></td>
                     </tr>
                 </table>
             </div>
 
-            <div id="tb4">
+            <div id="tb3">
                 <table border="1">
                     <tr>
-                        <td><span name="title"></span>标题:</td>
+                        <td><span name="span_title"></span>标题:</td>
                         <td>
                           <input name="title" value="" />
                         </td>
@@ -159,12 +127,49 @@ span[name*="title"] {
                     </tr>
                 </table>
             </div>
+
+            <div id="tb4">
+                <table border="1">
+                    <tr>
+                        <td><span name="span_title"></span>标题:</td>
+                        <td>
+                          <input name="title" value="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>正文:</td>
+                        <td>
+                          <textarea name="content" rows="10" cols="50">
+                              
+                          </textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>合同类型:<input name="title" value="" /></td>
+                        <td>合同语言:<input name="title" value="" /></td>
+                    </tr>
+
+                    <tr>
+                        <td>合同标的金额:<input name="title" value="" /></td>
+                        <td>合同双方谈判地位:<input name="title" value="" /></td>
+                    </tr>
+                    <tr>
+                        <td>合同双方所处行业:<input name="title" value="" /></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+
+
         </div>
 
         <br/>
         <button type="submit" class="btn btn-default">提交</button>
       </form>
-      <br>
+
+
+      <h4> {{ result }} </h4>
+      <br/>
       {% for error in errors %}
         <h4>{{ error }}</h4>
       {% endfor %}
@@ -183,7 +188,7 @@ jQuery(function () {
             $('#' + this.value).css('display', 'block');
             $('#' + this.value).css('visibility', 'visible');
             var text = $("#table-select option:selected").text();
-            $("[name='title']").text(text);
+            $("[name='span_title']").text(text);
 
         }
     }).change()
