@@ -1,0 +1,195 @@
+<html>
+<html>
+  <head>
+
+    <link rel="stylesheet" href="/static/game-frame-styles.css" />
+    <style type="text/css">
+#tbl_div div {
+  visibility:hidden;
+    display:none;
+}
+
+span[name*="title"] {
+  background: #ffff00;
+  font-weight: bold;
+}
+</style>
+  </head>
+ 
+<body>
+    <div class="container">
+      <h1>LegalText </h1>
+      <form role="form" method='POST' action='/'>
+
+      <label for="item">选择类型:</label>
+      <select name="select_Items" id="table-select">
+        {% for item in typelist %}
+
+        <option value="tb{{ loop.index }}"> {{ item }} </option>
+
+        {% endfor %}
+      </select>
+
+
+
+        <div id="tbl_div" class="form-group">
+            <div id="tb1">
+                <table border="1">
+                    <tr>
+                        <td><span name="title"></span>标题:</td>
+                        <td>
+                          <input name="title" value="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>正文:</td>
+                        <td>
+                          <textarea name="content" rows="10" cols="50">
+                              
+                          </textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>法律问题归纳:<input name="title" value="" /></td>
+                        <td>年份:<input name="title" value="" /></td>
+                    </tr>
+
+                    <tr>
+                        <td>客户所在行业:<input name="title" value="" /></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="tb2">
+                <table border="1">
+                    <tr>
+                        <td><span name="title"></span>标题:</td>
+                        <td>
+                          <input name="title" value="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>正文:</td>
+                        <td>
+                          <textarea name="content" rows="10" cols="50">
+                              
+                          </textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>判决法院:<input name="title" value="" /></td>
+                        <td>年份:<input name="title" value="" /></td>
+                    </tr>
+
+                    <tr>
+                        <td>案号:<input name="title" value="" /></td>
+                        <td>案由:<input name="title" value="" /></td>
+                    </tr>
+                    <tr>
+                        <td>当事人所处行业:<input name="title" value="" /></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="tb3">
+                <table border="1">
+                    <tr>
+                        <td><span name="title"></span>标题:</td>
+                        <td>
+                          <input name="title" value="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>正文:</td>
+                        <td>
+                          <textarea name="content" rows="10" cols="50">
+                              
+                          </textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>合同类型:<input name="title" value="" /></td>
+                        <td>合同语言:<input name="title" value="" /></td>
+                    </tr>
+
+                    <tr>
+                        <td>合同标的金额:<input name="title" value="" /></td>
+                        <td>合同双方谈判地位:<input name="title" value="" /></td>
+                    </tr>
+                    <tr>
+                        <td>合同双方所处行业:<input name="title" value="" /></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="tb4">
+                <table border="1">
+                    <tr>
+                        <td><span name="title"></span>标题:</td>
+                        <td>
+                          <input name="title" value="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>正文:</td>
+                        <td>
+                          <textarea name="content" rows="10" cols="50">
+                              
+                          </textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>案由:<input name="title" value="" /></td>
+                        <td>客户是否为原告:<br/>
+                              <input type="radio" name="gender">是<br>
+                              <input type="radio" name="gender">否<br>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>当事人国籍:<input name="title" value="" /></td>
+                        <td>当事人所处行业:<input name="title" value="" /></td>
+                    </tr>
+                    <tr>
+                        <td>审理法院:<input name="title" value="" /></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <br/>
+        <button type="submit" class="btn btn-default">提交</button>
+      </form>
+      <br>
+      {% for error in errors %}
+        <h4>{{ error }}</h4>
+      {% endfor %}
+    </div>
+
+
+<script src="/static/jquery-3.5.1.min.js"></script>
+<script src="/static/bootstrap-4.5.2-dist/js/bootstrap.min.js"></script>
+<script>
+
+jQuery(function () {
+    $('#table-select').change(function () {
+        $('#tbl_div > div').css('display', 'none');
+        if (this.value) {
+            // alert(this.value);
+            $('#' + this.value).css('display', 'block');
+            $('#' + this.value).css('visibility', 'visible');
+            var text = $("#table-select option:selected").text();
+            $("[name='title']").text(text);
+
+        }
+    }).change()
+})
+
+</script>
+
+  </body>
+</html>
