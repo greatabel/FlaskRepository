@@ -19,7 +19,7 @@ span[name*="title"] {
 <body>
     <div class="container">
       <h1>LegalText </h1>
-      <form role="form" method='POST' action='/'>
+      <form role="form" method='POST' action='/add'>
 
       <label for="item">选择类型:</label>
       <select name="select_Items" id="table-select">
@@ -33,6 +33,7 @@ span[name*="title"] {
 
 
         <div id="tbl_div" class="form-group">
+        
             <div id="tb1">
                 <table border="1">
                     <tr>
@@ -50,16 +51,16 @@ span[name*="title"] {
                         </td>
                     </tr>
                     <tr>
-                        <td>判决法院:<input name="title" value="" /></td>
-                        <td>年份:<input name="title" value="" /></td>
+                        <td>判决法院:<input name="case_court" value="" /></td>
+                        <td>年份:<input name="case_year" value="" /></td>
                     </tr>
 
                     <tr>
-                        <td>案号:<input name="title" value="" /></td>
-                        <td>案由:<input name="title" value="" /></td>
+                        <td>案号:<input name="case_id" value="" /></td>
+                        <td>案由:<input name="case_cause" value="" /></td>
                     </tr>
                     <tr>
-                        <td>当事人所处行业:<input name="title" value="" /></td>
+                        <td>当事人所处行业:<input name="case_industry" value="" /></td>
                         <td></td>
                     </tr>
                 </table>
