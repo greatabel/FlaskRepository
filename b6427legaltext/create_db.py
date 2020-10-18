@@ -1,56 +1,35 @@
-import json
 import sqlite3
 
 
 def create_table_schema():
-    conn = sqlite3.connect("airbnb.db")
+    conn = sqlite3.connect("legaltext.db")
     c = conn.cursor()
-    c.execute("DROP TABLE IF EXISTS accommodation")
+    c.execute("DROP TABLE IF EXISTS reference")
     c.execute('''
-        CREATE TABLE accommodation
-        (id INTEGER PRIMARY KEY , name text, summary text,
-            url text, review_score_value INTEGER)''')
+        CREATE TABLE reference
+        (id INTEGER PRIMARY KEY autoincrement, title text, content text,
+            case_court text, case_year text, case_id text,
+            case_cause text, case_industry text)''')
 
-    c.execute("DROP TABLE IF EXISTS reviewer")
+    c.execute("DROP TABLE IF EXISTS memo")
     c.execute('''
-        CREATE TABLE reviewer
-        (rid INTEGER PRIMARY KEY , rname text)''')
+        CREATE TABLE memo
+        (id INTEGER PRIMARY KEY autoincrement, title text, content text,
+            memo_issue text, memo_year text, meomo_industry text)''')
 
-    c.execute("DROP TABLE IF EXISTS host")
+    c.execute("DROP TABLE IF EXISTS evidence")
     c.execute('''
-        CREATE TABLE host
-        (host_id INTEGER PRIMARY KEY , host_url text,
-            host_name text, host_about text, host_location text)''')
+        CREATE TABLE evidence
+        (id INTEGER PRIMARY KEY autoincrement, title text, content text,
+            evidence_cause text, evidence_plaintiff INTEGER, evidence_nation text,
+            evidence_industry text, evidence_court text)''')
 
-    c.execute("DROP TABLE IF EXISTS review")
+    c.execute("DROP TABLE IF EXISTS contract")
     c.execute('''
-        CREATE TABLE review
-        (id INTEGER PRIMARY KEY autoincrement, rid INTEGER,
-            comment text, datetime text, accommodation_id INTEGER,
-         CONSTRAINT fk_column
-            FOREIGN KEY (accommodation_id) REFERENCES accommodation (id)
-            FOREIGN KEY (rid) REFERENCES reviewer (rid)
-        )''')
-
-    c.execute("DROP TABLE IF EXISTS amenities")
-    c.execute('''
-        CREATE TABLE amenities
-        (accommodation_id INTEGER, type text,
-        PRIMARY KEY (accommodation_id, type)
-        CONSTRAINT fk_column
-            FOREIGN KEY (accommodation_id) REFERENCES accommodation (id)
-        )''')
-
-    c.execute("DROP TABLE IF EXISTS host_accommodation")
-    c.execute('''
-        CREATE TABLE host_accommodation
-        (host_id INTEGER, accommodation_id INTEGER,
-        PRIMARY KEY (host_id, accommodation_id)
-        CONSTRAINT fk_column
-            FOREIGN KEY (host_id) REFERENCES host (host_id)
-            FOREIGN KEY (accommodation_id) REFERENCES accommodation (id)
-
-        )''')
+        CREATE TABLE contract
+        (id INTEGER PRIMARY KEY autoincrement, title text, content text,
+            contract_type text, contract_language text, contract_amount INTEGER,
+            contract_position text, contract_industry text)''')
 
     conn.commit()
     conn.close()
