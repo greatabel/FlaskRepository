@@ -155,7 +155,7 @@ def host_list_to_json(viewdata):
                         "Host ID": item[2],
                         "Host Location": item[3],
                         "Host Name": item[4],
-                        "Host Url": item[5]})
+                        "Host URL": item[5]})
     r = {
     "Count": len(viewdata),
     "Hosts":hosts
@@ -193,7 +193,7 @@ def hosts_per_hostid_list_to_json(viewdata):
     "Host ID": item[3],
     "Host Location": item[4],
     "Host Name": item[5],
-    "Host Url": item[6]
+    "Host URL": item[6]
     }
     return jsonify(r)
 
@@ -282,7 +282,7 @@ def accommodations_list_to_json(viewdata):
             "Accommodation": {
              "Name": item[0],
              "Summary": item[1],
-             "url": item[2]
+             "URL": item[2]
             },
             "Amenities": item[10],
             "Host": {
