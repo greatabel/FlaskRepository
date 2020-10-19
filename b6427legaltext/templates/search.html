@@ -13,6 +13,11 @@ span[name*="title"] {
   background: #ffff00;
   font-weight: bold;
 }
+
+.mytitle { width:100%; display:block; line-height:1.5em; overflow:visible; 
+  color: blue;
+  font-size:22px; text-shadow:#f3f3f3 1px 1px 0px, #b2b2b2 1px 2px 0
+}
 </style>
   </head>
  
@@ -170,7 +175,12 @@ span[name*="title"] {
 
 
       {% for r in results %}
-        <h4>{{ r[0] }}  {{ r[1] }}</h4>
+       <span class="mytitle"> {{ r[0] }}</span>  
+        {% if r[1]|length > 300  %}
+        <h4>{{ r[1][:300] }} ...</h4>
+        {% else %}
+        <h4>{{ r[1] }} </h4> 
+        {% endif %}       
       {% endfor %}
 
       <br/>
