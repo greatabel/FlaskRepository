@@ -113,7 +113,7 @@ span[name*="title"] {
                     <tr>
                         <td>案由:<input name="evidence_cause" value="" /></td>
                         <td>客户是否为原告:<br/>
-                              <input type="radio" name="evidence_plaintiff" value="1">是<br>
+                              <input type="radio" name="evidence_plaintiff" value="1" checked="checked">是<br>
                               <input type="radio" name="evidence_plaintiff" value="0">否<br>
                         </td>
                     </tr>
@@ -165,12 +165,12 @@ span[name*="title"] {
         </div>
 
         <br/>
-        <button type="submit" class="btn btn-default">搜索</button>
+        <button type="submit" class="btn btn-default" onclick="return handleSearch()">搜索</button>
       </form>
 
 
       {% for r in results %}
-        <h4>{{ r }}</h4>
+        <h4>{{ r[0] }}  {{ r[1] }}</h4>
       {% endfor %}
 
       <br/>
@@ -198,6 +198,35 @@ jQuery(function () {
     }).change()
 })
 
+function isEveryInputEmpty(index) {
+    var allEmpty = true;
+
+    $('#tb'+ index + ' input').each(function() {
+        if ($(this).val() !== '') {
+            allEmpty = false;
+            return false; // we've found a non-empty one, so stop iterating
+        }
+    });
+
+    return allEmpty;
+}
+
+function handleSearch() {
+  var index = $("#table-select option:selected").index() + 1;
+  if (isEveryInputEmpty(index))
+  {
+      alert('所有输入框为空，请至少输入1项！');
+      return false;
+  }
+  console.log('you can insert')
+
+    // // alert(index);
+    // if (title === "" || content === "") {
+    //     alert("标题和内容不能为空");
+    //     return false;
+    // }
+    return true;
+}
 </script>
 
   </body>
