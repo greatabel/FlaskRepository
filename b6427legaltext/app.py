@@ -47,6 +47,7 @@ def add():
         if select_Items == 'tb1':
             title = request.form['title1']
             content = request.form['content1']
+            content = content.strip()
             case_court = request.form['case_court']
             case_year = request.form['case_year']
             case_id = request.form['case_id']
@@ -58,6 +59,7 @@ def add():
         elif select_Items == 'tb2':
             title = request.form['title2']
             content = request.form['content2']
+            content = content.strip()
             memo_issue = request.form['memo_issue']
             memo_year = request.form['memo_year']
             meomo_industry = request.form['meomo_industry']
@@ -67,6 +69,7 @@ def add():
         elif select_Items == 'tb3':
             title = request.form['title3']
             content = request.form['content3']
+            content = content.strip()
             evidence_cause = request.form['evidence_cause']
             evidence_plaintiff = request.form['evidence_plaintiff']
             evidence_nation = request.form['evidence_nation']
@@ -81,6 +84,7 @@ def add():
         elif select_Items == 'tb4':
             title = request.form['title4']
             content = request.form['content4']
+            content = content.strip()
             contract_type = request.form['contract_type']
             contract_language = request.form['contract_language']
             contract_amount = request.form['contract_amount']
@@ -182,8 +186,8 @@ def search():
                 sql += """ and contract_industry='""" + case_industry + + """' """
         print(sql, '#'*5)
         results  = select_db(sql)
-        return render_template('search.html', typelist=typelist,
-                     errors=errors, result=results)
+    return render_template('search.html', typelist=typelist,
+                 errors=errors, results=results)
 
 if __name__ == '__main__':
     app.run()

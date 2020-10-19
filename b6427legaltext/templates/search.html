@@ -169,7 +169,10 @@ span[name*="title"] {
       </form>
 
 
-      <h4> {{ result }} </h4>
+      {% for r in results %}
+        <h4>{{ r }}</h4>
+      {% endfor %}
+
       <br/>
       {% for error in errors %}
         <h4>{{ error }}</h4>
