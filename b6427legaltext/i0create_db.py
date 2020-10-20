@@ -15,7 +15,8 @@ def create_table_schema():
     c.execute('''
         CREATE TABLE memo
         (id INTEGER PRIMARY KEY autoincrement, title text, content text,
-            memo_issue text, memo_year text, meomo_industry text)''')
+            memo_issue text, memo_year text, meomo_industry text, 
+            memo_caseid text)''')
 
     c.execute("DROP TABLE IF EXISTS evidence")
     c.execute('''

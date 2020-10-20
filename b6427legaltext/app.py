@@ -65,10 +65,11 @@ def add():
             memo_issue = request.form['memo_issue']
             memo_year = request.form['memo_year']
             meomo_industry = request.form['meomo_industry']
+            memo_caseid = request.form['memo_caseid']
             select_sql = "select title from memo where title='" + title + "'"
-            p = (title, content, memo_issue, memo_year, meomo_industry)
-            sql = "INSERT INTO memo (title, content, memo_issue, memo_year, meomo_industry)\
-                    VALUES (?, ?, ?, ?, ?)"
+            p = (title, content, memo_issue, memo_year, meomo_industry, memo_caseid)
+            sql = "INSERT INTO memo (title, content, memo_issue, memo_year, meomo_industry, memo_caseid)\
+                    VALUES (?, ?, ?, ?, ?, ?)"
         elif select_Items == 'tb3':
             title = request.form['title3']
             content = request.form['content3']
@@ -159,6 +160,7 @@ def search():
             memo_issue = request.form['memo_issue']
             memo_year = request.form['memo_year']
             meomo_industry = request.form['meomo_industry']
+            memo_caseid = request.form['memo_caseid']
             sql =  """select title, content from memo where """
             if memo_issue:
                 sql += """ memo_issue='""" + memo_issue + """' """
@@ -169,8 +171,11 @@ def search():
             if meomo_industry:
                 if memo_year  != '':
                     sql += """ and """                  
-                sql += """ and meomo_industry='""" + meomo_industry  + """' """
-
+                sql += """  meomo_industry='""" + meomo_industry  + """' """
+            if memo_caseid:
+                if meomo_industry  != '':
+                    sql += """ and """                  
+                sql += """  memo_caseid='""" + memo_caseid  + """' """
         elif select_Items == 'tb3':
             evidence_cause = request.form['evidence_cause']
             evidence_plaintiff = request.form['evidence_plaintiff']
