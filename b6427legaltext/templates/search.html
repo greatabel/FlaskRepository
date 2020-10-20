@@ -3,6 +3,7 @@
   <head>
 
     <link rel="stylesheet" href="/static/game-frame-styles.css" />
+    <link rel="stylesheet" href="/static/show-hide-text.min.css?q=123" />
     <style type="text/css">
 #tbl_div div {
   visibility:hidden;
@@ -17,6 +18,116 @@ span[name*="title"] {
 .mytitle { width:100%; display:block; line-height:1.5em; overflow:visible; 
   color: blue;
   font-size:22px; text-shadow:#f3f3f3 1px 1px 0px, #b2b2b2 1px 2px 0
+}
+
+
+/*@media screen and (min-width: 700px) 
+{
+     .fox-text 
+     {
+         color: black;
+     }
+     .fox-text <br>
+     {
+        display: none;
+     }
+}*/
+
+.tag-2 {
+  font-family: Helvetica, Arial, sans-serif;
+  display: inline-block;
+  color: #fff;
+  position: relative;
+  padding: 10px 35px 10px 10px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  margin: 0 40px 20px 0;
+  text-decoration: none;
+  -webkit-transition: right 0.2s ease-in;
+  -moz-transition: right 0.2s ease-in;
+  -ms-transition: right 0.2s ease-in;
+  background: #d63838;
+}
+
+.tag-2:before {
+  background: #fff;
+  width: 10px;
+  height: 10px;
+  content: "";
+  display: inline-block;
+  border-radius: 20px;
+  box-shadow: inset 0px 2px 5px rgba(0,0,0,0.2);
+  margin: 0 5px 0 0;
+}
+
+
+.tag-2:after {
+  content: "";
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+  box-shadow: inset 0px 5px 40px rgba(255,255,255,0.4), 0px 0px 10px rgba(0,0,0,0.3);
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.tag-2 .arrow {
+  display: inline-block;
+  border: 30px solid;
+  border-color: #fff #fff #fff transparent;
+  height: 2px;
+  z-index: 5000;
+  pointer-events: none;
+  position: absolute;
+  -webkit-transition: right 0.2s ease-in;
+  right: -20px;
+  top: -12px;
+  content: "";
+  display: inline-block;
+}
+
+.black .tag-2 .arrow {
+  border-color: #343434 #343434 #343434 transparent !important;
+}
+
+.tag-2:hover {
+  position: relative;
+  right: 8px;
+}
+
+.tag-2:hover .arrow {
+  right: -28px;
+}
+.tag-2:hover:after {
+  box-shadow: inset 0px -5px 30px rgba(255,255,255,0.4), 0px 0px 5px rgba(0,0,0,0.2);
+}
+
+.tag-2:active:after {
+  box-shadow: inset 0px 0px 30px rgba(0,0,0,0.3), 0px 0px 5px rgba(0,0,0,0.2);
+}
+
+.orange {
+  background-color: #e45c21;
+}
+.green {
+  background-color: #54a419;
+}
+
+.lightblue {
+  background-color: #229dc0;
+}
+
+.blue {
+  background-color: #2365d4;
+}
+
+.purple {
+  background-color: #6d1ecc;
+}
+
+.pink {
+  background-color: #c71a78;
 }
 </style>
   </head>
@@ -174,14 +285,15 @@ span[name*="title"] {
       </form>
 
 
+
       {% for r in results %}
-       <span class="mytitle"> {{ r[0] }}</span>  
-        {% if r[1]|length > 300  %}
-        <h4>{{ r[1][:300] }} ...</h4>
-        {% else %}
-        <h4>{{ r[1] }} </h4> 
-        {% endif %}       
+        <span class="mytitle"> {{ r[0]|safe }}</span>  
+        <a class="tag-2 lightblue"> 
+          <span class="arrow"></span>
+          {{ r[2] }} </a>
+        <div class="my-message">{{ r[1]|safe }} </div> 
       {% endfor %}
+
 
       <br/>
       {% for error in errors %}
@@ -192,9 +304,17 @@ span[name*="title"] {
 
 <script src="/static/jquery-3.5.1.min.js"></script>
 <script src="/static/bootstrap-4.5.2-dist/js/bootstrap.min.js"></script>
+<script src="/static/show-hide-text.js"></script>
 <script>
-
+var th = new showHideText('.my-message', {
+          charQty     : 250,
+          ellipseText : "...",
+      });
 jQuery(function () {
+  // https://stackoverflow.com/questions/3206344/passing-html-to-template-using-flask-jinja2
+  // https://stackoverflow.com/questions/2703601/how-to-line-break-from-css-without-using-br
+  // https://www.jqueryscript.net/text/Show-Hide-Long-Text-Max-Length-jQuery.html
+  // https://www.inserthtml.com/2012/02/css-tag-icons/
     $('#table-select').change(function () {
         $('#tbl_div > div').css('display', 'none');
         if (this.value) {

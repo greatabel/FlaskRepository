@@ -134,7 +134,10 @@ def search():
             case_id = request.form['case_id']
             case_cause = request.form['case_cause']
             case_industry = request.form['case_industry']
-            sql =  """select title, content from reference where """
+            sql =  """select title, content,
+                 (case_court || " " || case_year 
+                    || " " || case_id|| " " || case_cause
+                    || " " || case_industry) AS tag from reference where """
             if case_court:
                 sql += """ case_court='""" + case_court + """' """
             if case_year:
@@ -161,7 +164,10 @@ def search():
             memo_year = request.form['memo_year']
             meomo_industry = request.form['meomo_industry']
             memo_caseid = request.form['memo_caseid']
-            sql =  """select title, content from memo where """
+            sql =  """select title, content ,
+                 (memo_issue || " " || memo_year 
+                    || " " || meomo_industry|| " " || memo_caseid
+                    ) AS tag from memo where """
             if memo_issue:
                 sql += """ memo_issue='""" + memo_issue + """' """
             if memo_year:
@@ -182,7 +188,10 @@ def search():
             evidence_nation = request.form['evidence_nation']
             evidence_industry = request.form['evidence_industry']
             evidence_court = request.form['evidence_court']
-            sql =  """select title, content from evidence where """
+            sql =  """select title, content,
+                 (evidence_cause || " " ||  (CASE evidence_plaintiff WHEN true THEN '原告' ELSE '非原告' END)
+                    || " " || evidence_nation|| " " || evidence_industry
+                    || " " || evidence_court) AS tag from evidence where """
             if evidence_cause:
                 sql += """ evidence_cause='""" + evidence_cause + """' """
             if evidence_plaintiff:
@@ -208,7 +217,10 @@ def search():
             contract_amount = request.form['contract_amount']
             contract_position = request.form['contract_position']
             contract_industry = request.form['contract_industry']
-            sql =  """select title, content from contract where """
+            sql =  """select title, content,
+                 (contract_type || " " || contract_language 
+                    || " " || contract_amount|| " " || contract_position
+                    || " " || contract_industry) AS tag from contract where """
             if contract_type:
                 sql += """ contract_type='""" + contract_type + """' """
             if contract_language:
