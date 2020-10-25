@@ -1,0 +1,4 @@
+id,author-id,movie-id,comment-text,timestamp
+1,2,1,"Oh good movie",2020-02-28 14:31:26
+2,1,1,"Yeah I like it",2020-02-28 14:39:51
+3,3,1,"I hope it's better",2020-02-29 08:12:08
