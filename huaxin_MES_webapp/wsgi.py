@@ -11,6 +11,9 @@ from movie.domain.model import Director, User, Review, Movie
 
 
 app = create_app()
+app.secret_key = "ABCabc123"
+app.debug = True
+
 login_manager = flask_login.LoginManager(app)
 user_pass = {}
 
