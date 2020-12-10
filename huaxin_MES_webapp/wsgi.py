@@ -1,4 +1,6 @@
 """App entry point."""
+import os
+import json
 
 import flask_login
 from flask import request
@@ -14,8 +16,18 @@ app = create_app()
 app.secret_key = "ABCabc123"
 app.debug = True
 
+
 login_manager = flask_login.LoginManager(app)
 user_pass = {}
+
+@app.route("/statistics", methods=['GET'])
+def relationship():
+    # static/data/test_data.json
+    filename = os.path.join(app.static_folder, 'data.json')
+    with open(filename) as test_file:
+        d = json.load(test_file)
+    print(type(d), '#'*10, d)
+    return d
 
 @login_manager.user_loader
 def load_user(email):

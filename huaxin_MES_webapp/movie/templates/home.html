@@ -238,7 +238,7 @@ div[class*="release_year"] {
 <script src="/static/jquery-3.5.1.min.js"></script>
 <script src="/static/bootstrap-4.5.2-dist/js/bootstrap.min.js"></script>
 <script type="text/javascript">
-function pi_chart() {
+function pi_chart(myjson) {
   // set the dimensions and margins of the graph
 var width = 450
     height = 450
@@ -256,10 +256,13 @@ var svg = d3.select("#my_dataviz")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 
+console.log(myjson);
 
 // Create dummy data
-var data = {好: 27, 缺损: 9}
-
+var data = {好: myjson["Good"], 缺损: myjson["Bad"]}
+// var data = {好: 27, 缺损: 9}
+console.log(data);
+console.log('======');
 // set the color scale
 var color = d3.scaleOrdinal()
   .domain(data)
@@ -309,12 +312,12 @@ svg.append("text")
   
 }
 
-function group_chart(){
+function group_chart(myjson){
 let data = {
-    "Small": 10,
-    "Middle"  : 11,
-    "Big"  : 6,
-    "Bad" : 9
+    "Small": myjson.Small,
+    "Middle"  : myjson.Middle,
+    "Big"  : myjson.Big,
+    "Bad" : myjson.Bad
 };
 let margin = {top: 20, right: 20, bottom: 30, left: 40};
 let svgWidth = 720, svgHeight = 300;
@@ -402,16 +405,30 @@ bars.append("text")
    //        .text(function(d) {
    //      return d;
    // })
+var myjson = {}
+/* 修改这里的url访问地址  */
+
+var url = "http://localhost:5000/statistics";
 
 
-//------直方图 --
+$.getJSON(url, function (json) {
+    console.log(json);
+    myjson = json;
 
-group_chart();
+    //------直方图 --
 
-//----饼图---
-pi_chart();
+    group_chart(myjson);
 
-        });
+    //----饼图---
+    pi_chart(myjson);
+
+});
+
+
+
+        
+
+});
 
 
 </script>
