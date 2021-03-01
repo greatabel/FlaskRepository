@@ -2,3 +2,8 @@ __pycache__/*
 __pycache__/
 *.pyc
 *.DS_Store
+
+a9651_distribute_reinforce_game/original/webapp/saved_networks/
+a9651_distribute_reinforce_game/original/webapp/user/
+a9651_distribute_reinforce_game/webapp/saved_networks/
+a9651_distribute_reinforce_game/webapp/user/
