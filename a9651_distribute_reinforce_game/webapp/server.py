@@ -1,5 +1,7 @@
 #!/usr/bin/python
 # -- coding: utf-8 --
+from os import environ
+import math
 from flask import request, Flask, render_template
 # import time
 import re
@@ -19,14 +21,20 @@ app.debug = True
 @app.route("/h", methods=['POST'])
 def h():
     group_id = request.form.get('group_id')
+    user_id = request.form.get('user_id', type=int)
+    print(user_id, type(user_id), '*'*20)
+    group_list = group_list_Arr[user_id//5]
     return str(group_list.groups[int(group_id)].randomh)
 
 #分组
 @app.route("/gp", methods=['POST'])
 def gp():
     #获取参数
-    user_id = request.form.get('user_id')
-    g,b = Con.getbird_id(user_id)
+    user_id = request.form.get('user_id', type=int)
+    print(user_id, type(user_id), '*'*20)
+    Con = Con_Arr[user_id//5]
+
+    g,b = Con.getbird_id(user_id//5)
     print('in /gp', g, b)
     return str([g,b])
 
@@ -36,6 +44,11 @@ def pp():
     #获取参数
     group_id = request.form.get('group_id')
     print('in /pp group_id=', group_id)
+
+    user_id = request.form.get('user_id', type=int)
+    print(user_id, type(user_id), '*'*20)
+    Con = Con_Arr[user_id//5]
+
     if Con.wait_con(int(group_id)):
         return "true"
     return "false"
@@ -56,6 +69,11 @@ def img():
     bird_id = int(bird_id)
     group_id = int(group_id)
     die_id = int(die_id)
+
+    user_id = request.form.get('user_id', type=int)
+    print(user_id, type(user_id), '*'*20)
+    group_list = group_list_Arr[user_id//5]
+
     if die_id==6:
         base64_data=base64_data.replace(" ","+").replace("data:image/jpeg;base64,","")
         target = basetoimg(base64_data)
@@ -86,6 +104,11 @@ def getact():
     bird_id = request.form.get('bird_id')
     group_id = int(group_id)
     bird_id = int(bird_id)
+
+    user_id = request.form.get('user_id', type=int)
+    print(user_id, type(user_id), '*'*20)
+    group_list = group_list_Arr[user_id//5]
+
     # print('group_list.groups[group_id].isok[bird_id]=', group_list.groups[group_id].isok[bird_id])
     # print(group_id, group_list.groups[group_id].isok, bird_id)
     if  group_list.groups[group_id].isok[bird_id]:
@@ -97,11 +120,18 @@ def getact():
 @app.route("/abel_refresh", methods=['POST'])
 def abel_refresh():
     print('abel_refresh')
-    global Tmodel, group_list, Con
-    Tmodel.abel_close()
 
-    #初始化训练模型
-    Tmodel = TrainNetwork()
+    user_id = request.form.get('user_id', type=int)
+    print(user_id, type(user_id), '*'*20)
+
+
+    group_list = group_list_Arr[user_id//5]
+    Con = Con_Arr[user_id//5]
+
+    # Tmodel.abel_close()
+
+    # #初始化训练模型
+    # Tmodel = TrainNetwork()
     #初始化训练模型
     # model = Detect("saved_networks/")
     #初始化对战组
@@ -127,17 +157,43 @@ def abel_refresh():
 #     action = Tmodel.train(target,float(reward))
 #     return str([[0,action[1]],[0,1],[0,0],[0,1],[0,0],[random.randint(12, 20) ,random.randint(12, 20) ,random.randint(12, 20) ]])
 
-Tmodel = None
-group_list = None
-Con = None
+
+# group_list = None
+# Con = None
+
+
+global group_list_Arr, Con_Arr
+group_list_Arr = []
+Con_Arr = []
+max_user_num = environ.get('SupportUserMaxNumber', 10)
+
+
+def create_related_sessions(max_user_num):
+    c = max_user_num / 5
+    n = math.ceil(c)
+    for i in range(n):
+        print(i)
+        #初始化训练模型
+        # model = Detect("saved_networks/")
+        #初始化对战组
+        group_list = Group_list()
+        #初始化连接器
+        Con = Connect(group_list)
+
+        group_list_Arr.append(group_list)
+        Con_Arr.append(Con)
+
 
 if __name__ == "__main__":
     #初始化训练模型
-    Tmodel = TrainNetwork()
+    # Tmodel = TrainNetwork()
+
     #初始化训练模型
     # model = Detect("saved_networks/")
     #初始化对战组
-    group_list = Group_list()
-    #初始化连接器
-    Con = Connect(group_list)
+    # group_list = Group_list()
+    # #初始化连接器
+    # Con = Connect(group_list)
+    create_related_sessions(max_user_num)
+
     app.run(host="0.0.0.0", port=80)

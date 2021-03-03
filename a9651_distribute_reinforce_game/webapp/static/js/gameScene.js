@@ -121,12 +121,15 @@
                     
             //获取上传图片base64
             var imgbase64 = this.ctx.cvs.toDataURL("image/jpeg",1);
+            var user_id = document.getElementById('user_id').value;
             //图片大小改为80x80
             dealImage(imgbase64,80,80, function useImg(base64) {
-                Ajax.post("img","base64="+base64+"&group_id="+this.ctx.group_id+"&bird_id="+this.ctx.bird_id+"&die_id="+6,function(data){})
+                Ajax.post("img","base64="+base64+"&group_id="+this.ctx.group_id+"&bird_id="+this.ctx.bird_id+"&die_id="+6+"&user_id="+user_id,function(data){})
                 while (true){
                     var a = false;
-                    Ajax.post("getact","group_id="+this.ctx.group_id+"&bird_id="+this.ctx.bird_id,function(data){
+                    
+                    console.log(user_id, 'in gamescene');
+                    Ajax.post("getact","group_id="+this.ctx.group_id+"&bird_id="+this.ctx.bird_id+"&user_id="+user_id,function(data){
                         // console.log(data)
                         if(data=='false'){}else{
                             var jsarr=JSON.parse( data );

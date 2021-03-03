@@ -18,6 +18,15 @@ img {
     </head>
     <body>
 <canvas id="cvs" width="320" height="550"></canvas>
+
+
+<div>
+    <label for="user_id">用户id</label>
+    <input type="text" value="" id="user_id" name="user_id">
+    <input type="submit" value="开始匹配" onclick="getid()" >
+    <input type="submit" value="再玩一次" onclick="refresh()" >
+</div>
+
 <script src="static/js/utils.js"></script> 
 <script src="static/js/util.js"></script> 
 <script src="static/js/bird.js"></script> 
@@ -90,19 +99,21 @@ img {
             // 切入游戏场景，开始游戏
             (function run() {
 
-                console.log('isRun:', isRun);
+                // console.log('isRun:', isRun);
 
                 if ( isReady && isRun ) {
                     gameScene.draw();
                 }else if(ctx.group_id>=0 && isRun){
-                    Ajax.post("pp","group_id="+ctx.group_id,function(data){
+                    var user_id = document.getElementById('user_id').value;
+                    Ajax.post("pp","group_id="+ctx.group_id+"&user_id="+user_id,function(data){
                         if(data == "true"){
                             isReady = true
                             init = true
                         }
                 })}
                 if(init){
-                    Ajax.post("h","group_id="+ctx.group_id,function(data){
+                    var user_id = document.getElementById('user_id').value;
+                    Ajax.post("h","group_id="+ctx.group_id+"&user_id="+user_id,function(data){
                         var jsarr=JSON.parse( data );
                         randomh = jsarr;
                         webdata = [[0,0],[0,0],[0,0],[0,0],[0,0],randomh];
@@ -118,6 +129,7 @@ img {
                         Ajax.post("img","group_id="+ctx.group_id+"&bird_id="+ctx.bird_id+"&die_id="+ctx.bird_id,function(data){})
                         isRun = false; // 游戏场景退场
                         overScene.draw(); // 结束场景切入
+
                     } );
                     initial = false
                 }
@@ -200,14 +212,5 @@ img {
                 })
         }
 </script>
-
-<div>
-    <label for="user_id">用户id</label>
-    <input type="text" value="" id="user_id" name="user_id">
-    <input type="submit" value="开始匹配" onclick="getid()" >
-    <input type="submit" value="再玩一次" onclick="refresh()" >
-</div>
-
-
 </body>
 </html>
