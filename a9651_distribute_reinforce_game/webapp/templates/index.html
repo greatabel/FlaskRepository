@@ -90,6 +90,8 @@ img {
             // 切入游戏场景，开始游戏
             (function run() {
 
+                console.log('isRun:', isRun);
+
                 if ( isReady && isRun ) {
                     gameScene.draw();
                 }else if(ctx.group_id>=0 && isRun){
@@ -187,12 +189,23 @@ img {
                 })
             }
         }
+
+        function refresh(){
+
+            // 需要重载网页，应该是游戏的关系，我没有深入研究游戏代码
+            window.location.reload();
+            Ajax.post("abel_refresh","user_id="+user_id,function(data){
+                    var jsarr=JSON.parse( data );
+                    console.log('refresh=', data);
+                })
+        }
 </script>
 
 <div>
     <label for="user_id">用户id</label>
     <input type="text" value="" id="user_id" name="user_id">
     <input type="submit" value="开始匹配" onclick="getid()" >
+    <input type="submit" value="再玩一次" onclick="refresh()" >
 </div>
 
 

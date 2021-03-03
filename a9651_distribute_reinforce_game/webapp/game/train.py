@@ -49,6 +49,8 @@ class TrainNetwork():
         self.saver.restore(self.sess, checkpoint.model_checkpoint_path)
         tf.reset_default_graph()
 
+    def abel_close(self):
+        self.sess.close()
 
     # 开始训练
     def train(self,img,reward):

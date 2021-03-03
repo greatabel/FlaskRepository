@@ -12,7 +12,7 @@ from game.connect import *
 from utils.utils import *
 
 app = Flask(__name__)
-
+app.debug = True
 
 
 #初始管道数据
@@ -27,6 +27,7 @@ def gp():
     #获取参数
     user_id = request.form.get('user_id')
     g,b = Con.getbird_id(user_id)
+    print('in /gp', g, b)
     return str([g,b])
 
 #匹配
@@ -34,6 +35,7 @@ def gp():
 def pp():
     #获取参数
     group_id = request.form.get('group_id')
+    print('in /pp group_id=', group_id)
     if Con.wait_con(int(group_id)):
         return "true"
     return "false"
@@ -84,30 +86,50 @@ def getact():
     bird_id = request.form.get('bird_id')
     group_id = int(group_id)
     bird_id = int(bird_id)
+    # print('group_list.groups[group_id].isok[bird_id]=', group_list.groups[group_id].isok[bird_id])
+    # print(group_id, group_list.groups[group_id].isok, bird_id)
     if  group_list.groups[group_id].isok[bird_id]:
         group_list.groups[group_id].isok[bird_id] = False
         return str(group_list.groups[group_id].action)
         
     return "false"
 
+@app.route("/abel_refresh", methods=['POST'])
+def abel_refresh():
+    print('abel_refresh')
+    global Tmodel, group_list, Con
+    Tmodel.abel_close()
 
+    #初始化训练模型
+    Tmodel = TrainNetwork()
+    #初始化训练模型
+    # model = Detect("saved_networks/")
+    #初始化对战组
+    group_list = Group_list()
+    #初始化连接器
+    Con = Connect(group_list)
+    return str([])
 
 #训练
-@app.route("/trainhtml")
-def html():
-    return render_template('train.html')
+# @app.route("/trainhtml")
+# def html():
+#     return render_template('train.html')
 
 #获取训练数据
-@app.route("/train", methods=['POST'])
-def t():
-    # 获取上传base64图片
-    base64_data = request.form.get('base64')
-    reward =request.form.get('reward')
-    print(reward)
-    base64_data=base64_data.replace(" ","+").replace("data:image/jpeg;base64,","")
-    target = basetoimg(base64_data)
-    action = Tmodel.train(target,float(reward))
-    return str([[0,action[1]],[0,1],[0,0],[0,1],[0,0],[random.randint(12, 20) ,random.randint(12, 20) ,random.randint(12, 20) ]])
+# @app.route("/train", methods=['POST'])
+# def t():
+#     # 获取上传base64图片
+#     base64_data = request.form.get('base64')
+#     reward =request.form.get('reward')
+#     print(reward)
+#     base64_data=base64_data.replace(" ","+").replace("data:image/jpeg;base64,","")
+#     target = basetoimg(base64_data)
+#     action = Tmodel.train(target,float(reward))
+#     return str([[0,action[1]],[0,1],[0,0],[0,1],[0,0],[random.randint(12, 20) ,random.randint(12, 20) ,random.randint(12, 20) ]])
+
+Tmodel = None
+group_list = None
+Con = None
 
 if __name__ == "__main__":
     #初始化训练模型

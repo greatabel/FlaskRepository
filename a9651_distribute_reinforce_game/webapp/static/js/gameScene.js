@@ -90,9 +90,12 @@
             } );
             //管道
             this.pipe.forEach( function( pipe,index ) {
-                pipe.random = webdata[5][index]
-                pipe.update();
-                pipe.draw( );
+                if(webdata.length >= 5){
+                    pipe.random = webdata[5][index]
+                    pipe.update();
+                    pipe.draw( );
+                }
+
             } );
             //大地
             this.roles.forEach( function( role ) {
