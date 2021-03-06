@@ -103,7 +103,8 @@ class Comment(db.Model):
     movie_id = db.Column(db.Integer, db.ForeignKey("movie.id"))  # 所属电影
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))  # 所属用户
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)  # 评论时间
-
+    star = db.Column(db.SmallInteger)  # 星级
+    
     def __repr__(self):
         return "<Comment %r>" % self.id
 
@@ -193,7 +194,7 @@ class Oplog(db.Model):
     def __repr__(self):
         return "<Oplog %r>" % self.id
 
-    # if __name__ == '__main__':
+if __name__ == '__main__':
 
     # 1.创建出所有数据模型(第一次运行后就不用了,可以注释掉)
     db.create_all()

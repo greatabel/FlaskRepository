@@ -104,7 +104,8 @@ class Comment(db.Model):
     movie_id = db.Column(db.Integer, db.ForeignKey("movie.id"))  # 所属电影
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))  # 所属用户
     addtime = db.Column(db.DateTime, index=True, default=datetime.now)  # 评论时间
-
+    star = db.Column(db.SmallInteger)  # 星级
+    
     def __repr__(self):
         return "<Comment %r>" % self.id
 

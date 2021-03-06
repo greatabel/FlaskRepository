@@ -1,0 +1,1 @@
+ALTER TABLE movie.comment ADD COLUMN star Smallint DEFAULT 0;
