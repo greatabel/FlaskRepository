@@ -4,7 +4,7 @@
 
 {% block content %}
     <!--热门视频-->
-    <section id="hotmovie" style="margin-top:76px">
+<!--     <section id="hotmovie" style="margin-top:76px">
         <div class="container">
             <div class="row wow fadeInRight" data-wow-delay="0.6s">
                 <div class="row">
@@ -13,14 +13,19 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
     <!--热门视频-->
     <!--视频列表-->
-    <section id="movielist">
+    <section id="movielist" style="margin-top:76px">
         <div class="container">
             <div class="row wow fadeIn" data-wow-delay="0.6s">
                 <div class="col-md-12 table-responsive">
-                    <table class="table text-left table-bordered" id="movietags">
+                    <table class="table text-left table-bordered" id="movietags" style="border: 5px solid blue !important;">
+                        <tr>
+                            <td></td>
+                            <td><h3>电影数据分析区</h3></td>
+                        </tr>
+
                         <tr>
                             <td style="width:10%;color: #3c6de0;font-weight: bold">&nbsp;&nbsp;&nbsp;&nbsp;视频标签</td>
                             <td style="width:90%;">
@@ -91,7 +96,7 @@
 {#                            <a href="{{ url_for('home.play',id=v.id,page=1) }}" target="_blank" role="button">#}
                             <a href="{{ url_for('home.play',id=v.id,page=1) }}" role="button">
                                 <img src="{{ url_for('static',filename='uploads/' + v.logo) }}"
-                                     style="width: 300px;height: 190px"
+                                     style="width: 300px;height: 390px"
                                      class="img-responsive center-block" alt="{{ v.title }}" title="{{ v.title }}"></a>
                             <div class="text-left" style="margin-left:auto;margin-right:auto;width:210px;">
                                 <span style="color:#727272;font-style: italic;font-weight: bolder">{{ v.title }}</span><br>
@@ -157,6 +162,7 @@
         <ol id="playlist"></ol>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
     <script type="text/javascript" src="{{ url_for('static',filename='music/js/jquery.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static',filename='music/js/jquery.marquee.min.js') }}"></script>
     <script>
