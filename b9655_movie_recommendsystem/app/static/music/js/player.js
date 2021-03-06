@@ -1,4 +1,3 @@
-/* DaTouWang URL: www.datouwang.com */
 (function($){
 	// Settings
 	var isShowNotification = false,

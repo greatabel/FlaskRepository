@@ -136,13 +136,7 @@
             var key = $('#key_movie').val();
             location.href = '{{ url_for('home.search',page=1) }}?key=' + key;
         });
-        $.goup({
-            trigger: 100,
-            bottomOffset: 30, /*图标距离底边的边距*/
-            locationOffset: 30, /*图标距离右边的边距*/
-            title: '', /*图标下面的文字*/
-            titleAsText: true
-        });
+
 
 </script>
 
@@ -162,17 +156,6 @@
 </script>
 
 
-{#<script>#}
-{#    $(document).ready(function () {#}
-{#        $.goup({#}
-{#            trigger: 100,#}
-{#            bottomOffset: 30, /*图标距离底边的边距*/#}
-{#            locationOffset: 30, /*图标距离右边的边距*/#}
-{#            title: '', /*图标下面的文字*/#}
-{#            titleAsText: true#}
-{#        });#}
-{#    });#}
-{#</script>#}
 
 
 

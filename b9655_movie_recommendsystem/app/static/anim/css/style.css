@@ -33,23 +33,7 @@ em{font-style:normal;}
 	from{transform:rotate(120deg);opacity:0;}
 	to{transform:rotate(0deg);opacity:0.8;}
 }
-.banner_btn{ 	/*a 标签 按钮*/
-		width:255px; height:240px; position:absolute;
-		display:block; z-index:9; top:20px;
-}
-.btn_next{right:20px;}
-.banner_btn span{width:50px; height:100px; display:block; position:absolute;
-		left:110px; top:70px; opacity:0; transition:0.5s;
-		background:url(../images/bannerBtn.png) no-repeat 0 0;}
-.btn_next span{background-position:-50px 0;}
-.main_banner_box:hover .banner_btn_arrow{opacity:0.6;}
-.banner_btn span i{width:50px; height:100px; display:block;
-		background:url(../images/bannerBtn.png) no-repeat 0 0;}
-.btn_next span i{background-position:-50px 0;}
-.banner_btn:hover i{
-		-webkit-animation:arrow 0.5s infinite alternate ease-in-out;
-		-moz-animation:arrow 0.5s infinite alternate ease-in-out;
-}
+
 @-webkit-keyframes arrow{
 	from{-webkit-transform:scale(1); opacity:1;}
 	to{-webkit-transform:scale(1.5); opacity:0.2;}

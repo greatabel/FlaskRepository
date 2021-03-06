@@ -47,10 +47,10 @@ def admin_auth(f):
         else:
             auths = []
         auth_list = Auth.query.all()
-        urls = [v.url for v in auth_list for val in auths if val == v.id]
-        rule = request.url_rule
-        if str(rule) not in urls:
-            abort(404)  # 角色没有权限,就抛出异常,返回404页面
+        # urls = [v.url for v in auth_list for val in auths if val == v.id]
+        # rule = request.url_rule
+        # if str(rule) not in urls:
+        #     abort(404)  # 角色没有权限,就抛出异常,返回404页面
         return f(*args, **kwargs)
 
     return decorated_function
@@ -215,8 +215,9 @@ def tag_edit(id=None):
 # 1.添加电影
 @admin.route('/movie/add/', methods=['GET', 'POST'])
 @admin_login_req
-@admin_auth
+# @admin_auth
 def movie_add():
+    print('in movie_add')
     form = MovieForm()
     if form.validate_on_submit():
         data = form.data
