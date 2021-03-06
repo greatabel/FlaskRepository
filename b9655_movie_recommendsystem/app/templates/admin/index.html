@@ -22,7 +22,7 @@
         </ol>
     </section>
     <section class="content" id="showcontent">
-        <div class="row">
+    <!--     <div class="row">
             <div class="col-md-6">
                 <div class="box box-primary">
                     <div class="box-header with-border">
@@ -60,7 +60,7 @@
                     </form>
                 </div>
             </div>
-        </div>
+        </div> -->
     </section>
 {% endblock %}
 
@@ -68,8 +68,9 @@
 {% block js %}
 {# 添加js代码 #}
 {# 内存使用率的图表js #}
-<script src="{{ url_for('static',filename='js/echarts.min.js') }}"></script>
+<!-- <script src="{{ url_for('static',filename='js/echarts.min.js') }}"></script> -->
 <script>
+    /*
     var myChart = echarts.init(document.getElementById('meminfo'));
     option = {
         backgroundColor: "white",
@@ -98,6 +99,7 @@
         option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
         myChart.setOption(option, true);
     }, 2000);
+    */
 
 </script>
 
