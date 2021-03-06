@@ -40,12 +40,20 @@ pip3 install -r requirements.txt
 进入app目录，找到abel_import_all_to_db.py
 在命令行地下运行python3 abel_import_all_to_db.py
 该命令确保说有的数据建立表和用户，角色……各种数据必要操作
+（
+	如果嫌弃自己数据库数据维护步骤麻烦，可以使用：
+abel_backup/movie_dump.sql，直接将我做实验的数据表中的数据也全部同步到moivie中。
+记得如果同步数据，请保持我的static文件夹和你的一致
+）
+
 
 6.
 如果你的mysql使用的不是特定的用户名和密码，
 进入文件app文件夹，找到__init__.py文件，请修改下面文件：
 修改改文件第7行：app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root@127.0.0.1:3306/movie"
 把"mysql://root@127.0.0.1:3306/movie"中的root替换为 username:password
+
+
 
 7.
 安装好依赖库和数据库服务启动，数据库相关操作脚本已经顺利执行后，

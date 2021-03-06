@@ -164,6 +164,17 @@
                                             width: 1126px;
                                         }
                                     </style>
+
+                                    <select name="choose_moive_start" id="choose_moive_start">
+                                        <option value="">给电影评分-</option>
+                                        <option value="1">🌟</option>
+                                        <option value="2">🌟🌟</option>
+                                        <option value="3">🌟🌟🌟</option>
+                                        <option value="4">🌟🌟🌟🌟</option>
+
+                                    </select>
+                                    <br/>
+
                                     <label for="comment">{{ form.content.label }}</label><br>
                                     {# 原版(带表情的): <label for="input_content">{{ form.content.label }}</label><br>#}
                                     {{ form.content }}
