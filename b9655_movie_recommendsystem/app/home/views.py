@@ -81,11 +81,35 @@ def index(page=None):
 
     if page == None:
         page = 1
-    page_data = page_data.paginate(page=page, per_page=2)
+    page_data = page_data.paginate(page=page, per_page=4)
     # 将上面接受到的参数组成一个字典p
     p = dict(tid=tid, star=star, time=time, pm=pm, cm=cm)
     return render_template("home/index.html", tags=tags, p=p, page_data=page_data)
 
+
+@home.route("/recommend/", methods=["GET", "POST"])
+def recommend():
+    import app.home.recommandation as recommandation
+    choosed = recommandation.main()
+
+    if request.method == "POST":
+        
+        movie_name = request.form['movie_name']
+        movie_id = request.form['movie_id']
+        rtext = request.form['rtext']
+        rating = request.form['rating']
+
+        movie = Movie(movie_name, 1990, int(movie_id))
+        review = Review(movie, rtext, int(rating))
+        rc_reviews.append(review)
+
+
+    # return render_template(
+    #     'recommend.html',
+    #     choosed=choosed
+        
+    # )
+    return render_template("home/recommend.html", choosed=choosed)
 
 # 登录
 @home.route("/login/", methods=["GET", "POST"])
