@@ -103,13 +103,17 @@ def recommend():
         review = Review(movie, rtext, int(rating))
         rc_reviews.append(review)
 
-
-    # return render_template(
-    #     'recommend.html',
-    #     choosed=choosed
-        
-    # )
-    return render_template("home/recommend.html", choosed=choosed)
+    # print(choosed, 'typeof choosed', type(choosed))
+    movies = Movie.query.all()
+    choosed_ms = []
+    for m in movies:
+        # print(m.title, m.url)
+        if m.title in choosed:
+            # print(m.title, '>>')
+            choosed_ms.append(m)
+    # for m in choosed_ms:
+    #     print(m.id, m.title)
+    return render_template("home/recommend.html", choosed=choosed_ms)
 
 # 登录
 @home.route("/login/", methods=["GET", "POST"])

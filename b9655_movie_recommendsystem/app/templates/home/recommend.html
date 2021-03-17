@@ -32,7 +32,10 @@ div[class*="release_year"] {
 
 
     </style>
-    <link rel='stylesheet' href='/static/bootstrap-4.5.2-dist/css/bootstrap.min.css'>
+
+      <link rel="shortcut icon" href="{{ url_for('static',filename='base/images/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='base/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='base/css/bootstrap-movie.css') }}">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -56,8 +59,8 @@ div[class*="release_year"] {
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
       <div class="container">
-        <h1>Movie WebApp by Delysia Lee</h1>
-        <p>You can view/search movie on our website</p>
+        <h1>Movie RecommendationSystem</h1>
+        <p>根据协同过滤推荐算法</p>
       </div>
     </div>
 
@@ -70,23 +73,53 @@ div[class*="release_year"] {
 
         <div class="col-md-8">
 
-        <img src="/static/images/demo.png" class="img-fluid" >
+        <!-- <img src="/static/images/demo.png" class="img-fluid" > -->
         Accoriding to data above, 
-        We recommend for user[Toby] such movie according by <b>Collaborative Filtering Algorithm</b>:
+        We recommend for user[Abel] such movie according by <b>Collaborative Filtering Algorithm</b>:
 
-                  {% for c in choosed %}
+<!--                   {% for c in choosed %}
 
 
             <div class="release_year"> {{ c|safe }}</div>  
 
 
-           {% endfor %}
+           {% endfor %} -->
         </div>
 
+        <div class="col-md-12 table-responsive">
+                {% for v in choosed %}
+                    <div class="col-md-3">
+                        <div class="movielist text-center">
+                            <!--<img data-original="holder.js/262x166"
+                                     class="img-responsive lazy center-block" alt="">-->
+{#                            <a href="{{ url_for('home.play',id=v.id,page=1) }}" target="_blank" role="button">#}
+                            <a href="{{ url_for('home.play',id=v.id,page=1) }}" role="button">
+                                <img src="{{ url_for('static',filename='uploads/' + v.logo) }}"
+                                     style="width: 300px;height: 390px"
+                                     class="img-responsive center-block" alt="{{ v.title }}" title="{{ v.title }}"></a>
+                            <div class="text-left" style="margin-left:auto;margin-right:auto;width:210px;">
+                                <span style="color:#727272;font-style: italic;font-weight: bolder">{{ v.title }}</span><br>
+                                <div>
+                                    {# 实心星星#}
+                                    {% for val in range(1,1+v.star) %}
+                                        <span class="glyphicon glyphicon-star" style="color:#FFD119"></span>
+                                    {% endfor %}
+                                    {# 空心星星#}
+                                    {% for val in range(1,6-v.star) %}
+                                        <span class="glyphicon glyphicon-star-empty" style="color:#FFD119"></span>
+                                    {% endfor %}
 
+                                </div>
+                            </div>
+{#                            <a href="{{ url_for('home.play',id=v.id,page=1) }}" class="btn btn-primary" target="_blank"#}
+{#                               role="button"><span class="glyphicon glyphicon-play"></span>&nbsp;播放</a>#}
+                        <a href="{{ url_for('home.play',id=v.id,page=1) }}" class="btn btn-primary"
+                               role="button"><span class="glyphicon glyphicon-play"></span>&nbsp;播放</a>
+                        </div>
+                    </div>
+                {% endfor %}
 
-
-
+  </div>
     
 
 
@@ -117,8 +150,12 @@ div[class*="release_year"] {
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-<script src="/static/jquery-3.5.1.min.js"></script>
-<script src="/static/bootstrap-4.5.2-dist/js/bootstrap.min.js"></script>
+<script src="{{ url_for('static',filename='base/js/jquery.min.js') }}"></script>
+<script src="{{ url_for('static',filename='base/js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static',filename='base/js/jquery.singlePageNav.min.js') }}"></script>
+<script src="{{ url_for('static',filename='base/js/wow.min.js') }}"></script>
+<script src="{{ url_for('static',filename='lazyload/jquery.lazyload.min.js') }}"></script>
+<script src="//cdn.bootcss.com/holder/2.9.4/holder.min.js"></script>
 
   </body>
 </html>

@@ -42,7 +42,7 @@ def main():
     
     sm = pivot_ratings.corr()
     print(sm.to_string())
-
+    # 协同过滤推荐
     demo = 'Abel'
     # print(colored('1. 找出该用户为打分的电影 =>', 'red', attrs=['reverse', 'blink']))
     missing_films = list(pivot_ratings[pivot_ratings[demo].isnull()].index)
