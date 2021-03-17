@@ -111,8 +111,10 @@ def recommend():
         if m.title in choosed:
             # print(m.title, '>>')
             choosed_ms.append(m)
-    # for m in choosed_ms:
-    #     print(m.id, m.title)
+    if len(choosed_ms) < 4:
+        for m in movies:
+            if m.title in ('生之欲', '关云长') and m not in choosed_ms:
+                choosed_ms.append(m)
     return render_template("home/recommend.html", choosed=choosed_ms)
 
 # 登录
