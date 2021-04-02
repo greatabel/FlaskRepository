@@ -85,6 +85,20 @@ def select_show(id):
     if len(rows) >= 1:
         # print(rows[0])
         return rows[0]
+    return None
+
+def delete_show(id):
+    """
+    Query all rows in the tasks table
+    :param conn: the Connection object
+    :return:
+    """
+    conn = sqlite3.connect(db_name)
+    cur = conn.cursor()
+    cur.execute("delete from shows where id="+ str(id))
+
+    rows = cur.fetchall()
+    conn.close()
 
 def get_json(filename):
     
@@ -165,6 +179,13 @@ class TV_Show_Detail(Resource):
     def put(self, todo_id):
         todos[todo_id] = request.form['data']
         return {todo_id: todos[todo_id]}
+
+    def delete(self, todo_id):
+        delete_show(todo_id)
+        return { 
+            "message" :"The tv show with id "+str(todo_id)+ " was removed from the database!",
+            "id": todo_id
+        }, 200
 
 if __name__ == '__main__':
     db_start()
