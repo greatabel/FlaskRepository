@@ -10,7 +10,7 @@
 
     <link rel='stylesheet' href='/static/bootstrap-4.5.2-dist/css/bootstrap.min.css'>
     <script type="text/javascript" src="/static/d3/d3.js"></script>
-</script>
+
  <link rel="stylesheet" href="/static/game-frame-styles.css" />
 <style type="text/css">
 
@@ -32,13 +32,14 @@ h1 { font-size: 12pt; }
       <input id="query" name="query" value="输入豆瓣id" style="width:300px;"
 
         onfocus="this.value=''">
-      <span>目标平台：weibo/微博</span>
+      <span></span>
       <input id="button" type="submit" class="btn btn-warning" value="找出不同平台关联用户" >
       <br/>
-      <span>输入示例: krugman / zhangjiawei </span>
+      <span>输入示例: </span>
+      
     </form>
 
-      <p style="font-weight: bold;color: blue;">豆瓣源数据:<br/> {{index}}</p>
+      <p style="font-weight: bold;color: blue;">数据:<br/> {{index}}</p>
 
       <!-- <a href="{{ query_value }}">click here</a> -->
   </div>
