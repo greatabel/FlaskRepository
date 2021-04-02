@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>航空大数据可视化</title>
+    <!-- <script type="text/javascript" src="http://d3js.org/d3.v5.min.js"></script> -->
+    <meta name="description" content="placelist">
+    <meta name="content-type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <link rel='stylesheet' href='/static/bootstrap-4.5.2-dist/css/bootstrap.min.css'>
+    <script type="text/javascript" src="/static/d3/d3.js"></script>
+</script>
+ <link rel="stylesheet" href="/static/game-frame-styles.css" />
+<style type="text/css">
+
+img {
+width: 200px;
+height: 100px;
+}
+
+h1 { font-size: 12pt; }
+
+</style>
+  </head>
+
+ 
+<body id="level1">
+  <img src="/static/scp2.jpg" class="img-fluid" alt="Responsive image">
+      <div>
+      <form action="" method="GET">
+      <input id="query" name="query" value="输入豆瓣id" style="width:300px;"
+
+        onfocus="this.value=''">
+      <span>目标平台：weibo/微博</span>
+      <input id="button" type="submit" class="btn btn-warning" value="找出不同平台关联用户" >
+      <br/>
+      <span>输入示例: krugman / zhangjiawei </span>
+    </form>
+
+      <p style="font-weight: bold;color: blue;">豆瓣源数据:<br/> {{index}}</p>
+
+      <!-- <a href="{{ query_value }}">click here</a> -->
+  </div>
+
+<script src="/static/jquery-3.5.1.min.js"></script>
+<script src="/static/bootstrap-4.5.2-dist/js/bootstrap.min.js"></script>
+  </body>
+</html>
