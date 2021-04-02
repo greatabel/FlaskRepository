@@ -52,6 +52,14 @@ def delay():
 
     return r
 
+@app.route('/opensky/')
+def opensky():
+    r = make_response(
+        render_template('opensky.html')
+        )
+
+    return r
+
 @app.route('/index/')
 def index():
     r = make_response(
