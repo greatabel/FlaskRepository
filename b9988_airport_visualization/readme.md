@@ -12,35 +12,56 @@
 https://docs.python.org/zh-cn/3/tutorial/venv.html
 
 4.
-（可选，非必须）
-CUDA
-根据机器是否有cuda的英伟达显卡，分别安装：
-建议需要使用安装有cuda的机器，否则后续操作不能打开GPU，虽然可以运行，但模型运行速度会降低好几倍
-
-检测算法在ubuntu上运行的时候，最好装上python3-dev（不是必须的）
-sudo apt-get install python3-pip python3-dev # for Python 3.n
-
-5.
-terminal底下进入工程目录下，在requirements.txt同级目录下运行：
-pip3 install --upgrade -r requirements.txt
-
-
-6.
-处理归一化图片尺寸，方便在不同平台之间比较头像相似性
-weibo尺寸是固定的，豆瓣是不统一，我们为了方便，把豆瓣头像都归化为微博的尺寸 180x180 ：
-python3 i1unify_style.py  180 180  'data/img_douban' 'data/processed_douban'
-
-7.
-比较用户的用户名，用户简介相似度：
-python3 i2compare.py
-
-8.
-比较用户的头像相似度：
-进入i3perceptual_similarity 后执行：
-python3 i3avatar_compare.py
-
-9.
 运行预测网站
-进入i4api_and_website ,执行
-python3 app.py
-然后浏览器访问：http://127.0.0.1:5000/find_connect/
+进入当前工程目录 ,执行
+python3 i0app.py
+然后浏览器访问：
+http://127.0.0.1:5000/
+http://127.0.0.1:5000/index/
+
+
+
+-------------------------数据介绍------------------
+
+1. 机场交通拥堵网络结构图
+
+数据位置
+static/data/data.json
+数据来源
+http://stat-computing.org/dataexpo/2009/the-data.html
+https://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.asp
+https://www.transtats.bts.gov/nosessionvar.asp
+
+Variable descriptions
+Name	Description
+1	Year	1987-2008
+2	Month	1-12
+3	DayofMonth	1-31
+4	DayOfWeek	1 (Monday) - 7 (Sunday)
+5	DepTime	actual departure time (local, hhmm)
+6	CRSDepTime	scheduled departure time (local, hhmm)
+7	ArrTime	actual arrival time (local, hhmm)
+8	CRSArrTime	scheduled arrival time (local, hhmm)
+9	UniqueCarrier	unique carrier code
+10	FlightNum	flight number
+11	TailNum	plane tail number
+12	ActualElapsedTime	in minutes
+13	CRSElapsedTime	in minutes
+14	AirTime	in minutes
+15	ArrDelay	arrival delay, in minutes
+16	DepDelay	departure delay, in minutes
+17	Origin	origin IATA airport code
+18	Dest	destination IATA airport code
+19	Distance	in miles
+20	TaxiIn	taxi in time, in minutes
+21	TaxiOut	taxi out time in minutes
+22	Cancelled	was the flight cancelled?
+23	CancellationCode	reason for cancellation (A = carrier, B = weather, C = NAS, D = security)
+24	Diverted	1 = yes, 0 = no
+25	CarrierDelay	in minutes
+26	WeatherDelay	in minutes
+27	NASDelay	in minutes
+28	SecurityDelay	in minutes
+29	LateAircraftDelay	in minutes
+
+2. 

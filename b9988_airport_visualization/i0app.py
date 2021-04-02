@@ -29,8 +29,8 @@ app.debug = True
 #     3: [2, 0.0, 0.257, 0.604]
 # }
 
-@app.route('/find_connect/')
-@app.route('/find_connect/<index_id>')
+@app.route('/home/')
+@app.route('/home/<index_id>')
 def scp2(index_id=""):
     index = ''
     target = ''
@@ -40,6 +40,14 @@ def scp2(index_id=""):
 
     r = make_response(
         render_template('scp2.html', query_value=query_value,index=index)
+        )
+
+    return r
+
+@app.route('/delay/')
+def delay():
+    r = make_response(
+        render_template('airport_delays_congestion.html')
         )
 
     return r
@@ -66,7 +74,7 @@ def relationship():
     filename = os.path.join(app.static_folder, 'data/data.json')
     with open(filename) as test_file:
         d = json.load(test_file)
-    print(type(d), '#'*10, d)
+    # print(type(d), '#'*10, d)
     return jsonify(d)
 
 if __name__ == '__main__':

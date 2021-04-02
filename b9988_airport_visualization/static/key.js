@@ -114,7 +114,7 @@ d3.json("http://localhost:5000/statistics",function(error,root){
         .selectAll("circle")
         .data(force.nodes())//表示使用force.nodes数据
         .enter().append("circle")
-        .style("fill","#00BFFF")
+        .style("fill","green")
         .style('stroke',"#4682B4")
         .style('cursor',"pointer")
         .attr("r",function(node,i){
@@ -132,10 +132,10 @@ d3.json("http://localhost:5000/statistics",function(error,root){
                 }
             });*/
             circle.style('stroke-width',2)
-                  .style('fill',"#00BFFF")
+                  .style('fill',"green")
                   .style('stroke',"#4682B4");//所有的圆圈边框
             d3.select(this).style('stroke-width',14)
-                           .style('fill',"#4682B4")
+                           .style('fill',"green")
                            .style('stroke',"#4682B4");//被选中的圆圈边框
         })
         .on("dblclick",function(d){
