@@ -64,4 +64,36 @@ Name	Description
 28	SecurityDelay	in minutes
 29	LateAircraftDelay	in minutes
 
-2. 
+2.
+
+本地数据集：https://openflights.org/data.html
+
+'`Year` INT,'
+'`Month` INT,'
+'`DayofMonth` INT,'
+'`DayOfWeek` INT,'
+'`DepTime` VARCHAR(4),'
+'`CRSDepTime` VARCHAR(4),'
+'`ArrTime` VARCHAR(4),'
+'`CRSArrTime` VARCHAR(4),'
+'`UniqueCarrier` VARCHAR(8),'
+'`FlightNum` INT,'
+'`TailNum` VARCHAR(10),'
+'`ActualElapsedTime` FLOAT,'
+'`CRSElapsedTime` FLOAT,'
+'`AirTime` FLOAT,'
+'`ArrDelay` FLOAT,'
+'`DepDelay` FLOAT,'
+'`Origin` VARCHAR(3),'
+'`Dest` VARCHAR(3),'
+'`Distance` FLOAT,'	
+'`TaxiIn` FLOAT,'
+'`TaxiOut` FLOAT,'
+'`Cancelled` INT,'
+'`CancellationCode` VARCHAR(1),'
+'`Diverted` FLOAT,'
+'`CarrierDelay` FLOAT,'
+'`WeatherDelay` FLOAT,'
+'`NASDelay` FLOAT,'
+'`SecurityDelay` FLOAT,'
+'`LateAircraftDelay` FLOAT'	
