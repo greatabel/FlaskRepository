@@ -71,6 +71,21 @@ def insert_show(l):
     return c.lastrowid
 
 
+def select_show(id):
+    """
+    Query all rows in the tasks table
+    :param conn: the Connection object
+    :return:
+    """
+    conn = sqlite3.connect(db_name)
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM shows where id="+ str(id))
+
+    rows = cur.fetchall()
+    if len(rows) >= 1:
+        # print(rows[0])
+        return rows[0]
+
 def get_json(filename):
     
     listing = []
@@ -92,7 +107,7 @@ def db_start():
 @api.route('/tv-shows/import')
 class TV_Show(Resource):
     def get(self):
-        return {'hello': 'world'}
+        return {}, 200
 
     def post(self):
         parser = reqparse.RequestParser()
@@ -113,6 +128,43 @@ class TV_Show(Resource):
                         }, 201
         return {}, 500
 
+
+@api.route('/tv-shows/<int:todo_id>')
+class TV_Show_Detail(Resource):
+    def get(self, todo_id):
+        l = select_show(todo_id)
+        return {"tvmaze-id" : l[0],
+                "id": todo_id, 
+                "last-update": l[2],
+                "name": l[3],
+                "type": l[4],
+                "language": l[5],
+                "genres": l[6],
+                "status": l[7],
+                "runtime": l[8],
+                "premiered": l[9],
+                "officialSite": l[10],
+                "schedule": l[11],
+                "rating": l[12],
+                "weight": l[13],
+                "network": l[14],
+                "summary": l[15],
+                        "_links": {
+                        "self": {
+                          "href": "http://localhost:5000/tv-shows/"+str(todo_id)
+                                },
+                         "previous": {
+                          "href": "http://localhost:5000/tv-shows/"+str(todo_id-1)
+                        },
+                        "next": {
+                          "href": "http://localhost:5000/tv-shows/"+str(todo_id+1)
+                        }
+                                  }
+                        }, 201
+
+    def put(self, todo_id):
+        todos[todo_id] = request.form['data']
+        return {todo_id: todos[todo_id]}
 
 if __name__ == '__main__':
     db_start()
