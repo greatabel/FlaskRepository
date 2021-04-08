@@ -10,6 +10,18 @@
 3.
 （可选，非必须）（创建python3虚拟目录，隔绝不同版本库之间相互影响）
 https://docs.python.org/zh-cn/3/tutorial/venv.html
+创建虚拟环境：python3 -m venv airport_env（如果使用创建好的虚拟环境，就可以不用创建）
+
+进入虚拟环境：
+在Windows上，运行:
+airport_env\Scripts\activate.bat
+在Unix或MacOS上，运行:
+source airport_env/bin/activate
+
+3.1
+安装依赖库（如果使用创建好的虚拟环境，就可以不用创建）
+pip3 install -r requirements.txt 
+
 
 4.
 运行预测网站
