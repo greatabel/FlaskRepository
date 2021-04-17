@@ -81,6 +81,7 @@ var Ajax={
           fn.call(this, xhr.responseText);
         }
       };
+      console.log('utils.js data=', data);
       xhr.send(data);
     }
   }

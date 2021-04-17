@@ -64,7 +64,7 @@ class Connect():
             if self.cnum == 0 :
                 self.group_list.append(self.group)
                 # 等待时间 修改为2
-                self.group_list[self.gnum].timec = int(time.time())+2
+                self.group_list[self.gnum].timec = int(time.time())+0.1
             self.group_list[self.gnum].birds.append(user_id)
             self.cnum +=1
 

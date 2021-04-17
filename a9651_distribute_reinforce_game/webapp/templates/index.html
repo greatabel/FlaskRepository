@@ -129,9 +129,15 @@ img {
                         Ajax.post("img","group_id="+ctx.group_id+"&bird_id="+ctx.bird_id+"&die_id="+ctx.bird_id,function(data){})
                         isRun = false; // 游戏场景退场
                         overScene.draw(); // 结束场景切入
+                        
+                        window.setTimeout(function() {
+                                refresh();
+                              }, 2000);
 
                     } );
                     initial = false
+                    // gameScene = null;
+
                 }
                 requestAnimationFrame( run );
                 
@@ -204,12 +210,13 @@ img {
 
         function refresh(){
 
-            // 需要重载网页，应该是游戏的关系，我没有深入研究游戏代码
-            window.location.reload();
+            var user_id = document.getElementById('user_id').value;
             Ajax.post("abel_refresh","user_id="+user_id,function(data){
                     var jsarr=JSON.parse( data );
                     console.log('refresh=', data);
                 })
+            // 需要重载网页，应该是游戏的关系，我没有深入研究游戏代码
+            window.location.reload(true);
         }
 </script>
 </body>
