@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <title>flappy_bird</title>
+    <style>
+canvas {
+	display: block;
+	border: 1px solid #313131;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 50px;
+}
+img {
+	display: none;
+}
+</style>
+    </head>
+    <body>
+<canvas id="cvs" width="320" height="550"></canvas>
+
+
+<div>
+    <label for="user_id">用户id</label>
+    <input type="text" value="" id="user_id" name="user_id">
+    <input type="submit" value="开始匹配" onclick="getid()" >
+    <input type="submit" value="再玩一次" onclick="refresh()" >
+</div>
+
+<script src="static/js/utils.js"></script> 
+<script src="static/js/util.js"></script> 
+<script src="static/js/bird.js"></script> 
+<script src="static/js/otherbirds.js"></script> 
+<script src="static/js/land.js"></script> 
+<script src="static/js/pipe.js"></script> 
+<script src="static/js/sky.js"></script> 
+<script src="static/js/gameScene.js"></script> 
+<script src="static/js/overScene.js"></script> 
+<script src="static/js/score.js"></script> 
+<script>
+        var cvs = document.querySelector( '#cvs' );
+        var ctx = cvs.getContext( '2d' );
+
+        ctx.cvs = cvs;
+        ctx.bird_id=-1;
+        ctx.group_id=-1;
+        var randomh;
+        var webdata;
+
+
+        util.loadImage({
+            birddown1: 'static/img/redbird-downflap.png',
+            birdmid1: 'static/img/redbird-midflap.png',
+            birdup1: 'static/img/redbird-upflap.png',
+            birddown2: 'static/img/bbird-downflap.png',
+            birdmid2: 'static/img/bbird-midflap.png',
+            birdup2: 'static/img/bbird-upflap.png',
+            birddown3: 'static/img/blbird-downflap.png',
+            birdmid3: 'static/img/blbird-midflap.png',
+            birdup3: 'static/img/blbird-upflap.png',
+            birddown4: 'static/img/gbird-downflap.png',
+            birdmid4: 'static/img/gbird-midflap.png',
+            birdup4: 'static/img/gbird-upflap.png',
+            birddown5: 'static/img/ybird-downflap.png',
+            birdmid5: 'static/img/ybird-midflap.png',
+            birdup5: 'static/img/ybird-upflap.png',
+            land: 'static/img/land.png',
+            pipeDown: 'static/img/piped1.png',
+            pipeUp: 'static/img/pipeu1.png',
+            sky: 'static/img/background-black.png',
+            zero: 'static/img/0.png',
+            one: 'static/img/1.png',
+            two: 'static/img/2.png',
+            three: 'static/img/3.png',
+            four: 'static/img/4.png',
+            five: 'static/img/5.png',
+            six: 'static/img/6.png',
+            seven: 'static/img/7.png',
+            eight: 'static/img/8.png',
+            nine: 'static/img/9.png'
+        }, function( imgObj ) {
+
+            // 根据背景的大小设置画布的大小
+            cvs.width = imgObj.sky.width;
+            cvs.height = imgObj.sky.height;
+
+            // 游戏场景是否继续
+            var isRun = true;
+            var isReady = false;
+            var init = false;
+            var initial = false;
+
+            // 创建游戏场景
+            var gameScene ;
+
+            // 创建游戏结束场景
+            var overScene;
+
+            // 切入游戏场景，开始游戏
+            (function run() {
+
+                // console.log('isRun:', isRun);
+
+                if ( isReady && isRun ) {
+                    gameScene.draw();
+                }else if(ctx.group_id>=0 && isRun){
+                    var user_id = document.getElementById('user_id').value;
+                    Ajax.post("pp","group_id="+ctx.group_id+"&user_id="+user_id,function(data){
+                        if(data == "true"){
+                            isReady = true
+                            init = true
+                        }
+                })}
+                if(init){
+                    var user_id = document.getElementById('user_id').value;
+                    Ajax.post("h","group_id="+ctx.group_id+"&user_id="+user_id,function(data){
+                        var jsarr=JSON.parse( data );
+                        randomh = jsarr;
+                        webdata = [[0,0],[0,0],[0,0],[0,0],[0,0],randomh];
+                        init = false
+                        initial = true
+                    })
+                }
+                if(initial){
+                    gameScene = getGameScene( ctx, imgObj );
+                    overScene = getOverScene( ctx );
+                    // 添加小鸟死亡的听众
+                    gameScene.addListener( function() {
+                        Ajax.post("img","group_id="+ctx.group_id+"&bird_id="+ctx.bird_id+"&die_id="+ctx.bird_id,function(data){})
+                        isRun = false; // 游戏场景退场
+                        overScene.draw(); // 结束场景切入
+                        
+                        window.setTimeout(function() {
+                                refresh();
+                              }, 2000);
+
+                    } );
+                    initial = false
+                    // gameScene = null;
+
+                }
+                requestAnimationFrame( run );
+                
+            }());
+
+
+
+    //         var timer = {
+    // 　　　　 timers:{},
+    // 　　　　 start:function(asyn,fun,delay,id){
+    //     　　　　　　if(typeof fun === "function"){
+    //     　　　　　　　　var args = Array.prototype.slice.call(arguments,4),t,func,_this = this;
+    //     　　　　　　　　func = function(args){
+    //     　　　　　　　　　　var ags = arguments;
+    //     　　　　　　　　　　if(!Array.isArray) {
+    //     　　　　　　　　　　　　Array.isArray = function (vArg) {
+    //     　　　　　　　　　　　　　　return Object.prototype.toString.call(vArg) === "[object Array]";
+    //     　　　　　　　　　　　　};
+    //     　　　　　　　　　　}
+    //     　　　　　　　　　　if(!Array.isArray(args))
+    //     　　　　　　　　　　　　ags = Array.prototype.slice.call(arguments,0)
+    //     　　　　　　　　　　else
+    //     　　　　　　　　　　　　ags = args;
+    //     　　　　　　　　　　fun.apply(null,ags);
+    //     　　　　　　　　　　if(asyn){
+    //     　　　　　　　　　　　　_this.timers[id] = setInterval(function(){
+    //     　　　　　　　　　　　　　　fun.apply(null,ags);
+    //     　　　　　　　　　　　　},delay);
+    //     　　　　　　　　　　}else{
+    //     　　　　　　　　　　　　_this.timers[id] = setTimeout(function(){
+    //     　　　　　　　　　　　　　　func.apply(null,ags);
+    //     　　　　　　　　　　　　},delay);
+    //     　　　　　　　　　　}
+    //     　　　　　　　　};
+    //     　　　　　　　　setTimeout(func,delay,args);
+    //     　　　　　　}
+    //     　　　　},
+    //     　　　　clear:function(id){
+    //     　　　　　　clearTimeout(this.timers[id]);
+    //     　　　　　　clearInterval(this.timers[id]);
+    //     　　　　　　delete this.timers.id;
+    //     　　　　}
+
+    //     　　};
+    //     　　function f1(p){
+    //     　　}
+    //     　　//test
+    //     　　//timer.start(true,f1,2000,"asyn","aa","bb","cc");
+    //     　　timer.start(false,f1,1,"asyn");
+
+
+
+
+
+
+
+
+        });
+
+        function getid(){
+            var user_id = document.getElementById('user_id').value;
+            if (ctx.group_id<0){
+                Ajax.post("gp","user_id="+user_id,function(data){
+                    var jsarr=JSON.parse( data );
+                    ctx.group_id=jsarr[0];
+                    ctx.bird_id=jsarr[1];
+                })
+            }
+        }
+
+        function refresh(){
+
+            var user_id = document.getElementById('user_id').value;
+            Ajax.post("abel_refresh","user_id="+user_id,function(data){
+                    var jsarr=JSON.parse( data );
+                    console.log('refresh=', data);
+                })
+            // 需要重载网页，应该是游戏的关系，我没有深入研究游戏代码
+            window.location.reload(true);
+        }
+</script>
+</body>
+</html>

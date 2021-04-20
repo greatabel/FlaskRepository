@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <title>flappy_bird</title>
+    <style>
+		body{background-color: #2A2A2A}
+canvas {
+	display: block;
+	border: 1px solid #313131;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 50px;
+}
+img {
+	display: none;
+}
+</style>
+    </head>
+    <body>
+<canvas id="cvs" width="320" height="550"></canvas>
+<script src="static/js/utils.js"></script> 
+<script>
+    var randomh;
+    Ajax.get("h",function(data){
+        var jsarr=JSON.parse( data );
+        randomh = jsarr;
+    })
+</script>
+<script src="static/js/util.js"></script> 
+<script src="static/js/bird.js"></script> 
+<script src="static/js/otherbirds.js"></script> 
+<script src="static/js/land.js"></script> 
+<script src="static/js/pipe.js"></script> 
+<script src="static/js/sky.js"></script> 
+<script src="static/js/gameTrain.js"></script> 
+<script src="static/js/overScene.js"></script> 
+<script src="static/js/score.js"></script> 
+<script>
+        var cvs = document.querySelector( '#cvs' );
+        var ctx = cvs.getContext( '2d' );
+        ctx.cvs = cvs;
+        ctx.flag = 0;
+        ctx.reward = 0.1;
+        var webdata = [[0,0],[0,0],[0,0],[0,0],[0,0],randomh];
+ 
+        util.loadImage({
+            birddown: 'static/img/redbird-downflap.png',
+            birdmid: 'static/img/redbird-midflap.png',
+            birdup: 'static/img/redbird-upflap.png',
+            land: 'static/img/land.png',
+            pipeDown: 'static/img/piped1.png',
+            pipeUp: 'static/img/pipeu1.png',
+            sky: 'static/img/background-black.png',
+            zero: 'static/img/0.png',
+            one: 'static/img/1.png',
+            two: 'static/img/2.png',
+            three: 'static/img/3.png',
+            four: 'static/img/4.png',
+            five: 'static/img/5.png',
+            six: 'static/img/6.png',
+            seven: 'static/img/7.png',
+            eight: 'static/img/8.png',
+            nine: 'static/img/9.png'
+        }, function( imgObj ) {
+
+            // 根据背景的大小设置画布的大小
+            cvs.width = imgObj.sky.width;
+            cvs.height = imgObj.sky.height;
+
+            // 游戏场景是否继续
+            var isRun = true;
+
+            // 创建游戏场景
+            var gameScene = getGameScene( ctx, imgObj );
+            // 创建游戏结束场景
+            var overScene = getOverScene( ctx );
+
+            // 切入游戏场景，开始游戏
+            // (function run() {
+            //     setInterval(function(){
+            //          gameScene.draw();
+            //     },10)
+            // }());
+        var timer = {
+　　　　 timers:{},
+　　　　 start:function(asyn,fun,delay,id){
+    　　　　　　if(typeof fun === "function"){
+    　　　　　　　　var args = Array.prototype.slice.call(arguments,4),t,func,_this = this;
+    　　　　　　　　func = function(args){
+    　　　　　　　　　　var ags = arguments;
+    　　　　　　　　　　if(!Array.isArray) {
+    　　　　　　　　　　　　Array.isArray = function (vArg) {
+    　　　　　　　　　　　　　　return Object.prototype.toString.call(vArg) === "[object Array]";
+    　　　　　　　　　　　　};
+    　　　　　　　　　　}
+    　　　　　　　　　　if(!Array.isArray(args))
+    　　　　　　　　　　　　ags = Array.prototype.slice.call(arguments,0)
+    　　　　　　　　　　else
+    　　　　　　　　　　　　ags = args;
+    　　　　　　　　　　fun.apply(null,ags);
+    　　　　　　　　　　if(asyn){
+    　　　　　　　　　　　　_this.timers[id] = setInterval(function(){
+    　　　　　　　　　　　　　　fun.apply(null,ags);
+    　　　　　　　　　　　　},delay);
+    　　　　　　　　　　}else{
+    　　　　　　　　　　　　_this.timers[id] = setTimeout(function(){
+    　　　　　　　　　　　　　　func.apply(null,ags);
+    　　　　　　　　　　　　},delay);
+    　　　　　　　　　　}
+    　　　　　　　　};
+    　　　　　　　　setTimeout(func,delay,args);
+    　　　　　　}
+    　　　　},
+    　　　　clear:function(id){
+    　　　　　　clearTimeout(this.timers[id]);
+    　　　　　　clearInterval(this.timers[id]);
+    　　　　　　delete this.timers.id;
+    　　　　}
+
+    　　};
+    　　function f1(p){
+    　　　 gameScene.draw();
+    　　}
+    　　//test
+    　　//timer.start(true,f1,2000,"asyn","aa","bb","cc");
+    　　timer.start(false,f1,1,"asyn");
+
+                
+        });
+
+</script>
+</body>
+</html>
