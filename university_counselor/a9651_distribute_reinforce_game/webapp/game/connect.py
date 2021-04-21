@@ -77,6 +77,10 @@ class Connect():
         return self.gnum,self.cnum-1
 
     def wait_con(self,group_id):#等待连接
+        print(len(self.group_list), '### wait_con')
+        # if len(self.group_list) == 0:
+        #     self.group_list.append(self.group)
+            # print('-*-*- in wait_con ')
         if self.group_list[group_id].timeout and self.group_list[group_id].timec < int(time.time()):
             self.group_list[group_id].timeout = False
             self.group_list[group_id]._init_model()
