@@ -1,4 +1,4 @@
-from flask import Flask, url_for, render_template, request, redirect, session
+from flask import Flask, url_for, render_template, request, redirect, session, Response
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -10,6 +10,27 @@ from flask import Response
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import numpy as np
+
+import sys
+# Tornado web server
+from tornado.wsgi import WSGIContainer
+from tornado.httpserver import HTTPServer
+from tornado.ioloop import IOLoop
+
+
+#Debug logger
+import logging 
+root = logging.getLogger()
+root.setLevel(logging.DEBUG)
+
+ch = logging.StreamHandler(sys.stdout)
+ch.setLevel(logging.DEBUG)
+formatter = logging.Formatter(
+    '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+ch.setFormatter(formatter)
+root.addHandler(ch)
+
+
 
 
 app = Flask(__name__)
@@ -157,9 +178,58 @@ def logout():
     return redirect(url_for("home"))
 
 
+def return_dict():
+    #Dictionary to store music file information
+    dict_here = [
+        {'id': 1, 'name': 'Acoustic Breeze', 'link': 'music/acousticbreeze.mp3', 'genre': 'General', 'chill out': 5},
+        {'id': 2, 'name': 'Happy Rock','link': 'music/happyrock.mp3', 'genre': 'Bollywood', 'rating': 4},
+        {'id': 3, 'name': 'Ukulele', 'link': 'music/ukulele.mp3', 'genre': 'Bollywood', 'rating': 4}
+        ]
+    return dict_here
+
+#Route to render GUI
+@app.route('/music/<int:music_id>')
+def show_entries(music_id):
+    print(music_id, '#-#'*20)
+    general_Data = {
+        'title': 'Music Player'}
+    print(return_dict())
+    stream_entries = []
+    if music_id == 1:
+        stream_entries = [{'id': 1, 'name': 'Acoustic Breeze', 'link': 'music/acousticbreeze.mp3', 'genre': 'General', 'chill out': 5}]
+    elif music_id == 2:
+        stream_entries = [ {'id': 2, 'name': 'Happy Rock','link': 'music/happyrock.mp3', 'genre': 'Bollywood', 'rating': 4}]
+    elif music_id == 3:
+        stream_entries = [{'id': 3, 'name': 'Ukulele', 'link': 'music/ukulele.mp3', 'genre': 'Bollywood', 'rating': 4}]
+    return render_template('simple.html', entries=stream_entries, **general_Data)
+
+#Route to stream music
+@app.route('/<int:stream_id>')
+def streammp3(stream_id):
+    def generate():
+        data = return_dict()
+        count = 1
+        for item in data:
+            if item['id'] == stream_id:
+                song = item['link']
+        with open(song, "rb") as fwav:
+            data = fwav.read(1024)
+            while data:
+                yield data
+                data = fwav.read(1024)
+                logging.debug('Music data fragment : ' + str(count))
+                count += 1
+                
+    return Response(generate(), mimetype="audio/mp3")
+
 if __name__ == "__main__":
     app.debug = True
     db.create_all()
     app.secret_key = "123"
     # app.run(host='0.0.0.0')
-    app.run(host='localhost', port=8000, threaded=False)
+    # app.run(host='localhost', port=8000, threaded=False)
+    port = 5000
+    http_server = HTTPServer(WSGIContainer(app))
+    logging.debug("Started Server, Kindly visit http://localhost:" + str(port))
+    http_server.listen(port)
+    IOLoop.instance().start()
