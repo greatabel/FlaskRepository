@@ -1,0 +1,6 @@
+ipython==7.16.1
+pandas
+numpy
+seaborn
+matplotlib
+sklearn
