@@ -26,7 +26,7 @@ def recommend(demo, ratings, pivot_ratings):
     rec = rec[rec >= mean_score]
     print('该用户我推荐：', list(rec.index))
 
-
+# 推荐算法主函数 根据物品或内容的元数据，发现物品或内容的相关性，然后基于用户以前的喜好记录推荐给用户相似的物品，如图所示：
 def main():
     print('main')
 

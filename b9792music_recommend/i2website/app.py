@@ -54,7 +54,7 @@ class User(db.Model):
         self.username = username
         self.password = password
 
-#  绘图类，暂时可以忽略，没有被使用
+#  绘图类，暂时可以忽略，没有使用实时绘图暂时在这个网站
 @app.route("/plot.png")
 def plot_png():
     fig = create_figure()
@@ -231,6 +231,13 @@ def show_entries(music_id):
     return render_template('simple.html', entries=stream_entries, **general_Data)
 
 #Route to stream music
+'''
+内存中收集的响应只返回给客户端，这是很低效的。另一种方法是将响应写入磁盘，
+然后使用flask.send_file()返回文件，但是这增加了I/O的组合。
+假设数据可以分块生成，以小块数据的方式给请求提供响应是一种更好的解决方案。
+实时数据 。对于一些应用，需要请求返回的数据来自实时数据源
+
+'''
 @app.route('/<int:stream_id>')
 def streammp3(stream_id):
     def generate():
