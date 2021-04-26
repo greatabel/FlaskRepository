@@ -23,6 +23,7 @@ import logging
 root = logging.getLogger()
 root.setLevel(logging.DEBUG)
 
+# log相关声明
 ch = logging.StreamHandler(sys.stdout)
 ch.setLevel(logging.DEBUG)
 formatter = logging.Formatter(
@@ -32,7 +33,7 @@ root.addHandler(ch)
 
 
 
-
+#  flask 服务相关实例
 app = Flask(__name__)
 app.debug = True
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test.db"
@@ -41,7 +42,7 @@ db = SQLAlchemy(app)
 xs = []
 ys = []
 
-
+# 登录用户相关类
 class User(db.Model):
     """ Create user table"""
 
@@ -53,7 +54,7 @@ class User(db.Model):
         self.username = username
         self.password = password
 
-
+#  绘图类，暂时可以忽略，没有被使用
 @app.route("/plot.png")
 def plot_png():
     fig = create_figure()
@@ -124,6 +125,7 @@ def create_figure():
 #         return render_template("index.html")
 
 
+# 首页的路由操作
 @app.route("/", methods=["GET", "POST"])
 def home():
     listings = list(range(1, 7))
@@ -138,7 +140,7 @@ def home():
         return render_template("home.html", listing=listings)
 
 
-
+# 登录路由
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Login Form"""
@@ -157,7 +159,7 @@ def login():
         except:
             return "Not Login"
 
-
+# 注册路由
 @app.route("/register/", methods=["GET", "POST"])
 def register():
     """Register Form"""
@@ -178,6 +180,31 @@ def logout():
     return redirect(url_for("home"))
 
 
+# 推荐页路由
+@app.route("/recommend", methods=["GET", "POST"])
+def recommend():
+    import recommandation 
+    choosed = recommandation.main()
+    print('choosed=', choosed)
+    if request.method == "POST":
+        print('in post')
+        # movie_name = request.form['movie_name']
+        # movie_id = request.form['movie_id']
+        # rtext = request.form['rtext']
+        # rating = request.form['rating']
+
+        # movie = Movie(movie_name, 1990, int(movie_id))
+        # review = Review(movie, rtext, int(rating))
+        # rc_reviews.append(review)
+
+
+    return render_template(
+        'recommend.html',
+        choosed=choosed
+        
+    )
+
+# 前台播放音乐的位置，名称详细页的维护
 def return_dict():
     #Dictionary to store music file information
     dict_here = [
@@ -187,7 +214,7 @@ def return_dict():
         ]
     return dict_here
 
-#Route to render GUI
+#Route to render GUI, 简易播放器的页面
 @app.route('/music/<int:music_id>')
 def show_entries(music_id):
     print(music_id, '#-#'*20)
@@ -230,6 +257,7 @@ if __name__ == "__main__":
     # app.run(host='localhost', port=8000, threaded=False)
     port = 5000
     http_server = HTTPServer(WSGIContainer(app))
+    http_server.debug = True
     logging.debug("Started Server, Kindly visit http://localhost:" + str(port))
     http_server.listen(port)
     IOLoop.instance().start()

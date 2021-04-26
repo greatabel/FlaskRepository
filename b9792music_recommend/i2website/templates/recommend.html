@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Movie WebApp by Delysia Lee</title>
+    <title>music WebApp by Delysia Lee</title>
 
     <!-- Bootstrap core CSS -->
     <style type="text/css">
@@ -53,7 +53,7 @@ div[class*="release_year"] {
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="/home/1">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
       </li>
 
       <li class="nav-item active">
@@ -80,8 +80,8 @@ div[class*="release_year"] {
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
       <div class="container">
-        <h1>Movie WebApp by Delysia Lee</h1>
-        <p>You can view/search movie on our website</p>
+        <h1>Music WebApp by Remeo</h1>
+        <p>You can view/search music on our website</p>
       </div>
     </div>
 
@@ -95,8 +95,10 @@ div[class*="release_year"] {
         <div class="col-md-8">
 
         <img src="/static/images/demo.png" class="img-fluid" >
+
+
         Accoriding to data above, 
-        We recommend for user[Toby] such movie according by <b>Collaborative Filtering Algorithm</b>:
+        We recommend for user such music according by <b>Collaborative Filtering Algorithm</b>:
 
                   {% for c in choosed %}
 
@@ -105,7 +107,12 @@ div[class*="release_year"] {
 
 
            {% endfor %}
+                   <br/>
+        <img src="/static/images/Acoustic_Breeze.png" class="img-fluid" >
+        <img src="/static/images/Happy_Rock.png" class="img-fluid" >
         </div>
+
+
 
 
 
@@ -120,16 +127,16 @@ div[class*="release_year"] {
           <p>No need to buy hardware either for your tables or for your kitchen. Management and usage all directly from this page.</p>
        </div> -->
         <div class="col-md-4">
-          <h2>add now</h2>
+          <h2>add rating now</h2>
              <form class="form-horizontal" action="/review" method="POST">
                    <div class="form-group">
                     <div class="col-sm-9">
-                        <input type="text" name="movie_id" id="movie_id" placeholder="movie_id" class="form-control">
+                        <input type="text" name="music_id" id="music_id" placeholder="music_id" class="form-control">
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-9">
-                        <input type="text" name="movie_name" id="movie_name" placeholder="movie_name" class="form-control">
+                        <input type="text" name="music_name" id="music_name" placeholder="music_name" class="form-control">
                     </div>
                 </div>
                 <div class="form-group">

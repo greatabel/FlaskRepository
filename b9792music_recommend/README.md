@@ -9,6 +9,8 @@
 3.
 可选（创建python3虚拟目录，隔绝不同版本库之间相互影响）
 https://docs.python.org/zh-cn/3/tutorial/venv.html
+创建虚拟环境 create virtual environment:
+python3 -m venv  movie-env
 
 4.
 
