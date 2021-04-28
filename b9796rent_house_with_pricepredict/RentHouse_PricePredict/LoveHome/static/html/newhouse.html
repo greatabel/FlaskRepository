@@ -79,6 +79,7 @@
                             <input type="text" class="form-control" name="beds" id="house-beds" placeholder="如：双人床:2x1.8x1张 1.5x2x2张" required>
                         </div> 
                         <div class="form-group">
+                           <button id="btn_predict">获取预测金额</button>
                             <label for="house-deposit">押金数额</label> (预测金额<label id="lbl_predict">0</label>)
                             <input type="number" class="form-control" name="deposit" id="house-deposit" required>
                         </div>
@@ -294,13 +295,37 @@
             <p><span><i class="fa fa-copyright"></i></span>红泥小火炉&nbsp;&nbsp;享受家的温馨</p>
         </div> 
     </div>
-    
+
     <script src="/static/js/jquery.min.js"></script>
     <script src="/static/js/jquery.form.min.js"></script>
     <script src="/static/js/template.js"></script>
     <script src="/static/plugins/bootstrap/js/bootstrap.min.js"></script>
     <script src="/static/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
     <script src="/static/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+        <script>
+      
+    $("#btn_predict").click(function(){
+            var price =  $("#house-price").val(); 
+            var house_roomcount =  $("#house-room-count").val(); 
+            var house_acreage =  $("#house-acreage").val(); 
+            var house_capacity =  $("#house-capacity").val(); 
+
+            alert(price)
+            $.get('/api/v1.0/predict_rent_price', function (resp) {
+              if (resp.errno == '0'){
+                  
+                  var predict =  resp.data['price'];
+
+                  $('#lbl_predict').html("<label >"+predict +"</label>");
+
+              }else{
+                  alert(resp.errmsg)
+              }
+          })
+    });
+    
+    </script>
+
     <script src="/static/js/ihome/newhouse.js?v=3"></script>
 </body>
 </html>

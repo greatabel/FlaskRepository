@@ -18,15 +18,18 @@ $(document).ready(function(){
             // 通过模板生成要显示的HTML
             var html = template("areas-tmpl", {'areas': resp.data})
             // 设置到指定的标签里面
-            $('#area-id').html(html)
-            $('#lbl_predict').val("1000");
-            var predict = Math.floor(Math.random() *  1000);
-            $('#lbl_predict').html("<label >"+predict +"</label>");
+            // $('#area-id').html(html)
+            // $('#lbl_predict').val("1000");
+            // var predict = Math.floor(Math.random() *  1000);
+            // $('#lbl_predict').html("<label >"+predict +"</label>");
 
         }else{
             alert(resp.errmsg)
         }
     })
+
+ 
+
 
     // 处理房屋基本信息提交的表单数据
     $('#form-house-info').submit(function (e) {

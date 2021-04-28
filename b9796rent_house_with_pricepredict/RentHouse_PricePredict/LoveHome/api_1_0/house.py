@@ -11,6 +11,22 @@ from LoveHome import db, constants, redis_store
 from LoveHome.utils import image_storage
 import datetime
 
+from flask import Flask, request
+from flask import render_template
+from flask import make_response
+
+from LoveHome.api_1_0.predict_train import MyEncoder
+from LoveHome.api_1_0.predict_realdata import flow_predict
+
+
+'''添加新房屋信息功能'''
+@api.route('/predict_rent_price', methods=['POST', "GET"])
+def predict_rent_price():
+    mylist = [1100,2,120,2]
+    p = flow_predict(mylist)
+    print('p=', p)
+    return jsonify(errno=RET.OK, errmsg='OK', data={'price': p})
+
 
 '''搜索房屋功能'''
 @api.route('/houses')

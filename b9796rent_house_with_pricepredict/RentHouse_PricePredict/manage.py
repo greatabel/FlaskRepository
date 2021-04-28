@@ -4,6 +4,23 @@ __author__ = "xiaoguo"
 from LoveHome import create_app, db
 from flask_migrate import MigrateCommand, Migrate, Manager
 
+import sklearn.preprocessing as sp
+import pickle
+
+class MyEncoder:
+    """
+    数字与字符串互转
+    """
+
+    def fit_transform(self, y):
+        return y.astype(float)
+
+    def transform(self, y):
+        return y.astype(float)
+
+    def inverse_transform(self, y):
+        return y.astype(str)
+
 app = create_app("development")
 app.debug = True
 
