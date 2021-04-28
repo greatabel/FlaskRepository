@@ -22,8 +22,13 @@ from LoveHome.api_1_0.predict_realdata import flow_predict
 '''添加新房屋信息功能'''
 @api.route('/predict_rent_price', methods=['POST', "GET"])
 def predict_rent_price():
-    mylist = [1100,2,120,2]
-    p = flow_predict(mylist)
+
+    data_dict = request.json
+    mydata = data_dict.get('mydata')
+    results = list(map(int, mydata))
+    print(mydata, '-'*30, results)
+    # mylist = [1100,2,120,2]
+    p = flow_predict(results)
     print('p=', p)
     return jsonify(errno=RET.OK, errmsg='OK', data={'price': p})
 

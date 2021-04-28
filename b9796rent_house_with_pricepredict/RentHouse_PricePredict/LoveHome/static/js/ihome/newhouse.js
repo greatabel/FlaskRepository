@@ -18,7 +18,7 @@ $(document).ready(function(){
             // 通过模板生成要显示的HTML
             var html = template("areas-tmpl", {'areas': resp.data})
             // 设置到指定的标签里面
-            // $('#area-id').html(html)
+            $('#area-id').html(html)
             // $('#lbl_predict').val("1000");
             // var predict = Math.floor(Math.random() *  1000);
             // $('#lbl_predict').html("<label >"+predict +"</label>");

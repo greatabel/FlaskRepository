@@ -7,6 +7,7 @@ import sklearn.naive_bayes as nb
 
 import pickle
 from LoveHome.api_1_0.predict_train import MyEncoder
+# from predict_train import MyEncoder
 
 
 
