@@ -2,6 +2,10 @@ import time
 import datetime
 import os
 import json
+import requests
+import simplejson 
+
+
 import sqlite3
 
 
@@ -149,7 +153,20 @@ def chunks(lst, n):
     for i in range(0, len(lst), n):
         yield lst[i:i + n]
 
+def download_json():
+    url = 'http://api.tvmaze.com/search/shows?q=good%20girls'
+    try:
+        uResponse = requests.get(url)
+    except requests.ConnectionError:
+       return "Connection Error"  
+    Jresponse = uResponse.text
+    data = json.loads(Jresponse)
+    with open('shows.json', 'w') as outfile:
+        json.dump(data, outfile)
+
+
 def db_start():
+    download_json()
     create_table_schema()
     global original_listing
     listings = get_json('shows.json')
