@@ -14,11 +14,11 @@ from LoveHome.api_1_0.predict_train import MyEncoder
 
 def flow_predict(input_data):
 	print(dir(MyEncoder), '#'*20)
-	filename = "/Users/abel/Downloads/AbelProject/FlaskRepository/b9796rent_house_with_pricepredict/RentHouse_PricePredict/LoveHome/api_1_0/finalized_model.sav"
+	filename = "/Users/abel/Downloads/AbelProject/FlaskRepository/university_counselor/b9796rent_house_with_pricepredict/RentHouse_PricePredict/LoveHome/api_1_0/finalized_model.sav"
 
 	# load the model from disk
 	loaded_model = pickle.load(open(filename, 'rb'))
-	encoder_name = '/Users/abel/Downloads/AbelProject/FlaskRepository/b9796rent_house_with_pricepredict/RentHouse_PricePredict/LoveHome/api_1_0/myencoders.pkl'
+	encoder_name = '/Users/abel/Downloads/AbelProject/FlaskRepository/university_counselor/b9796rent_house_with_pricepredict/RentHouse_PricePredict/LoveHome/api_1_0/myencoders.pkl'
 	encoders = pickle.load(open(encoder_name, 'rb'))
 
 

@@ -1,9 +1,0 @@
-termcolor
-Flask
-Flask-SQLAlchemy
-requests
-jellyfish
-tornado==5.0.2
-pandas
-
-

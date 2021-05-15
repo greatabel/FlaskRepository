@@ -212,14 +212,11 @@ def upload_house_image():
     if not house:
         return jsonify(errno=RET.NODATA, errmsg='当前房屋不存在')
 
-    # 3、上传图片到七牛云
-    # try:
-    #     key = image_storage.upload_image(house_image)
-    # except Exception as e:
-    #     current_app.logger.error(e)
-    #     return jsonify(errno=RET.THIRDERR, errmsg='上传房屋图片失败')
     import random
-    key = str(random.randint(0,3))
+    key = str(random.randint(10, 100))
+    with open('/Users/abel/Downloads/AbelProject/FlaskRepository/university_counselor/b9796rent_house_with_pricepredict/RentHouse_PricePredict/LoveHome/static/images/'+ key + '.jpg', 'wb') as f:
+        f.write(house_image)
+
     # 判断当前房屋是否设置index_image_url,如果没有设置直接设置
     if not house.index_image_url:
         house.index_image_url = key
