@@ -9,6 +9,10 @@
 
     <!-- Bootstrap core CSS -->
     <style type="text/css">
+label {
+  border: 1px solid gray;
+}
+
 #tbl_div div {
   visibility:hidden;
     display:none;
@@ -116,18 +120,33 @@ div[class*="release_year"] {
 <div class="container">
    <h1>作业自动评分系统</h1>
   <div class="row">
-    <div class="col-md4">
+    <div class="col-sm-4">
               <figure>
             <img src="/static/images/ml.png" class="img-fluid" style="height:250px;">
         </figure>
     </div>
 
-    <div class="col-md4">
+    <div class="col-sm-8">
            
         <p style="width:500px;padding-left:10px;">
-        <br/><br/>
-        &nbsp;&nbsp;本周作业:
+            <span style="font-weight:bold;">Technical Materail Title: </span>
+            <span id="titleLbl" style="border: 1px solid gray; " >
+     标题示例 设置多列
+  </span>
+
+       <br/><br/>
+        <span style="font-weight:bold;">Detail: </span>
+        <br/>
+        <div style="border: 1px solid gray; display: inline-block">
+      detail：具体我们本周要做的是：
+        实现一个简单的html中 2列竖直对齐功能；请提交html为最终结果<br>
+        &nbsp;&nbsp;detail：具体我们本周要做的是：
         实现一个简单的html中 2列竖直对齐功能；请提交html为最终结果
+        实现一个简单的html中 2列竖直对齐功能；请提交html为最终结果<br>
+        &nbsp;&nbsp;detail：具体我们本周要做的是：
+        实现一个简单的html中 2列竖直对齐功能；请提交html为最终结果        
+</div>
+
       </p>
 
     </div>
@@ -135,7 +154,21 @@ div[class*="release_year"] {
   </div>
 
     <div class="row">
-      <div class="col-md8">
+      <div class="col-sm-4">
+      <hr/>
+      <h3>1. 上传数据集 </h3>
+      <a href="http://127.0.0.1:5000" target="_blank" rel="noopener noreferrer">
+       前往上传数据页</a>
+      </div>
+
+      <div class="col-sm-4">
+      <hr/>
+      <h3>1. 上传数据集 </h3>
+      <a href="http://127.0.0.1:5000" target="_blank" rel="noopener noreferrer">
+       前往上传数据页</a>
+      </div>
+
+      <div class="col-sm-4">
       <hr/>
       <h3>1. 上传数据集 </h3>
       <a href="http://127.0.0.1:5000" target="_blank" rel="noopener noreferrer">
@@ -144,34 +177,6 @@ div[class*="release_year"] {
     </div>
 
 
-    <div class="row">
-      <div class="col-md8">
-      <hr/>
-      <h3>2. 查看已上传数据集和选择模型 </h3>
-      <a href="http://127.0.0.1:5000/file/list" target="_blank" rel="noopener noreferrer">
-       前往已上传数据集列表页</a>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md8">
-      <hr/>
-      <h3>3.数据分析探索 </h3>
-      <a href="http://localhost:8888/notebooks/pricepredict.ipynb" target="_blank" rel="noopener noreferrer">
-       前往进行数据列统计分析、数据探索、特征工程、模型训练环节
-       （将来会包含机器学习模型探索、调优、试用功能）
-     </a>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md8">
-      <hr/>
-      <h3>4.查看平台可用API列表 </h3>
-      <a href="http://localhost:5000/senordata?searchdate=2021-01-08" target="_blank" rel="noopener noreferrer">
-       API示例和向导</a>
-      </div>
-    </div>
 </div>
 
 
