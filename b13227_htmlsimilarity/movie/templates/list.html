@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+     <link rel='stylesheet' href='/static/bootstrap-4.5.2-dist/css/bootstrap.min.css'>
+
+     <script src="/static/jquery-3.5.1.min.js"></script>
+     <script src="/static/bootstrap-4.5.2-dist/js/bootstrap.min.js"></script>
+     
+     <link type="text/css" rel="stylesheet" href="/static/jquery.dropdown.css" />
+	<script type="text/javascript" src="/static/jquery.dropdown.js"></script>
+
+</head>
+
+<body>
+	<div>
+	<br/>
+	<button type="button" class="btn btn-primary">已经上传成功的数据集列表如下:</button>
+
+	</div>
+
+    {% for file in files %}
+    <a href="{{ url_for('file_download', filename=file) }}">{{ file }}</a><br/>
+    {% endfor %}
+
+    <hr/>
+    <a href="#" data-jq-dropdown="#jq-dropdown-1">选择算法或模型</a>
+
+
+    <div id="jq-dropdown-1" class="jq-dropdown jq-dropdown-tip">
+    <ul class="jq-dropdown-menu">
+        <li><a href="#1">LR/Ridge/Lasso模型</a></li>
+        <!-- <li><a href="#2">Collaborative Filtering 算法</a></li> -->
+
+    </ul>
+	</div>
+
+<script type="text/javascript">
+	$('#jq-dropdown-1').on('show', function(event, dropdownData) {
+
+}).on('hide', function(event, dropdownData) {
+    // console.log(dropdownData);
+    	var type = location.hash;
+    console.log(type);
+    alert('以及选择LR/Ridge/Lasso模型，请返回首页查看分析')
+});
+</script>
+
+</body>
+
+</html>
