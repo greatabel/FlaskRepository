@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+{% if session['logged_in'] %}
+   
+	{% if data %}
+	<h3>{{data}}</h3>
+	{% else %}
+
+	<a href="/logout">Logout</a> <br> <br>
+	<form action="" method="POST">
+	  <span>1 搜索方式:</span>
+	  <br/>
+	  <input type="disename" name="disename" placeholder="病名">
+	  <input type="submit" value="Finds">
+	  <br/>
+	  <span>例如: 湿阻/痹症</span>
+	  <hr/>
+	  <br/>
+	  <span>2 搜索方式:</span>
+	  <br/>
+
+
+	  <textarea name="symptom" cols="40" rows="5" placeholder="症状"></textarea>
+	  <input type="submit" value="Finds">
+	  <br/>
+	  <span>例如: 全身关节容易酸痛减，左颈肩酸痛到手肘，睡眠安，二便调,咽喉微红</span> 
+	  <br/>
+	  <span>例如: 全身关节容易酸痛减，左颈肩酸痛到手肘，呼吸困难，睡眠安，二便调,咽喉微</span>
+
+	  <br/>
+	  <hr/>
+	  	  <span>3.探索治疗方案(天数）与年龄关系:</span>
+	  <br/>
+	   <textarea name="prescrptinfo" cols="40" rows="5" placeholder="治疗方案"></textarea>
+	  <input type="submit" value="Finds">
+	  <br/>
+	  <span>例如: Y银翘解毒合剂</span> 
+	  <span>例如: 推拿</span> 
+	  <br/>
+	  <img src="/plot.png" alt="my plot">
+	</form>
+	{% endif %}
+
+{% else %}
+<p>Not login!</p>
+
+<a href="/login">Login</a> 
+<a href="/register">Register</a>
+
+{% endif %}
+{% endblock %}
