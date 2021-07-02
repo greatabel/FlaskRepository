@@ -16,6 +16,7 @@ from flask import jsonify
 from movie import create_app
 from movie.domain.model import Director, Review, Movie
 
+from html_similarity import style_similarity, structural_similarity, similarity
 
 app = create_app()
 app.secret_key = "ABCabc123"
@@ -116,7 +117,6 @@ reviews = []
 
 
 @app.route("/review", methods=["GET", "POST"])
-@flask_login.login_required
 def review():
     if request.method == "POST":
 
@@ -129,9 +129,16 @@ def review():
         review = Review(movie, rtext, int(rating))
         reviews.append(review)
 
+    with open(r'upload/a.html', "r") as f:
+        html_1 = f.read()
+    with open(r'upload/b.html', "r") as f:
+        html_2 = f.read()
+    print(html_1, '#'*20, html_2)
+    myscore = similarity(html_1, html_2)
     return rt(
         "review.html",
         reviews=reviews,
+        myscore=myscore
     )
 
 
@@ -206,32 +213,7 @@ def file_download(filename):
 # --------------------------
 
 
-@app.route("/senordata", methods=["GET"])
-def senordata():
 
-    searchdate = request.args.get("searchdate")
-    print(searchdate, "in /senordata")
-    if searchdate is None:
-        return 405, "not allowed"
-
-    print("---get from hdfs ---")
-    lines = []
-    with hdfs.open("hdfs://127.0.0.1:9000/data/source_demo.csv") as f:
-        for line in f:
-            # print(line, type(line))
-            l = line.decode("utf-8")
-            if "2020-11-15" in l:
-                lines.append(l)
-    print(lines)
-    print("---end get from hdfs----")
-
-    # compatible for data post from url for putao and
-    # data post from body for try-out approval from Apple
-    # in future, front end unify send method, it need to amodify
-    result = {}
-
-    result["data"] = lines
-    return jsonify(result)
 
 
 if __name__ == "__main__":

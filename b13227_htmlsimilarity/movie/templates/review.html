@@ -53,13 +53,14 @@ div[class*="release_year"] {
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="/home/1">Home <span class="sr-only">(current)</span></a>
+        <!-- <a class="nav-link" href="/home/1">Home <span class="sr-only">(current)</span></a> -->
       </li>
 
       <li class="nav-item active">
         <form class="form-inline my-2 my-lg-0 navbar-right" action="/home" method="POST">
 
                 <div class="form-group">
+                  <input type="text" name="keyword" placeholder="actors/genre/directors" class="form-control" autofocus>&nbsp;
                   <input type="text" name="keyword" placeholder="actors/genre/directors" class="form-control" autofocus>&nbsp;
                 </div>
           
@@ -68,7 +69,7 @@ div[class*="release_year"] {
       </li>
 
       <li class="nav-item active">
-           {% if current_user.is_authenticated %}
+         {% if  session['logged_in'] %}
          <a class="nav-link" href="/logout">logout <span class="sr-only">(current)</span></a>
 
   {% endif %}
@@ -76,7 +77,7 @@ div[class*="release_year"] {
 
 
     </ul>
-    {% if not current_user.is_authenticated %}
+{% if not session['logged_in'] %}
     <form class="form-inline my-2 my-lg-0 navbar-right" action="/login" method="POST">
 
             <div class="form-group">
@@ -88,7 +89,7 @@ div[class*="release_year"] {
       <input type="submit" value="Sign in" class="btn btn-success">
     </form>
       {% else %}
-          <a class="nav-link" href="#">already logined <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="#">already logined <span class="sr-only"></span></a>
 
      {% endif %}
   </div>
@@ -100,18 +101,19 @@ div[class*="release_year"] {
 
 
 <div class="container">
-   <h1>华新生产过程执行管理系统</h1>
+   <h1>Performance Dashboard</h1>
   <div class="row">
     <div class="col-md4">
               <figure>
-            <img src="/static/images/HuaXin_ems.png" class="img-fluid" style="height:80px;">
+            <img src="/static/images/score.png" class="img-fluid" style="height:80px;">
         </figure>
     </div>
 
     <div class="col-md4">
            
-        <p style="width:500px;padding-left:10px;">MES可以为企业提供包括制造数据管理、计划排程管理、生产调度管理、库存管理、质量管理、人力资源管理、工作中心/设备管理、工具工装管理、采购管理、成本管理、项目看板管理、生产过程控制、底层数据集成分析、上层数据集成分解等管理模块，
-        为华新水泥打造一个扎实、可靠、全面、可行的制造协同管理平台。</p>
+        <p style="width:500px;padding-left:10px;">latest assignment score:
+{{ myscore }}
+        </p>
 
     </div>
 
