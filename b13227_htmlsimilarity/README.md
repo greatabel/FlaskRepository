@@ -7,7 +7,7 @@
 安装pip3 
 
 如果是osx/linux，可以跳过 步骤3，4，因为我已经打包了虚拟环境,
-虚拟环境在web_platform的 mlsystem-env
+虚拟环境在wsgi.py平行的目录的 mlsystem-env
 
 3.
 可选（创建python3虚拟环境，隔绝不同版本库之间相互影响）
@@ -23,7 +23,7 @@ terminal底下进入工程目录下，在requirements.txt同级目录下运行�
 pip3 install --upgrade -r requirements.txt
 
 5.
-命令行进入web_platform目录,执行下列命令，进入虚拟环境
+命令行进入wsgi.py平行的目录目录,执行下列命令，进入虚拟环境
 then enter virtual environment:
 Windows run:
 mlsystem-env\Scripts\activate.bat
@@ -33,7 +33,7 @@ source mlsystem-env/bin/activate
 
 
 6.
-在虚拟环境中，命令行进入web_platform目录，执行：
+在虚拟环境中，命令行进入wsgi.py平行的目录目录，执行：
 python3 wsgi.py
 
 7. 
@@ -43,5 +43,8 @@ python3 wsgi.py
 如果提供接口给外部访问，确保操作系统防火墙运行了权限和5000端口等，
 然后让用户访问 http://服务器ip:5000/home
 
+8.
+设置了默认管理员账号：admin@126.com 密码：admin
+只有管理员账号才可以分配作业
 
 
