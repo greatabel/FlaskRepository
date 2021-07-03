@@ -132,20 +132,14 @@ div[class*="release_year"] {
         <p style="width:500px;padding-left:10px;">
             <span style="font-weight:bold;">Technical Materail Title: </span>
             <span id="titleLbl" style="border: 1px solid gray; " >
-     标题示例 设置多列
+     {{session['title']}}
   </span>
 
        <br/><br/>
         <span style="font-weight:bold;">Detail: </span>
         <br/>
         <div style="border: 1px solid gray; display: inline-block">
-      detail：具体我们本周要做的是：
-        实现一个简单的html中 2列竖直对齐功能；请提交html为最终结果<br>
-        &nbsp;&nbsp;detail：具体我们本周要做的是：
-        实现一个简单的html中 2列竖直对齐功能；请提交html为最终结果
-        实现一个简单的html中 2列竖直对齐功能；请提交html为最终结果<br>
-        &nbsp;&nbsp;detail：具体我们本周要做的是：
-        实现一个简单的html中 2列竖直对齐功能；请提交html为最终结果        
+    {{session['detail']}}   
 </div>
 
       </p>

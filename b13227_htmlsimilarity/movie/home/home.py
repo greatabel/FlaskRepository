@@ -73,9 +73,11 @@ def home(pagenum=1):
             listing=PageResult(search_list, pagenum, 100),
             
         )
+
     return render_template(
         'home.html',
         listing=PageResult(movie_list, pagenum),
+
         
     )
 

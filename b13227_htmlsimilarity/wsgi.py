@@ -41,6 +41,19 @@ class User(db.Model):
         self.username = username
         self.password = password
 
+# 老师当前布置作业的表
+class TeacherWork(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(80), unique=True)
+    detail = db.Column(db.String(500))
+    answer = db.Column(db.String(5000))
+
+    def __init__(self, title, detail, answer):
+        self.title = title
+        self.detail = detail
+        self.answer = answer
+
+
 
 login_manager = flask_login.LoginManager(app)
 user_pass = {}
@@ -155,6 +168,26 @@ def unauthorized_handler():
 def assignwork():
     return rt("index.html")
 
+
+@app.route("/teacher_work", methods=["POST"])
+def teacher_work():
+    title = request.form.get("title")
+    detail = request.form.get("detail")
+
+    # salt = PH.get_salt()
+    # hashed = PH.get_hash(pw1 + salt)
+    print("teacher_work ===>", title, detail)
+    w = TeacherWork.query.get(1)
+    print(w.id, w.answer)
+    w.title = title
+    w.detail = detail
+    db.session.commit()
+    session['title'] = title
+    session['detail'] = detail
+
+    return redirect(url_for("assignwork"))
+
+
 # @app.route("/", methods=["GET"])
 # def index():
 #     return rt("index.html")
@@ -190,6 +223,19 @@ def upload_success():  # 按序读出分片内容，并写入新文件
             os.remove(filename)  # 删除该分片，节约空间
     if session['isadmin']:
         print('admin upload assignwork=', target_filename)
+        with open(r'upload/'+target_filename, "r") as f:
+            html_1 = f.read()
+            w = TeacherWork.query.get(1)
+            print('w=',w)
+
+            if w is None:
+                w = TeacherWork(title='', detail='',answer=html_1)
+                db.session.add(w)
+                db.session.commit()
+            else:
+                w.answer = html_1
+                db.session.commit()   
+
     return rt("index.html")
 
 

@@ -11,13 +11,94 @@
 </head>
 
 <body>
-    <div style="margin:50px 0 0 50px;">
-        <div id="picker" style="float:left;">请选择想要上传的数据集</div>
+
+<!--            <div style="margin:50px 0 0 50px;">
+        <div id="picker" style="float:left;">upload-correct-answer</div>
         <div id="progress" class="progress" style="width:500px;float:left;margin:10px 0 0 20px;">
             <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:0%;"></div>
         </div>
         <div style="clear:both;"></div>
+         </div> -->
+
+
+<br/>
+<form class="form-horizontal" action="/teacher_work" method="POST">
+<div class="container">
+  <div class="row">
+    <div class="col-sm-4">
+       <label for="code">Title</label>
+       
     </div>
+
+    <div class="col-sm-8">
+<input type="title" class="form-control" name="title" id="title" 
+        aria-describedby="emailHelp" placeholder="Enter title">
+
+    </div>
+
+  </div>
+
+ <br/>
+
+  <div class="row">
+    <div class="col-sm-4">
+       <label for="code">Detail</label>
+       
+    </div>
+    <div class="col-sm-8">
+    <label for="code">Correct Answer</label>
+    </div>
+
+  </div>
+
+  <div class="row">
+        <div class="col-sm-4">
+       <label for="code">file upload</label>
+       
+    </div>
+    <div class="col-sm-8">
+           <div >
+        <div id="picker" style="float:left;">upload-correct-answer</div>
+        <div id="progress" class="progress" style="width:500px;float:left;margin:10px 0 0 20px;">
+            <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:0%;"></div>
+        </div>
+        <div style="clear:both;"></div>
+         </div>
+
+
+    </div>
+  </div>
+
+      <div class="row">
+    <div class="col-sm-12">
+
+        <textarea rows = "5" cols = "120" name = "detail" id="detail">
+            Enter details here...
+         </textarea>
+
+
+
+    </div>
+      </div>
+
+
+      <div class="row">
+    <div class="col-sm-6">
+
+<button type="submit"  class="btn btn-primary" onclick="relocate_dashboard()">assign</button>
+    </div>
+    <div class="col-sm-6">
+
+<button type="button" class="btn btn-primary" onclick="relocate_dashboard()">back</button>
+    </div>
+      </div>
+
+
+</div>
+
+</form>
+
+
     <script type="text/javascript">
     $(document).ready(function() {
         var task_id = WebUploader.Base.guid(); // 产生文件唯一标识符task_id
