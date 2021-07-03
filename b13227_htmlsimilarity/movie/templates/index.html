@@ -85,11 +85,11 @@
       <div class="row">
     <div class="col-sm-6">
 
-<button type="submit"  class="btn btn-primary" onclick="relocate_dashboard()">assign</button>
+<button type="submit"  class="btn btn-primary" >assign</button>
     </div>
     <div class="col-sm-6">
 
-<button type="button" class="btn btn-primary" onclick="relocate_dashboard()">back</button>
+<button type="button" class="btn btn-primary" onclick="back()">back</button>
     </div>
       </div>
 
@@ -152,6 +152,12 @@
 
         $('#progress').hide();
     });
+
+
+    function back()
+{
+     location.href = "http://localhost:5000/home";
+}
     </script>
 </body>
 </html>

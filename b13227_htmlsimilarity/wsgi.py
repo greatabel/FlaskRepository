@@ -54,6 +54,17 @@ class TeacherWork(db.Model):
         self.answer = answer
 
 
+class StudentWork(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    userid = db.Column(db.Integer)
+    answer = db.Column(db.String(5000))
+    score =  db.Column(db.DECIMAL(10,2))
+
+    def __init__(self, title, detail, answer):
+        self.userid = title
+        self.answer = detail
+        self.score = answer
+
 
 login_manager = flask_login.LoginManager(app)
 user_pass = {}
@@ -77,6 +88,7 @@ def relationship():
 
 @login_manager.user_loader
 def load_user(email):
+    print('$'*30)
     return user_pass.get(email, None)
 
 
@@ -90,10 +102,22 @@ def login():
         if data is not None:
             print("test login")
             session["logged_in"] = True
+
+
+
             if email in admin_list:
                 session["isadmin"] = True
+                session["userid"] = data.id
 
             print("login sucess", "#" * 20, session["email"])
+
+            w = TeacherWork.query.get(1)
+            print('w=', w)
+            if w is not None:
+                session['title'] = w.title
+                session['detail'] = w.detail
+                session['answer'] = w.answer
+
             return redirect(url_for("home_bp.home", pagenum=1))
         else:
             return "Not Login"
@@ -188,6 +212,9 @@ def teacher_work():
     return redirect(url_for("assignwork"))
 
 
+@app.route("/student_index", methods=["GET"])
+def student_index():
+    return rt("student_index.html")
 # @app.route("/", methods=["GET"])
 # def index():
 #     return rt("index.html")
@@ -221,7 +248,7 @@ def upload_success():  # 按序读出分片内容，并写入新文件
 
             chunk += 1
             os.remove(filename)  # 删除该分片，节约空间
-    if session['isadmin']:
+    if 'isadmin' in session and session['isadmin']:
         print('admin upload assignwork=', target_filename)
         with open(r'upload/'+target_filename, "r") as f:
             html_1 = f.read()
@@ -234,8 +261,13 @@ def upload_success():  # 按序读出分片内容，并写入新文件
                 db.session.commit()
             else:
                 w.answer = html_1
-                db.session.commit()   
-
+                db.session.commit()
+    else:
+        # student submit
+        with open(r'upload/'+target_filename, "r") as f:
+            html_2 = f.read()
+            myscore = similarity(html_2, session['answer'])
+            print('#'*20, 'myscore=', myscore)
     return rt("index.html")
 
 
@@ -270,4 +302,5 @@ def file_download(filename):
 
 if __name__ == "__main__":
     db.create_all()
+
     app.run(host="localhost", port=5000, threaded=False)

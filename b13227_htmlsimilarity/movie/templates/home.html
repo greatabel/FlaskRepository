@@ -151,7 +151,7 @@ div[class*="release_year"] {
     <div class="row">
       <div class="col-sm-4">
       <hr/>
-      {% if session['isadmin'] %}
+      {% if session['isadmin'] and session['logged_in'] %}
       <button type="button" class="btn btn-primary" onclick="relocate_home()">Assign Work</button>
       {% else %}
       <button type="button" class="btn btn-primary" disabled> Assign Work</button>
@@ -160,7 +160,7 @@ div[class*="release_year"] {
 
       <div class="col-sm-4">
       <hr/>
-      <button type="button" class="btn btn-primary" onclick="relocate_dashboard()">Submit Assignment</button>
+      <button type="button" class="btn btn-primary" onclick="relocate_student()">Submit Assignment</button>
       </div>
 
       <div class="col-sm-4">
@@ -281,6 +281,11 @@ div[class*="release_year"] {
 function relocate_home()
 {
      location.href = "http://localhost:5000/assignwork";
+} 
+
+function relocate_student()
+{
+     location.href = "http://localhost:5000/student_index";
 } 
 
 function relocate_dashboard()
