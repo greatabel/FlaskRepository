@@ -77,7 +77,9 @@ def login():
         if data is not None:
             print("test login")
             session["logged_in"] = True
-            print("login sucess", "#" * 20)
+            session["email"] = email
+
+            print("login sucess", "#" * 20, session["email"])
             return redirect(url_for("home_bp.home", pagenum=1))
         else:
             return "Not Login"

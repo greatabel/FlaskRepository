@@ -157,7 +157,11 @@ div[class*="release_year"] {
     <div class="row">
       <div class="col-sm-4">
       <hr/>
+      {% if session['email'] == 'admin@126.com' %}
       <button type="button" class="btn btn-primary" onclick="relocate_home()">Assign Work</button>
+      {% else %}
+      <button type="button" class="btn btn-primary" disabled> Assign Work</button>
+      {% endif %}
       </div>
 
       <div class="col-sm-4">
