@@ -5,9 +5,9 @@ Flask
 html-similarity
 itsdangerous
 pandas
-pytest
+pytest==6.0.1
 python-dotenv
 pytest-cov
 flask-wtf
-flask_login
+Flask-Login==0.4.1
 flask_sqlalchemy
