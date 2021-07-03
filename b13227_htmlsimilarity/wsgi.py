@@ -28,7 +28,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///hs_data.db"
 db = SQLAlchemy(app)
 
 # --- end   数据库 ---
-
+admin_list = ['admin@126.com']
 
 class User(db.Model):
     """ Create user table"""
@@ -77,7 +77,8 @@ def login():
         if data is not None:
             print("test login")
             session["logged_in"] = True
-            session["email"] = email
+            if email in admin_list:
+                session["isadmin"] = True
 
             print("login sucess", "#" * 20, session["email"])
             return redirect(url_for("home_bp.home", pagenum=1))
@@ -150,11 +151,13 @@ def unauthorized_handler():
 
 
 # --------------------------
+@app.route("/assignwork", methods=["GET"])
+def assignwork():
+    return rt("index.html")
 
-
-@app.route("/", methods=["GET"])
-def index():
-    return rt("./index.html")
+# @app.route("/", methods=["GET"])
+# def index():
+#     return rt("index.html")
 
 
 @app.route("/file/upload", methods=["POST"])
@@ -165,7 +168,7 @@ def upload_part():  # 接收前端上传的一个分片
 
     upload_file = request.files["file"]
     upload_file.save("./upload/%s" % filename)  # 保存分片到本地
-    return rt("./index.html")
+    return rt("index.html")
 
 
 @app.route("/file/merge", methods=["GET"])
@@ -185,8 +188,9 @@ def upload_success():  # 按序读出分片内容，并写入新文件
 
             chunk += 1
             os.remove(filename)  # 删除该分片，节约空间
-
-    return rt("./index.html")
+    if session['isadmin']:
+        print('admin upload assignwork=', target_filename)
+    return rt("index.html")
 
 
 @app.route("/file/list", methods=["GET"])
@@ -195,7 +199,7 @@ def file_list():
     # print(type(files))
     files.remove(".DS_Store")
     # files = map(lambda x: x if isinstance(x, unicode) else x.decode('utf-8'), files)  # 注意编码
-    return rt("./list.html", files=files)
+    return rt("list.html", files=files)
 
 
 @app.route("/file/download/<filename>", methods=["GET"])

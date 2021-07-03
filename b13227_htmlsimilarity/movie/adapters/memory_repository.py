@@ -80,7 +80,7 @@ def load_movies():
             movie.add_genre(genre2)
 
         moive_list.append(movie)
-        print(movie, 'in MemoryRepository',  movie.director)
+        # print(movie, 'in MemoryRepository',  movie.director)
     return moive_list
 
 

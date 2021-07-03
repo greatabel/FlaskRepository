@@ -157,7 +157,7 @@ div[class*="release_year"] {
     <div class="row">
       <div class="col-sm-4">
       <hr/>
-      {% if session['email'] == 'admin@126.com' %}
+      {% if session['isadmin'] %}
       <button type="button" class="btn btn-primary" onclick="relocate_home()">Assign Work</button>
       {% else %}
       <button type="button" class="btn btn-primary" disabled> Assign Work</button>
@@ -286,7 +286,7 @@ div[class*="release_year"] {
 <script type="text/javascript">
 function relocate_home()
 {
-     location.href = "http://localhost:5000/";
+     location.href = "http://localhost:5000/assignwork";
 } 
 
 function relocate_dashboard()
