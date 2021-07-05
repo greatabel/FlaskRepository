@@ -22,7 +22,7 @@
 
 
 <br/>
-<form class="form-horizontal" action="/teacher_work" method="POST">
+<form class="form-horizontal" action="/student_work" method="POST">
 <div class="container">
 
 
@@ -51,7 +51,7 @@
       <div class="row">
     <div class="col-sm-6">
 
-<button type="submit"  class="btn btn-primary" onclick="relocate_dashboard()">submit</button>
+<button type="submit"  class="btn btn-primary" onclick="student_index()">submit</button>
     </div>
     <div class="col-sm-6">
 
@@ -122,6 +122,11 @@
         function back()
 {
      location.href = "http://localhost:5000/home";
+}
+
+        function student_index()
+{
+     location.href = "http://localhost:5000/student_index";
 }
     </script>
 </body>

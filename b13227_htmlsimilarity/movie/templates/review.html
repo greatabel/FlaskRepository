@@ -219,7 +219,7 @@ svg.append("g")
 
 svg.append("text")
     .attr("class", "title")
-    .attr("x", width*5/7)
+    .attr("x", width*3/7)
     .attr("y", 0 - (margin.top / 3))
     .attr("text-anchor", "middle")
     .text("score not pass vs pass");  
@@ -277,7 +277,7 @@ var svg = d3.select("#my_dataviz")
 // console.log(myjson);
 
 // Create dummy data
-var data = {positive: inputdata.num_positive, neural: inputdata.num_neural, nagtive: inputdata.num_nagtive}
+var data = {bigger_than_80_percent: inputdata.num_positive, between40_80_percent: inputdata.num_neural, less_than_40_percent: inputdata.num_nagtive}
 // var data = {好: 27, 缺损: 9}
 console.log(data);
 console.log('======');

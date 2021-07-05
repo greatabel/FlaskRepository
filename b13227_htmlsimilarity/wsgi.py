@@ -17,6 +17,7 @@ from movie import create_app
 from movie.domain.model import Director, Review, Movie
 
 from html_similarity import style_similarity, structural_similarity, similarity
+from common import set_js_file
 
 app = create_app()
 app.secret_key = "ABCabc123"
@@ -109,10 +110,10 @@ def login():
                 session["isadmin"] = True
                 session["userid"] = data.id
 
-            print("login sucess", "#" * 20, session["email"])
+            print("login sucess", "#" * 20, session["logged_in"])
 
             w = TeacherWork.query.get(1)
-            print('w=', w)
+            print('w=', w, w.answer, w.title)
             if w is not None:
                 session['title'] = w.title
                 session['detail'] = w.detail
@@ -212,6 +213,11 @@ def teacher_work():
     return redirect(url_for("assignwork"))
 
 
+@app.route("/student_work", methods=["POST"])
+def student_work():
+    return redirect(url_for("student_index"))
+
+
 @app.route("/student_index", methods=["GET"])
 def student_index():
     return rt("student_index.html")
@@ -266,8 +272,10 @@ def upload_success():  # 按序读出分片内容，并写入新文件
         # student submit
         with open(r'upload/'+target_filename, "r") as f:
             html_2 = f.read()
+            # print(html_2, '*'*20, session['answer'])
             myscore = similarity(html_2, session['answer'])
             print('#'*20, 'myscore=', myscore)
+            set_js_file(myscore)
     return rt("index.html")
 
 
