@@ -177,8 +177,8 @@ div[class*="release_year"] {
 
 function group_chart(inputdata){
 let data = {
-    "not-pass": inputdata.data2020,
-    "pass"  : inputdata.data2021
+    "not_pass": inputdata.not_pass,
+    "pass"  : inputdata.pass
 };
 let margin = {top: 30, right: 20, bottom: 30, left: 40};
 let svgWidth = 720, svgHeight = 300;
@@ -325,7 +325,7 @@ svg.append("text")
     .attr("x", width*2/7)
     .attr("y", 0 - 50)
     .attr("text-anchor", "middle")
-    .text("silimary chart（"+ inputdata.total_sentiment_polarity + ")");  
+    .text("silimary chart（likelihood)");  
 
   
 }
@@ -493,8 +493,8 @@ bars.append("text")
         console.log(DATA);
         group_chart(DATA);
         pi_chart(DATA);
-        group_chart_II(RELATED_WORDS);
-        group_chart_III(WHO_TWEETS);
+        // group_chart_II(RELATED_WORDS);
+        // group_chart_III(WHO_TWEETS);
 
         // d3.select('#chart')
         //   .selectAll("div")
@@ -519,10 +519,10 @@ bars.append("text")
 
 <hr>
 
-<div id="relatedword_chart"></div>
+<!-- <div id="relatedword_chart"></div> -->
 
 <hr>
 
-<div id="who_tweet_chart"></div>
+<!-- <div id="who_tweet_chart"></div> -->
   </body>
 </html>
