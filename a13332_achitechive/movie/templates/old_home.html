@@ -1,0 +1,226 @@
+<html>
+<html>
+  <head>
+
+    <!-- <link rel="stylesheet" href="/static/game-frame-styles.css" /> -->
+    <style type="text/css">
+#tbl_div div {
+  visibility:hidden;
+    display:none;
+}
+
+div[name*="title"] {
+/*  background: #ffff00;*/
+  font-weight: bold;
+  font-size: 150%;
+  text-align: center;
+}
+
+div[class*="release_year"] {
+/*  background: #ffff00;*/
+  color:blue;
+  font-weight: bold;
+  font-size: 90%;
+  text-align: center;
+}
+</style>
+<link rel='stylesheet' href='/static/bootstrap-4.5.2-dist/css/bootstrap.min.css'>
+
+
+
+  </head>
+ 
+<body>
+    <div class="container">
+      <h1>Movie WebApp by HuaXin </h1>
+      <form role="form" method='POST' action='/search'>
+
+      <label for="item">choose director:</label>
+      <select name="select_Items" id="table-select">
+        {% for d in directors %}
+
+        <option value="{{ d.director_full_name }}"> {{ d.director_full_name }} </option>
+
+        {% endfor %}
+      </select>
+
+
+
+        <div id="tbl_div" class="form-group">
+
+            <div id="tb1">
+                <table border="1">
+                    <tr>
+                        <td><span name="span_title"></span>标题:</td>
+                        <td>
+                          <input name="title1" value="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>正文:</td>
+                        <td>
+                          <textarea name="content1" rows="10" cols="50">
+                              
+                          </textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>判决法院:<input name="case_court" value="" /></td>
+                        <td>年份:<input name="case_year" value="" /></td>
+                    </tr>
+
+                    <tr>
+                        <td>案号:<input name="case_id" value="" /></td>
+                        <td>案由:<input name="case_cause" value="" /></td>
+                    </tr>
+                    <tr>
+                        <td>当事人所处行业:<input name="case_industry" value="" /></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="tb2">
+                <table border="1">
+                    <tr>
+                        <td><span name="span_title"></span>标题:</td>
+                        <td>
+                          <input name="title2" value="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>正文:</td>
+                        <td>
+                          <textarea name="content2" rows="10" cols="50">
+                              
+                          </textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>法律问题归纳:<input name="memo_issue" value="" /></td>
+                        <td>年份:<input name="memo_year" value="" /></td>
+                    </tr>
+
+                    <tr>
+                        <td>客户所在行业:<input name="meomo_industry" value="" /></td>
+                        <td>案号: <input name="memo_caseid" value="" /></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="tb3">
+                <table border="1">
+                    <tr>
+                        <td><span name="span_title"></span>标题:</td>
+                        <td>
+                          <input name="title3" value="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>正文:</td>
+                        <td>
+                          <textarea name="content3" rows="10" cols="50">
+                              
+                          </textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>案由:<input name="evidence_cause" value="" /></td>
+                        <td>客户是否为原告:<br/>
+                              <input type="radio" name="evidence_plaintiff" value="1">是<br>
+                              <input type="radio" name="evidence_plaintiff" value="0">否<br>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>当事人国籍:<input name="evidence_nation" value="" /></td>
+                        <td>当事人所处行业:<input name="evidence_industry" value="" /></td>
+                    </tr>
+                    <tr>
+                        <td>审理法院:<input name="evidence_court" value="" /></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="tb4">
+                <table border="1">
+                    <tr>
+                        <td><span name="span_title"></span>标题:</td>
+                        <td>
+                          <input name="title4" value="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>正文:</td>
+                        <td>
+                          <textarea name="content4" rows="10" cols="50">
+                              
+                          </textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>合同类型:<input name="contract_type" value="" /></td>
+                        <td>合同语言:<input name="contract_language" value="" /></td>
+                    </tr>
+
+                    <tr>
+                        <td>合同标的金额:<input name="contract_amount" value="" /></td>
+                        <td>合同双方谈判地位:<input name="contract_position" value="" /></td>
+                    </tr>
+                    <tr>
+                        <td>合同双方所处行业:<input name="contract_industry" value="" /></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+
+
+        </div>
+
+        <br/>
+        <button type="submit" class="btn btn-success" onclick="return handleChange()">Search</button>
+      </form>
+
+
+      {% for r in listing %}
+
+      <div class="container">
+        <div class="col-md-4 px-0">
+            <img src="/static/images/{{r.id }}.png" class="img-fluid">
+            <div name="title"> {{ r.title|safe }}</div>  
+            <div class="release_year">release_year: {{ r.release_year }} </div> 
+        </div>
+     </div>
+
+
+
+      {% endfor %}
+
+      <br/>
+
+      <ul class="pagination">
+      {%if listing.page == 1%}
+      <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+      {%else%}
+          <li class="page-item"><a class="page-link" href="/{{listing.page-1}}">Previous</a></li>
+       {%endif%}
+      <li class="page-item"><a class="page-link" href="{{listing}}">Next</a></li>
+    </ul>
+
+
+
+    </div>
+
+
+
+
+<script>
+
+
+</script>
+<script src="/static/jquery-3.5.1.min.js"></script>
+<script src=='/static/bootstrap-4.5.2-dist/js/bootstrap.min.js'></script>
+
+  </body>
+</html>
