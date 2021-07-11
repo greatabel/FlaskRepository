@@ -56,7 +56,7 @@ def findSteelPrice(startDate,endDate):
         with open(r'../data/i1steel_price_%s.csv' % today, 'a', encoding='utf-8') as f:
             f.write("{},{}\n".format(date, value))
     f.close()
-    print("File <Steel_Price_%s.csv> Download Successful" % today)
+    print("File <i1steel_price_%s.csv> Download Successful" % today)
 
 
 findSteelPrice('2021-01-01', '2021-07-12')

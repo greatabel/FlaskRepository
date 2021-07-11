@@ -38,7 +38,7 @@ def findWoodPrice():
                 "supermaket": "".join(tr.xpath("./td[4]/text()")).strip(),
                 "time": "".join(tr.xpath("./td[5]/text()")).strip(),
             }
-            with open("../data/i0manmade_"+ str(today) + ".csv", "a", encoding="utf_8_sig", newline="") as fp:
+            with open("../data/i0manmadeboard_"+ str(today) + ".csv", "a", encoding="utf_8_sig", newline="") as fp:
                 # 'a'为追加模式（添加）
                 # utf_8_sig格式导出csv不乱码
                 fieldnames = ["name", "price", "unit", "supermaket", "time"]

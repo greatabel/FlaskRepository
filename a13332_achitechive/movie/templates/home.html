@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>作业自动评分系统</title>
+    <title>BIM建材大数据系统</title>
 
     <!-- Bootstrap core CSS -->
     <style type="text/css">
@@ -119,7 +119,7 @@ div[class*="release_year"] {
 
 
 <div class="container">
-   <h1>作业自动评分系统</h1>
+   <h1>BIM建材大数据系统</h1>
   <div class="row">
     <div class="col-sm-4">
               <figure>
@@ -132,14 +132,14 @@ div[class*="release_year"] {
         <p style="width:500px;padding-left:10px;">
             <span style="font-weight:bold;">Technical Materail Title: </span>
             <span id="titleLbl" style="border: 1px solid gray; " >
-     {{session['title']}}
+     结合BIM及建材产品大数据技术的平台
   </span>
 
        <br/><br/>
         <span style="font-weight:bold;">Detail: </span>
         <br/>
         <div style="border: 1px solid gray; display: inline-block">
-    {{session['detail']}}   
+    BIM——建筑行业大数据源代码：BIM的核心在于Information，其应用是大数据时代的必然产物。而BIM作为建筑业的源代码，其不仅能够处理项目级的基础数据，最大的优势是承载海量项目数据。建筑业是数据量最大，规模最大的行业，随着BIM的发展及普及，势必会促使建筑行业大数据时代的到来
 </div>
 
       </p>
@@ -148,26 +148,6 @@ div[class*="release_year"] {
 
   </div>
 
-    <div class="row">
-      <div class="col-sm-4">
-      <hr/>
-      {% if session['isadmin'] and session['logged_in'] %}
-      <button type="button" class="btn btn-primary" onclick="relocate_home()">Assign Work</button>
-      {% else %}
-      <button type="button" class="btn btn-primary" disabled> Assign Work</button>
-      {% endif %}
-      </div>
-
-      <div class="col-sm-4">
-      <hr/>
-      <button type="button" class="btn btn-primary" onclick="relocate_student()">Submit Assignment</button>
-      </div>
-
-      <div class="col-sm-4">
-      <hr/>
-      <button type="button" class="btn btn-primary" onclick="relocate_dashboard()"">Dashboard</button>
-      </div>
-    </div>
 
 
 </div>
@@ -178,7 +158,7 @@ div[class*="release_year"] {
 
     <div class="container">
       <div class="row">
-       <div class="col-md-8"> <div class="release_year">作业自动评分系统流程和原理：</div>
+       <div class="col-md-8"> <div class="release_year">BIM建材大数据系统流程和原理：</div>
        </div>
        </div>
       <!-- Example row of columns -->
@@ -267,7 +247,7 @@ div[class*="release_year"] {
 <br/>
 
       <footer>
-        <p>&copy; weijiyuan 2021</p>
+        <p>&copy; Berich 2021</p>
       </footer>
     </div> <!-- /container -->
 
