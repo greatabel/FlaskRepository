@@ -59,5 +59,5 @@ def findSteelPrice(startDate,endDate):
     print("File <i1steel_price_%s.csv> Download Successful" % today)
 
 
-findSteelPrice('2021-01-01', '2021-07-12')
+findSteelPrice('2020-01-01', '2021-07-12')
 

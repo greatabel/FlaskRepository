@@ -279,7 +279,7 @@ def upload_success():  # 按序读出分片内容，并写入新文件
     return rt("index.html")
 
 
-@app.route("/file/list", methods=["GET"])
+@app.route("/ml", methods=["GET"])
 def file_list():
     files = os.listdir("./upload/")  # 获取文件目录
     # print(type(files))

@@ -16,35 +16,18 @@
 <body>
 	<div>
 	<br/>
-	<button type="button" class="btn btn-primary">已经上传成功的数据集列表如下:</button>
+机器学习预测钢铁价格
+<img src="/static/images/app_data/price.png"/>
+<img src="/static/images/app_data/price_predict.png"/>
+
 
 	</div>
 
-    {% for file in files %}
-    <a href="{{ url_for('file_download', filename=file) }}">{{ file }}</a><br/>
-    {% endfor %}
 
-    <hr/>
-    <a href="#" data-jq-dropdown="#jq-dropdown-1">选择算法或模型</a>
-
-
-    <div id="jq-dropdown-1" class="jq-dropdown jq-dropdown-tip">
-    <ul class="jq-dropdown-menu">
-        <li><a href="#1">LR/Ridge/Lasso模型</a></li>
-        <!-- <li><a href="#2">Collaborative Filtering 算法</a></li> -->
-
-    </ul>
 	</div>
 
 <script type="text/javascript">
-	$('#jq-dropdown-1').on('show', function(event, dropdownData) {
 
-}).on('hide', function(event, dropdownData) {
-    // console.log(dropdownData);
-    	var type = location.hash;
-    console.log(type);
-    alert('以及选择LR/Ridge/Lasso模型，请返回首页查看分析')
-});
 </script>
 
 </body>
