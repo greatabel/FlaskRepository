@@ -1,2 +1,2 @@
 var DATA = {
-	'not_pass':5, 'pass':4,'num_positive':3, 'num_neural':1,'num_nagtive':3 };
+	'18厘竹材胶合板':245.00,'15厘竹材胶合板':163.00,'18厘指接板':160.00, };

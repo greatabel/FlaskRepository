@@ -17,7 +17,7 @@ from movie import create_app
 from movie.domain.model import Director, Review, Movie
 
 from html_similarity import style_similarity, structural_similarity, similarity
-from common import set_js_file
+# from common import set_js_file
 
 app = create_app()
 app.secret_key = "ABCabc123"
@@ -275,7 +275,7 @@ def upload_success():  # 按序读出分片内容，并写入新文件
             # print(html_2, '*'*20, session['answer'])
             myscore = similarity(html_2, session['answer'])
             print('#'*20, 'myscore=', myscore)
-            set_js_file(myscore)
+            # set_js_file(myscore)
     return rt("index.html")
 
 

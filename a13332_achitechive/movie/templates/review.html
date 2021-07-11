@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Recommand-Algorithm Demo by HuaXin</title>
+    <title>建材数据可视化</title>
 
     <!-- Bootstrap core CSS -->
     <style type="text/css">
@@ -133,6 +133,7 @@ div[class*="release_year"] {
 <script src="/static/bootstrap-4.5.2-dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/static/d3/d3.js"></script>
 <script src="/static/student.js" ></script>
+<script src="/static/student1.js" ></script>
 <script type="text/javascript">
     function SimpleWidget(spec) {
         var instance = {}; // <-- A
@@ -176,10 +177,12 @@ div[class*="release_year"] {
 
 
 function group_chart(inputdata){
-let data = {
-    "not_pass": inputdata.not_pass,
-    "pass"  : inputdata.pass
-};
+console.log(inputdata)
+// let data = {
+//     "not_pass": inputdata.not_pass,
+//     "pass"  : inputdata.pass
+// };
+let data = inputdata;
 let margin = {top: 30, right: 20, bottom: 30, left: 40};
 let svgWidth = 720, svgHeight = 300;
 let height = svgHeight- margin.top- margin.bottom, width = svgWidth - margin.left - margin.right;
@@ -222,7 +225,7 @@ svg.append("text")
     .attr("x", width*3/7)
     .attr("y", 0 - (margin.top / 3))
     .attr("text-anchor", "middle")
-    .text("score not pass vs pass");  
+    .text("价格排名");  
 // Create rectangles
 let bars = svg.selectAll('.bar')
     .data(sourceNames)
@@ -277,7 +280,8 @@ var svg = d3.select("#my_dataviz")
 // console.log(myjson);
 
 // Create dummy data
-var data = {bigger_than_80_percent: inputdata.num_positive, between40_80_percent: inputdata.num_neural, less_than_40_percent: inputdata.num_nagtive}
+// var data = {bigger_than_80_percent: inputdata.num_positive, between40_80_percent: inputdata.num_neural, less_than_40_percent: inputdata.num_nagtive}
+var data = inputdata;
 // var data = {好: 27, 缺损: 9}
 console.log(data);
 console.log('======');
@@ -315,17 +319,17 @@ svg
   .data(data_ready)
   .enter()
   .append('text')
-  .text(function(d){ return "similarity: " + d.data.key})
+  .text(function(d){ return "名称: " + d.data.key})
   .attr("transform", function(d) { return "translate(" + arcGenerator.centroid(d) + ")";  })
   .style("text-anchor", "middle")
   .style("font-size", 17)
 
 svg.append("text")
     .attr("class", "title")
-    .attr("x", width*2/7)
+    .attr("x", width*3/7)
     .attr("y", 0 - 50)
     .attr("text-anchor", "middle")
-    .text("silimary chart（likelihood)");  
+    .text("类别频率");  
 
   
 }
@@ -492,7 +496,7 @@ bars.append("text")
 
         console.log(DATA);
         group_chart(DATA);
-        pi_chart(DATA);
+        pi_chart(DATA_COUNT);
         // group_chart_II(RELATED_WORDS);
         // group_chart_III(WHO_TWEETS);
 
