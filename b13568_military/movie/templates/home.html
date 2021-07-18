@@ -110,7 +110,7 @@ div[class*="release_year"] {
       <input type="submit" value="Sign in" class="btn btn-success">
     </form>
       {% else %}
-          <a class="nav-link" href="#"> [{{ session["level"] }} ] already logined <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="#"> (级别:{{ session["level"] }} ) 已登录 <span class="sr-only">(current)</span></a>
 
      {% endif %}
   </div>

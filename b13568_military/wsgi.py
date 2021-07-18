@@ -111,8 +111,8 @@ def login():
             if email in admin_list:
                 session["isadmin"] = True
                 session["userid"] = data.id
-                session["level"] = data.level
-                print(session["level"], 'level session')
+            session["level"] = data.level
+            print(session["level"], 'level session')
 
             print("login sucess", "#" * 20, session["logged_in"])
 
