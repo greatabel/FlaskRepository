@@ -16,7 +16,7 @@ from flask import jsonify
 from movie import create_app
 # from movie.domain.model import Director, Review, Movie
 
-# from html_similarity import style_similarity, structural_similarity, similarity
+from html_similarity import style_similarity, structural_similarity, similarity
 # from common import set_js_file
 
 app = create_app()

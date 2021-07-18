@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>建材数据可视化</title>
+    <title>民兵数据可视化</title>
 
     <!-- Bootstrap core CSS -->
     <style type="text/css">
@@ -43,6 +43,7 @@ div[class*="release_year"] {
   </head>
   <body>
 
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
   <button class="navbar-toggler" type="button" data-toggle="collapse" 
@@ -52,6 +53,15 @@ div[class*="release_year"] {
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
+
+            <li class="nav-item active">
+
+         <a href="/home"> 回到首页 &nbsp;</a>
+
+
+      </li>
+
+
       <li class="nav-item active">
         <!-- <a class="nav-link" href="/home/1">Home <span class="sr-only">(current)</span></a> -->
       </li>
@@ -225,7 +235,7 @@ svg.append("text")
     .attr("x", width*3/7)
     .attr("y", 0 - (margin.top / 3))
     .attr("text-anchor", "middle")
-    .text("价格排名");  
+    .text("民兵类别和数量（w)");  
 // Create rectangles
 let bars = svg.selectAll('.bar')
     .data(sourceNames)
@@ -329,7 +339,7 @@ svg.append("text")
     .attr("x", width*3/7)
     .attr("y", 0 - 50)
     .attr("text-anchor", "middle")
-    .text("类别频率");  
+    .text("军费开支");  
 
   
 }
