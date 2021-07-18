@@ -10,7 +10,7 @@
     <!-- Bootstrap core CSS -->
     <style type="text/css">
 label {
-  border: 1px solid gray;
+  /*border: 1px solid gray;*/
 }
 
 #tbl_div div {
@@ -91,7 +91,7 @@ div[class*="release_year"] {
          <a class="nav-link" href="/review">数据可视化 <span class="sr-only">(current)</span></a>
       </li>
              <li class="nav-item active">
-         <a class="nav-link" href="/ml">机器学习和预测 <span class="sr-only">(current)</span></a>
+         <a class="nav-link" href="/blogs"> 资讯管理后台 <span class="sr-only">(current)</span></a>
       </li>
     {% endif %}
      
@@ -165,7 +165,7 @@ div[class*="release_year"] {
 
     <div class="container">
       <div class="row">
-       <div class="col-md-8"> <div class="release_year">民兵管理平台流程和原理：</div>
+       <div class="col-md-8"> <div class="release_year">民兵资讯与通知栏</div>
        </div>
        </div>
       <!-- Example row of columns -->
@@ -174,6 +174,7 @@ div[class*="release_year"] {
           {% for r in listing %}
 
         <div class="col-md-4">
+        <label>{{ r.title }}</label>
         <figure>
             <img src="/static/images/app_data/{{r.id }}.png" class="img-fluid" style="height:250px;width:500px;">
         </figure>
