@@ -110,7 +110,7 @@ div[class*="release_year"] {
       <input type="submit" value="Sign in" class="btn btn-success">
     </form>
       {% else %}
-          <a class="nav-link" href="#">already logined <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="#"> [{{ session["level"] }} ] already logined <span class="sr-only">(current)</span></a>
 
      {% endif %}
   </div>
@@ -209,6 +209,20 @@ div[class*="release_year"] {
                 <div class="form-group">
                     <div class="col-sm-9">
                         <input type="password" name="password2" id="password2" placeholder="Confirm password" class="form-control">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-9">
+                      <label> 
+                      级别:
+                    </label>
+                        <select name="level" id="level">
+                        <option value="民兵">民兵</option>
+                        <option value="团机关">团机关</option>
+                        <option value="师机关">师机关</option>
+                        <option value="兵团机关">兵团机关</option>
+                      </select>
                     </div>
                 </div>
 

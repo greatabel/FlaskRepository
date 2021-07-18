@@ -47,24 +47,9 @@ python3 wsgi.py
 设置了默认管理员账号：admin@126.com 密码：admin
 只有管理员账号才可以分配作业
 
-其余学生账号请正常注册，登录
+其余民兵账号请正常注册，登录
 
 数据库使用sqlchemy使用sqlite3，位于：
 b13227_htmlsimilarity/movie/hs_data.db
 
-9.
-
-除此之外
-下载钢材，板材，红木数据的程序在：
-i0scrapy的
-i0scrapy.py
-i1scrapy.py
-
-可视化处理代码在：
-i1data_visualization的 i2preprocess.py
-
-机器学习价格模型预测在i2ai文件夹：
-i3prepare.py
-i3ml.py
-i4ml.py
 

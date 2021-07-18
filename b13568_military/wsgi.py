@@ -37,12 +37,14 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True)
     password = db.Column(db.String(80))
+    level = db.Column(db.String(80))
 
-    def __init__(self, username, password):
+    def __init__(self, username, password, level=''):
         self.username = username
         self.password = password
+        self.level = level
 
-# 老师当前布置作业的表
+
 class TeacherWork(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), unique=True)
@@ -109,15 +111,11 @@ def login():
             if email in admin_list:
                 session["isadmin"] = True
                 session["userid"] = data.id
+                session["level"] = data.level
+                print(session["level"], 'level session')
 
             print("login sucess", "#" * 20, session["logged_in"])
 
-            w = TeacherWork.query.get(1)
-            print('w=', w, w.answer, w.title)
-            if w is not None:
-                session['title'] = w.title
-                session['detail'] = w.detail
-                session['answer'] = w.answer
 
             return redirect(url_for("home_bp.home", pagenum=1))
         else:
@@ -132,6 +130,8 @@ def register():
     email = request.form.get("email")
     pw1 = request.form.get("password")
     pw2 = request.form.get("password2")
+    level = request.form.get("level")
+    print('register level=', level)
     if not pw1 == pw2:
         return redirect(url_for("home_bp.home", pagenum=1))
     # if DB.get_user(email):
@@ -141,7 +141,7 @@ def register():
     # salt = PH.get_salt()
     # hashed = PH.get_hash(pw1 + salt)
     print("register", email, pw1)
-    new_user = User(username=email, password=pw1)
+    new_user = User(username=email, password=pw1, level=level)
     db.session.add(new_user)
     db.session.commit()
 
