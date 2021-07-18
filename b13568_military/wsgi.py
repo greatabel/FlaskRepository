@@ -14,9 +14,9 @@ from flask import Flask, Response
 from flask import jsonify
 
 from movie import create_app
-from movie.domain.model import Director, Review, Movie
+# from movie.domain.model import Director, Review, Movie
 
-from html_similarity import style_similarity, structural_similarity, similarity
+# from html_similarity import style_similarity, structural_similarity, similarity
 # from common import set_js_file
 
 app = create_app()
@@ -72,6 +72,74 @@ class StudentWork(db.Model):
 login_manager = flask_login.LoginManager(app)
 user_pass = {}
 
+'''
+# home页
+'''
+
+
+
+class PageResult:
+    
+    def __init__(self, data, page=1, number=2):
+        self.__dict__ = dict(zip(['data', 'page', 'number'], [data, page, number]))
+        self.full_listing = [self.data[i:i+number] for i in range(0, len(self.data), number)]
+        self.totalpage = len(data)// number
+        print('totalpage=', self.totalpage)
+
+
+    def __iter__(self):
+        if self.page - 1 < len(self.full_listing):
+            for i in self.full_listing[self.page-1]:
+                yield i
+        else:
+            return None
+
+    def __repr__(self): #used for page linking
+        return "/home/{}".format(self.page+1) #view the next page
+
+
+
+@app.route('/home/<int:pagenum>', methods=['GET'])
+@app.route('/home', methods=['GET', 'POST'])
+def home(pagenum=1):
+    movie_list = []
+
+    if request.method == "POST":
+        search_list = []
+        keyword = request.form['keyword']
+        print('keyword=', keyword, '-'*10)
+        if keyword is not None:
+            for movie in movie_list:
+                if movie.director.director_full_name == keyword:
+                    search_list.append(movie)
+
+                for actor in movie.actors:
+                    if actor.actor_full_name == keyword:
+                        search_list.append(movie)
+                        break
+
+                for gene in movie.genres:
+                    if gene.genre_name == keyword:
+                        search_list.append(movie)
+                        break
+        print('search_list=' ,search_list, '#'*5)
+        return rt(
+            'home.html',
+            listing=PageResult(search_list, pagenum, 100),
+            
+        )
+
+    return rt(
+        'home.html',
+        listing=PageResult(movie_list, pagenum),
+
+        
+    )
+
+### end of home
+
+
+
 
 @app.route("/call_bash", methods=["GET"])
 def call_bash():
@@ -117,12 +185,12 @@ def login():
             print("login sucess", "#" * 20, session["logged_in"])
 
 
-            return redirect(url_for("home_bp.home", pagenum=1))
+            return redirect(url_for("home", pagenum=1))
         else:
             return "Not Login"
     except:
         return "Not Login"
-    return redirect(url_for("home_bp.home", pagenum=1))
+    return redirect(url_for("home", pagenum=1))
 
 
 @app.route("/register", methods=["POST"])
@@ -133,11 +201,11 @@ def register():
     level = request.form.get("level")
     print('register level=', level)
     if not pw1 == pw2:
-        return redirect(url_for("home_bp.home", pagenum=1))
+        return redirect(url_for("home", pagenum=1))
     # if DB.get_user(email):
     if email in user_pass:
         print("already existed user")
-        return redirect(url_for("home_bp.home", pagenum=1))
+        return redirect(url_for("home", pagenum=1))
     # salt = PH.get_salt()
     # hashed = PH.get_hash(pw1 + salt)
     print("register", email, pw1)
@@ -145,13 +213,13 @@ def register():
     db.session.add(new_user)
     db.session.commit()
 
-    return redirect(url_for("home_bp.home", pagenum=1))
+    return redirect(url_for("home", pagenum=1))
 
 
 @app.route("/logout")
 def logout():
     session["logged_in"] = False
-    return redirect(url_for("home_bp.home", pagenum=1))
+    return redirect(url_for("home", pagenum=1))
 
 
 reviews = []
@@ -189,94 +257,94 @@ def unauthorized_handler():
 
 
 # --------------------------
-@app.route("/assignwork", methods=["GET"])
-def assignwork():
-    return rt("index.html")
+# @app.route("/assignwork", methods=["GET"])
+# def assignwork():
+#     return rt("index.html")
 
 
-@app.route("/teacher_work", methods=["POST"])
-def teacher_work():
-    title = request.form.get("title")
-    detail = request.form.get("detail")
+# @app.route("/teacher_work", methods=["POST"])
+# def teacher_work():
+#     title = request.form.get("title")
+#     detail = request.form.get("detail")
 
-    # salt = PH.get_salt()
-    # hashed = PH.get_hash(pw1 + salt)
-    print("teacher_work ===>", title, detail)
-    w = TeacherWork.query.get(1)
-    print(w.id, w.answer)
-    w.title = title
-    w.detail = detail
-    db.session.commit()
-    session['title'] = title
-    session['detail'] = detail
+#     # salt = PH.get_salt()
+#     # hashed = PH.get_hash(pw1 + salt)
+#     print("teacher_work ===>", title, detail)
+#     w = TeacherWork.query.get(1)
+#     print(w.id, w.answer)
+#     w.title = title
+#     w.detail = detail
+#     db.session.commit()
+#     session['title'] = title
+#     session['detail'] = detail
 
-    return redirect(url_for("assignwork"))
-
-
-@app.route("/student_work", methods=["POST"])
-def student_work():
-    return redirect(url_for("student_index"))
+#     return redirect(url_for("assignwork"))
 
 
-@app.route("/student_index", methods=["GET"])
-def student_index():
-    return rt("student_index.html")
+# @app.route("/student_work", methods=["POST"])
+# def student_work():
+#     return redirect(url_for("student_index"))
+
+
+# @app.route("/student_index", methods=["GET"])
+# def student_index():
+#     return rt("student_index.html")
 # @app.route("/", methods=["GET"])
 # def index():
 #     return rt("index.html")
 
 
-@app.route("/file/upload", methods=["POST"])
-def upload_part():  # 接收前端上传的一个分片
-    task = request.form.get("task_id")  # 获取文件的唯一标识符
-    chunk = request.form.get("chunk", 0)  # 获取该分片在所有分片中的序号
-    filename = "%s%s" % (task, chunk)  # 构造该分片的唯一标识符
+# @app.route("/file/upload", methods=["POST"])
+# def upload_part():  # 接收前端上传的一个分片
+#     task = request.form.get("task_id")  # 获取文件的唯一标识符
+#     chunk = request.form.get("chunk", 0)  # 获取该分片在所有分片中的序号
+#     filename = "%s%s" % (task, chunk)  # 构造该分片的唯一标识符
 
-    upload_file = request.files["file"]
-    upload_file.save("./upload/%s" % filename)  # 保存分片到本地
-    return rt("index.html")
+#     upload_file = request.files["file"]
+#     upload_file.save("./upload/%s" % filename)  # 保存分片到本地
+#     return rt("index.html")
 
 
-@app.route("/file/merge", methods=["GET"])
-def upload_success():  # 按序读出分片内容，并写入新文件
-    target_filename = request.args.get("filename")  # 获取上传文件的文件名
-    task = request.args.get("task_id")  # 获取文件的唯一标识符
-    chunk = 0  # 分片序号
-    with open("./upload/%s" % target_filename, "wb") as target_file:  # 创建新文件
-        while True:
-            try:
-                filename = "./upload/%s%d" % (task, chunk)
-                source_file = open(filename, "rb")  # 按序打开每个分片
-                target_file.write(source_file.read())  # 读取分片内容写入新文件
-                source_file.close()
-            except IOError as msg:
-                break
+# @app.route("/file/merge", methods=["GET"])
+# def upload_success():  # 按序读出分片内容，并写入新文件
+#     target_filename = request.args.get("filename")  # 获取上传文件的文件名
+#     task = request.args.get("task_id")  # 获取文件的唯一标识符
+#     chunk = 0  # 分片序号
+#     with open("./upload/%s" % target_filename, "wb") as target_file:  # 创建新文件
+#         while True:
+#             try:
+#                 filename = "./upload/%s%d" % (task, chunk)
+#                 source_file = open(filename, "rb")  # 按序打开每个分片
+#                 target_file.write(source_file.read())  # 读取分片内容写入新文件
+#                 source_file.close()
+#             except IOError as msg:
+#                 break
 
-            chunk += 1
-            os.remove(filename)  # 删除该分片，节约空间
-    if 'isadmin' in session and session['isadmin']:
-        print('admin upload assignwork=', target_filename)
-        with open(r'upload/'+target_filename, "r") as f:
-            html_1 = f.read()
-            w = TeacherWork.query.get(1)
-            print('w=',w)
+#             chunk += 1
+#             os.remove(filename)  # 删除该分片，节约空间
+#     if 'isadmin' in session and session['isadmin']:
+#         print('admin upload assignwork=', target_filename)
+#         with open(r'upload/'+target_filename, "r") as f:
+#             html_1 = f.read()
+#             w = TeacherWork.query.get(1)
+#             print('w=',w)
 
-            if w is None:
-                w = TeacherWork(title='', detail='',answer=html_1)
-                db.session.add(w)
-                db.session.commit()
-            else:
-                w.answer = html_1
-                db.session.commit()
-    else:
-        # student submit
-        with open(r'upload/'+target_filename, "r") as f:
-            html_2 = f.read()
-            # print(html_2, '*'*20, session['answer'])
-            myscore = similarity(html_2, session['answer'])
-            print('#'*20, 'myscore=', myscore)
-            # set_js_file(myscore)
-    return rt("index.html")
+#             if w is None:
+#                 w = TeacherWork(title='', detail='',answer=html_1)
+#                 db.session.add(w)
+#                 db.session.commit()
+#             else:
+#                 w.answer = html_1
+#                 db.session.commit()
+#     else:
+#         # student submit
+#         with open(r'upload/'+target_filename, "r") as f:
+#             html_2 = f.read()
+#             # print(html_2, '*'*20, session['answer'])
+#             myscore = similarity(html_2, session['answer'])
+#             print('#'*20, 'myscore=', myscore)
+#             # set_js_file(myscore)
+#     return rt("index.html")
 
 
 @app.route("/ml", methods=["GET"])
