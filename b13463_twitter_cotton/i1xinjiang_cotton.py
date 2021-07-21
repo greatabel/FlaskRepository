@@ -80,22 +80,36 @@ bot_list = []
 for record in records:
 	if '|' in record:
 		items = record.split('|')
-		print(len(items),items, '*'*5)
+		# print(len(items),items, '*'*5)
 		score = detect(items)
-		if score <= 2.5:
+		if score <= 3.5:
 			bot_list.append(items[2].strip().replace('@', '').lower())
 
 
 
-print('#'*30,'\nbot_list:')
+print('#'*30,'\n')
 
-
-print(len(bot_list),bot_list)
+print('bot数量:',len(bot_list),'\nbot列表:',bot_list)
 
 
 x = Percent(len(bot_list)/ len(name_dict))
 
-print("bot/total user =", x )
+print("bot/总用户的占比:", x )
+
+bot_cotton = 0
+for c in cotton[1:]:
+
+	if len(c)> 7:
+		if c[7]  in bot_list:
+			# print(c[7])
+			bot_cotton += 1
+
+print('bot推文数:',bot_cotton)
+
+print('#'*30,'\n bot发布的推文占比:')
+y = Percent(bot_cotton/ len(cotton))
+print(y)
+
 # print("-*-" * 10)
 # data2019 = csv_reader("2020_04-06sankaku.csv", "data")
 # print(data2019[0], "#" * 10, data2019[1], "#" * 10, " \n", data2019[2])

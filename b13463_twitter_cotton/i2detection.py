@@ -4,7 +4,7 @@ def detect(items):
 	followers = None
 	for item in items:
 		if 'Avatar:' in item:
-			print(item)
+			# print(item)
 			if 'default_profile_normal.png' in item:
 				# 无自定义头像，降低真人权重
 				score -= 1
@@ -15,11 +15,11 @@ def detect(items):
 				score -= 1
 		if 'Following:' in item:
 			following = item.replace('Following:', '').strip()
-			print('following=', following) 
+			# print('following=', following) 
 			
 		if 'Followers:' in item:
 			followers = item.replace('Followers:', '').strip()
-			print('Followers=', followers) 
+			# print('Followers=', followers) 
 			if int(followers) <= 3:
 				score -= 0.5
 
