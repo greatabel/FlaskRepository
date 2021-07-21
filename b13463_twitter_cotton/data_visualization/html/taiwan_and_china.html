@@ -1,0 +1,429 @@
+<!--index.html-->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Simple D3 Dev Env</title>
+<script type="text/javascript" src="../d3/d3.js"></script>
+<script type="text/javascript" src="../js/jquery-1.10.2.js"></script>
+
+
+
+</head>
+<body>
+
+<style>
+#chart div {
+  display: inline-block;
+  background: #4285F4;
+  width: 20px;
+  margin-right: 3px;
+}
+</style>
+
+
+<script src="../taiwan_china.js" ></script>
+<script type="text/javascript">
+    function SimpleWidget(spec) {
+        var instance = {}; // <-- A
+
+        var headline, description; // <-- B
+
+        instance.render = function () {
+            var div = d3.select('body').append("div");
+
+            div.append("h1").text(headline); // <-- C
+
+            div.attr("class", "box")
+               .attr("style", "color:" + spec.color) // <-- D
+               .append("p")
+                   .text(description); // <-- E
+
+            
+
+            return instance; // <-- F
+        };
+
+        instance.headline = function (h) {
+            if (!arguments.length) return headline; // <-- G
+            headline = h;
+            return instance; // <-- H
+        };
+
+        instance.description = function (d) {
+            if (!arguments.length) return description;
+            description = d;
+            return instance;
+        };
+
+        return instance; // <-- I
+    }
+
+    var widget = SimpleWidget({color: "#6495ed"})
+            .headline("taiwan_china Data-visiualization")
+            .description("taiwan_china trend data mining and visualization");
+    widget.render();
+
+
+function group_chart(inputdata){
+let data = {
+    "2019": inputdata.data2019,
+    "2020"  : inputdata.data2020
+};
+let margin = {top: 40, right: 20, bottom: 30, left: 40};
+let svgWidth = 720, svgHeight = 300;
+let height = svgHeight- margin.top- margin.bottom, width = svgWidth - margin.left - margin.right;
+let sourceNames = [], sourceCount = [];
+
+let x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
+    y = d3.scaleLinear().rangeRound([height, 0]);
+for(let key in data){
+    if(data.hasOwnProperty(key)){
+        sourceNames.push(key);
+        sourceCount.push(parseInt(data[key]));
+    }
+}
+x.domain(sourceNames);
+y.domain([0, d3.max(sourceCount, function(d) { return d; })]);
+
+let svg = d3.select("#chart").append("svg");
+
+
+
+svg.attr('height', svgHeight)
+    .attr('width', svgWidth)
+    .attr('color', 'green');
+
+svg = svg.append("g")
+         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+svg.append("g")
+    .attr("class", "axis axis--x")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
+
+svg.append("g")
+    .attr("class", "axis axis--y")
+    .call(d3.axisLeft(y).ticks(5))
+    ;
+
+svg.append("text")
+    .attr("class", "title")
+    .attr("x", width*2/7)
+    .attr("y", 0 - (margin.top / 3))
+    .attr("text-anchor", "middle")
+    .text("taiwan_china 2019 vs 2020 fever-comparison[12m]");  
+// Create rectangles
+let bars = svg.selectAll('.bar')
+    .data(sourceNames)
+    .enter()
+    .append("g");
+
+bars.append('rect')
+    .attr('class', 'bar')
+    .attr("x", function(d) { return x(d); })
+    .attr("y", function(d) { return y(data[d]); })
+    .attr("width", x.bandwidth())
+    .attr("height", function(d) { return height - y(data[d]); })
+    .attr("fill", "SkyBlue");;
+    
+bars.append("text")
+    .text(function(d) { 
+        return data[d];
+    })
+    .attr("x", function(d){
+        return x(d) + x.bandwidth()/2;
+    })
+    .attr("y", function(d){
+        return y(data[d]) - 5;
+    })
+    .attr("font-family" , "sans-serif")
+    .attr("font-size" , "22px")
+    .attr("fill" , "black")
+    .attr("text-anchor", "middle");
+
+
+}
+
+
+function pi_chart(inputdata) {
+  // set the dimensions and margins of the graph
+var width = 550
+    height = 450
+    margin = 40
+
+// The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
+var radius = Math.min(width, height) / 2 - margin
+
+// append the svg object to the div called 'my_dataviz'
+var svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+
+// console.log(myjson);
+
+// Create dummy data
+var data = {positive: inputdata.num_positive, neural: inputdata.num_neural, nagtive: inputdata.num_nagtive}
+// var data = {好: 27, 缺损: 9}
+console.log(data);
+console.log('======');
+// set the color scale
+var color = d3.scaleOrdinal()
+  .domain(data)
+  .range(d3.schemeSet2);
+
+// Compute the position of each group on the pie:
+var pie = d3.pie()
+  .value(function(d) {return d.value; })
+var data_ready = pie(d3.entries(data))
+// Now I know that group A goes from 0 degrees to x degrees and so on.
+
+// shape helper to build arcs:
+var arcGenerator = d3.arc()
+  .innerRadius(0)
+  .outerRadius(radius)
+
+// Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
+svg
+  .selectAll('mySlices')
+  .data(data_ready)
+  .enter()
+  .append('path')
+    .attr('d', arcGenerator)
+    .attr('fill', function(d){ return(color(d.data.key)) })
+    .attr("stroke", "black")
+    .style("stroke-width", "2px")
+    .style("opacity", 0.7)
+
+// Now add the annotation. Use the centroid method to get the best coordinates
+svg
+  .selectAll('mySlices')
+  .data(data_ready)
+  .enter()
+  .append('text')
+  .text(function(d){ return "attitude: " + d.data.key})
+  .attr("transform", function(d) { return "translate(" + arcGenerator.centroid(d) + ")";  })
+  .style("text-anchor", "middle")
+  .style("font-size", 17)
+
+svg.append("text")
+    .attr("class", "title")
+    .attr("x", width*2/7)
+    .attr("y", 0 - 50)
+    .attr("text-anchor", "middle")
+    .text("态度状态图（"+ inputdata.total_sentiment_polarity + ")");  
+
+  
+}
+
+function group_chart_II(inputdata){
+let data = inputdata;
+
+let margin = {top: 30, right: 20, bottom: 30, left: 40};
+let svgWidth = 920, svgHeight = 300;
+let height = svgHeight- margin.top- margin.bottom, width = svgWidth - margin.left - margin.right;
+let sourceNames = [], sourceCount = [];
+
+let x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
+    y = d3.scaleLinear().rangeRound([height, 0]);
+for(let key in data){
+    if(data.hasOwnProperty(key)){
+        sourceNames.push(key);
+        sourceCount.push(parseInt(data[key]));
+    }
+}
+x.domain(sourceNames);
+y.domain([0, d3.max(sourceCount, function(d) { return d; })]);
+
+let svg = d3.select("#relatedword_chart").append("svg");
+
+
+
+svg.attr('height', svgHeight)
+    .attr('width', svgWidth)
+    .attr('color', 'green');
+
+svg = svg.append("g")
+         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+svg.append("g")
+    .attr("class", "axis axis--x")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
+
+svg.append("g")
+    .attr("class", "axis axis--y")
+    .call(d3.axisLeft(y).ticks(5))
+    ;
+
+svg.append("text")
+    .attr("class", "title")
+    .attr("x", width*3/7)
+    .attr("y", 0 - (margin.top / 3))
+    .attr("text-anchor", "middle")
+    .text("taiwan_china 2020 Related-Words");  
+// Create rectangles
+let bars = svg.selectAll('.bar')
+    .data(sourceNames)
+    .enter()
+    .append("g");
+
+bars.append('rect')
+    .attr('class', 'bar')
+    .attr("x", function(d) { return x(d); })
+    .attr("y", function(d) { return y(data[d]); })
+    .attr("width", x.bandwidth())
+    .attr("height", function(d) { return height - y(data[d]); })
+    .attr("fill", "SkyBlue");;
+    
+bars.append("text")
+    .text(function(d) { 
+        return data[d];
+    })
+    .attr("x", function(d){
+        return x(d) + x.bandwidth()/2;
+    })
+    .attr("y", function(d){
+        return y(data[d]) - 5;
+    })
+    .attr("font-family" , "sans-serif")
+    .attr("font-size" , "22px")
+    .attr("fill" , "black")
+    .attr("text-anchor", "middle");
+
+
+}
+
+function group_chart_III(inputdata){
+let data = inputdata;
+
+let margin = {top: 30, right: 20, bottom: 30, left: 40};
+let svgWidth = 1040, svgHeight = 300;
+let height = svgHeight- margin.top- margin.bottom, width = svgWidth - margin.left - margin.right;
+let sourceNames = [], sourceCount = [];
+
+let x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
+    y = d3.scaleLinear().rangeRound([height, 0]);
+for(let key in data){
+    if(data.hasOwnProperty(key)){
+        sourceNames.push(key);
+        sourceCount.push(parseInt(data[key]));
+    }
+}
+x.domain(sourceNames);
+y.domain([0, d3.max(sourceCount, function(d) { return d; })]);
+
+let svg = d3.select("#who_tweet_chart").append("svg");
+
+
+
+svg.attr('height', svgHeight)
+    .attr('width', svgWidth)
+    .attr('color', 'green');
+
+svg = svg.append("g")
+         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+svg.append("g")
+    .attr("class", "axis axis--x")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
+
+svg.append("g")
+    .attr("class", "axis axis--y")
+    .call(d3.axisLeft(y).ticks(5))
+    ;
+
+svg.append("text")
+    .attr("class", "title")
+    .attr("x", width*3/7)
+    .attr("y", 0 - (margin.top / 3))
+    .attr("text-anchor", "middle")
+    .text("taiwan_china 2020 Who Tweets Most");  
+// Create rectangles
+let bars = svg.selectAll('.bar')
+    .data(sourceNames)
+    .enter()
+    .append("g");
+
+bars.append('rect')
+    .attr('class', 'bar')
+    .attr("x", function(d) { return x(d); })
+    .attr("y", function(d) { return y(data[d]); })
+    .attr("width", x.bandwidth())
+    .attr("height", function(d) { return height - y(data[d]); })
+    .attr("fill", "SkyBlue");;
+    
+bars.append("text")
+    .text(function(d) { 
+        return data[d];
+    })
+    .attr("x", function(d){
+        return x(d) + x.bandwidth()/2;
+    })
+    .attr("y", function(d){
+        return y(data[d]) - 5;
+    })
+    .attr("font-family" , "sans-serif")
+    .attr("font-size" , "22px")
+    .attr("fill" , "black")
+    .attr("text-anchor", "middle");
+
+
+}
+
+    // wait id=chart is exist
+    $(function()
+        {
+
+        console.log(DATA);
+        group_chart(DATA);
+        pi_chart(DATA);
+        group_chart_II(RELATED_WORDS);
+        group_chart_III(WHO_TWEETS);
+
+        // d3.select('#chart')
+        //   .selectAll("div")
+        //   .data([4, 8, 15, 16, 23, 42])
+        //   .enter()
+        //   .append("div")
+        //   .style("height", (d)=> d + "px");
+
+        });
+
+
+</script>
+
+<div id="chart"> 
+   </div>
+
+<hr>
+
+<div id="my_dataviz"></div>
+
+<hr>
+
+<div id="relatedword_chart"></div>
+
+<hr>
+
+<div id="who_tweet_chart"></div>
+<!-- <script>
+console.log('test0 start');
+
+// d3.select('#chart')
+//   .selectAll("div")
+//   .data([4, 8, 15, 16, 23, 42])
+//   .enter()
+//   .append("div")
+//   .style("height", (d)=> d + "px")
+
+console.log('test0 end');
+</script> -->
+
+</body>
+</html>
