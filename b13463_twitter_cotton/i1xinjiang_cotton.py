@@ -67,7 +67,7 @@ def filterTheDict(dictObj, callback):
 
 
 # Open a file: 打开所有用户主页被抓取数据
-file = open('data/profiles.txt',mode='r') 
+file = open('data/profiles.txt', mode='r') 
 # read all lines at once
 all_of_it = file.read()
 # close the file
@@ -94,19 +94,21 @@ print('bot数量:',len(bot_list),'\nbot列表:',bot_list)
 
 x = Percent(len(bot_list)/ len(name_dict))
 
-print("bot/总用户的占比:", x )
+print("1. bot/总用户的占比:", x )
 
 bot_cotton = 0
+
+filter_tweets = []
 for c in cotton[1:]:
 
 	if len(c)> 7:
 		if c[7]  in bot_list:
 			# print(c[7])
 			bot_cotton += 1
-
+			filter_tweets.append(c)
 print('bot推文数:',bot_cotton)
 
-print('#'*30,'\n bot发布的推文占比:')
+print('#'*30,'\n 2. bot发布的推文占比:')
 y = Percent(bot_cotton/ len(cotton))
 print(y)
 
@@ -119,120 +121,121 @@ print(y)
 # print(data2020[1][10], "\n", "#" * 10, "\n", data2019[1][10])
 
 
-# js_txt = '''
+js_txt = '''
 
-# var DATA = {
-# '''
+var DATA = {
+'''
 
-# print("\n1. Heat comparison")
+print("\n1. Heat comparison")
 # print(len(data2020), " VS ", len(data2019))
 
-# compare_txt = "'data2021':" + str(len(data2020)) + ", 'data2020':" + str(len(data2019))
-# js_txt += compare_txt
+compare_txt = "'bot_cotton':" + str(bot_cotton) + ", 'total_cotton':" + str(len(cotton))
+js_txt += compare_txt
 
 
-# # data2020full = csv_reader("2021-06senkaku.csv", "data")
+# data2020full = csv_reader("2021-06senkaku.csv", "data")
 # data2020full = data2020
 
-# print("\n2. sentiment anlaysis")
-# total_sentiment = 0
+print("\n2. sentiment anlaysis")
+total_sentiment = 0
 
-# num_positive = 0
-# num_neural = 0
-# num_nagtive = 0
+num_positive = 0
+num_neural = 0
+num_nagtive = 0
 
-# unwanted_chars = ".,-_ ()’'"
-# black_list = ["//t.co/daqs0qh2wb #", "# #", 
-#     "[ auto ]", "//t.co/tgzew5at0r https", "s territory"]
-# wordfreq = {}
+unwanted_chars = ".,-_ ()’'"
+black_list = ["//t.co/daqs0qh2wb #", "# #", 
+    "[ auto ]", "//t.co/tgzew5at0r https", "s territory"]
+wordfreq = {}
 
-# usernamefreq = {}
+usernamefreq = {}
 
-# split = 51
-# # pick_twlist = data2020full[0::split]
+split = 1
+# pick_twlist = data2020full[0::split]
 # pick_twlist = data2020full[0::split]
 # for tw in pick_twlist:
-#     text = tw[10]
-#     username = tw[8]
-#     # print(text, "\n@@@username=", username, "\n")
-#     words, sentiment_tw = anlaysis(text)
-#     print(sentiment_tw)
-#     total_sentiment += sentiment_tw
-#     if sentiment_tw < 0:
-#         num_nagtive += 1
-#     if sentiment_tw == 0:
-#         num_neural += 1
-#     if sentiment_tw > 0:
-#         num_positive += 1
-#     # print('words=', words)
-#     for raw_word in words:
-#         word = raw_word.strip(unwanted_chars)
-#         if word not in wordfreq:
-#             if word not in black_list:
-#                 wordfreq[word] = 0
-#         if word not in black_list:
-#             wordfreq[word] += 1
-#     if username == 'Indo-Pacific News - Watching the CCP-China Threat':
-#         username = 'Indo-Pacific News'
-#     username = username.replace("'", "")
-#     if username not in usernamefreq:
-#         usernamefreq[username] = 0
-#     usernamefreq[username] += 1
+for tw in filter_tweets:
+    text = tw[10]
+    username = tw[8]
+    # print(text, "\n@@@username=", username, "\n")
+    words, sentiment_tw = anlaysis(text)
+    print(sentiment_tw)
+    total_sentiment += sentiment_tw
+    if sentiment_tw < 0:
+        num_nagtive += 1
+    if sentiment_tw == 0:
+        num_neural += 1
+    if sentiment_tw > 0:
+        num_positive += 1
+    # print('words=', words)
+    for raw_word in words:
+        word = raw_word.strip(unwanted_chars)
+        if word not in wordfreq:
+            if word not in black_list:
+                wordfreq[word] = 0
+        if word not in black_list:
+            wordfreq[word] += 1
+    if username == 'Indo-Pacific News - Watching the CCP-China Threat':
+        username = 'Indo-Pacific News'
+    username = username.replace("'", "")
+    if username not in usernamefreq:
+        usernamefreq[username] = 0
+    usernamefreq[username] += 1
 
-# print('@'*30, usernamefreq)
+print('@'*30, usernamefreq)
 
-# print("tatal sentiment polarity:", total_sentiment)
-# print("average sentiment polarity:", total_sentiment / len(pick_twlist))
-# print(
-#     "number of (positive VS neural VS nagtive):",
-#     num_positive * split,
-#     num_neural * split,
-#     num_nagtive * split,
-# )
-# sentiment_txt = ",'total_sentiment_polarity':" + str( round(total_sentiment, 2)) \
-#     + ", 'average_sentiment_polarity':" + str(round( total_sentiment / len(pick_twlist),2))  \
-#     + ",'num_positive':" + str(num_positive * split) + ", 'num_neural':" + str(num_neural * split) \
-#      + ",'num_nagtive':" + str(num_nagtive * split) + ", 'data2021':" + str(len(data2020))
-# js_txt += sentiment_txt
+print("tatal sentiment polarity:", total_sentiment)
+print("average sentiment polarity:", total_sentiment / len(filter_tweets))
+print(
+    "number of (positive VS neural VS nagtive):",
+    num_positive * split,
+    num_neural * split,
+    num_nagtive * split,
+)
+sentiment_txt = ",'total_sentiment_polarity':" + str( round(total_sentiment, 2)) \
+    + ", 'average_sentiment_polarity':" + str(round( total_sentiment / len(filter_tweets),2))  \
+    + ",'num_positive':" + str(num_positive * split) + ", 'num_neural':" + str(num_neural * split) \
+     + ",'num_nagtive':" + str(num_nagtive * split) + ", 'filter_tweets':" + str(len(filter_tweets))
+js_txt += sentiment_txt
 
-# js_txt += " };\n"
-
-
-# print("\n 3. related words related to this topic")
-
-# js_txt += 'var RELATED_WORDS = {'
-# # print(wordfreq)
-# index = 0
-# a1_sorted_keys = sorted(wordfreq, key=wordfreq.get, reverse=True)
-# for r in a1_sorted_keys:
-#     if wordfreq[r] > 1:
-#         print(r, wordfreq[r])
-#         if index < 10:
-#             js_txt += "'" + r + "':" + str(wordfreq[r]) + ','
-#             index += 1
+js_txt += " };\n"
 
 
-# js_txt += " };\n"
+print("\n 3. related words related to this topic")
+
+js_txt += 'var RELATED_WORDS = {'
+# print(wordfreq)
+index = 0
+a1_sorted_keys = sorted(wordfreq, key=wordfreq.get, reverse=True)
+for r in a1_sorted_keys:
+    if wordfreq[r] > 1:
+        print(r, wordfreq[r])
+        if index < 10:
+            js_txt += "'" + r + "':" + str(wordfreq[r]) + ','
+            index += 1
 
 
-# index = 0
-# print("\n 4. username often posts related topics")
-# js_txt += 'var WHO_TWEETS = {'
-# a2_sorted_keys = sorted(usernamefreq, key=usernamefreq.get, reverse=True)
-# # print('#'*20, usernamefreq)
-
-# for r in a2_sorted_keys:
-#     if usernamefreq[r] >= 1 and r not in ('name'):
-#         print(r, usernamefreq[r])
-#         if index < 10:
-#             js_txt += "'" + r + "':" + str(usernamefreq[r]) + ','
-#             index += 1
+js_txt += " };\n"
 
 
-# js_txt += " };"
+index = 0
+print("\n 4. username often posts related topics")
+js_txt += 'var WHO_TWEETS = {'
+a2_sorted_keys = sorted(usernamefreq, key=usernamefreq.get, reverse=True)
+# print('#'*20, usernamefreq)
 
-# # write to a local js file , let d3 do data-visual
-# with open("data_visualization/senkufu.js", 'w') as file:
-#     file.write(js_txt.strip())
+for r in a2_sorted_keys:
+    if usernamefreq[r] >= 1 and r not in ('name'):
+        print(r, usernamefreq[r])
+        if index < 10:
+            js_txt += "'" + r + "':" + str(usernamefreq[r]) + ','
+            index += 1
+
+
+js_txt += " };"
+
+# write to a local js file , let d3 do data-visual
+with open("data_visualization/xinjiang.js", 'w') as file:
+    file.write(js_txt.strip())
 
 

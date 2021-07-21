@@ -22,7 +22,7 @@
 </style>
 
 
-<script src="../taiwan_china.js" ></script>
+<script src="../xinjiang.js" ></script>
 <script type="text/javascript">
     function SimpleWidget(spec) {
         var instance = {}; // <-- A
@@ -60,17 +60,17 @@
     }
 
     var widget = SimpleWidget({color: "#6495ed"})
-            .headline("taiwan_china Data-visiualization")
-            .description("taiwan_china trend data mining and visualization");
+            .headline("score history Data-visiualization")
+            .description("score data mining and visualization");
     widget.render();
 
 
 function group_chart(inputdata){
 let data = {
-    "2019": inputdata.data2019,
-    "2020"  : inputdata.data2020
+    "bot_cotton": inputdata.bot_cotton,
+    "total_cotton"  : inputdata.total_cotton
 };
-let margin = {top: 40, right: 20, bottom: 30, left: 40};
+let margin = {top: 30, right: 20, bottom: 30, left: 40};
 let svgWidth = 720, svgHeight = 300;
 let height = svgHeight- margin.top- margin.bottom, width = svgWidth - margin.left - margin.right;
 let sourceNames = [], sourceCount = [];
@@ -109,10 +109,10 @@ svg.append("g")
 
 svg.append("text")
     .attr("class", "title")
-    .attr("x", width*2/7)
+    .attr("x", width*3/7)
     .attr("y", 0 - (margin.top / 3))
     .attr("text-anchor", "middle")
-    .text("taiwan_china 2019 vs 2020 fever-comparison[12m]");  
+    .text("xinjiang (bot vs total)");  
 // Create rectangles
 let bars = svg.selectAll('.bar')
     .data(sourceNames)
@@ -205,7 +205,7 @@ svg
   .data(data_ready)
   .enter()
   .append('text')
-  .text(function(d){ return "attitude: " + d.data.key})
+  .text(function(d){ return "attitude: " + d.data.key + " num:"+ d.data.value})
   .attr("transform", function(d) { return "translate(" + arcGenerator.centroid(d) + ")";  })
   .style("text-anchor", "middle")
   .style("font-size", 17)
@@ -215,7 +215,7 @@ svg.append("text")
     .attr("x", width*2/7)
     .attr("y", 0 - 50)
     .attr("text-anchor", "middle")
-    .text("态度状态图（"+ inputdata.total_sentiment_polarity + ")");  
+    .text("bot态度状态图（总数:"+ inputdata.filter_tweets + ")");  
 
   
 }
@@ -265,7 +265,7 @@ svg.append("text")
     .attr("x", width*3/7)
     .attr("y", 0 - (margin.top / 3))
     .attr("text-anchor", "middle")
-    .text("taiwan_china 2020 Related-Words");  
+    .text("bot tweets most Related-Words");  
 // Create rectangles
 let bars = svg.selectAll('.bar')
     .data(sourceNames)
@@ -341,9 +341,9 @@ svg.append("g")
 svg.append("text")
     .attr("class", "title")
     .attr("x", width*3/7)
-    .attr("y", 0 - (margin.top / 3))
+    .attr("y", 0 - (margin.top * 4/ 7))
     .attr("text-anchor", "middle")
-    .text("taiwan_china 2020 Who Tweets Most");  
+    .text("xinjiang bot-user 2021 Who Tweets Most");  
 // Create rectangles
 let bars = svg.selectAll('.bar')
     .data(sourceNames)
