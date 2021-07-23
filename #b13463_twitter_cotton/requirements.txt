@@ -1,0 +1,4 @@
+textblob
+networkx
+numpy
+matplotlib

@@ -106,6 +106,13 @@ for c in cotton[1:]:
 			# print(c[7])
 			bot_cotton += 1
 			filter_tweets.append(c)
+			# 为网络分析 所使用
+			# if c[10] is not None and len(c[10]) > 0 and '@' in c[10]:
+			# 	t = c[10].split()
+			# 	if '@' in t[0]:
+			# 		# print('t[0]=', t[0][1:])
+			# 		print("name="+c[7]+ ",name="+t[0][1:]+",'"+ c[3]+"'")
+
 print('bot推文数:',bot_cotton)
 
 print('#'*30,'\n 2. bot发布的推文占比:')
