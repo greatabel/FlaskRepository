@@ -284,6 +284,20 @@ def update_profile(id):
 ### -------------end of profile
 
 
+@app.route('/course/<id>',methods = ['GET'])
+def course_home(id):
+    '''
+    查询课程详情、删除课程
+    '''
+    if request.method == 'GET':
+        # 到数据库查询课程详情
+        blog = Blog.query.filter_by(id = id).first_or_404()
+        print(id, blog, 'in query_blog','@'*20)
+        # 渲染课程详情页面
+        return rt('course.html',blog = blog)
+    else:
+        return '',204
+
 
 login_manager = flask_login.LoginManager(app)
 user_pass = {}

@@ -192,8 +192,8 @@ div[class*="release_year"] {
           {% for r in listing %}
       <div class="row">
         <div class="col-md-12">
-        <label>{{ r.title }}</label>
-        <a href="/blogs/{{r.id}}">{{ r.text }}</a>
+        <span>{{ r.title }}</span> &nbsp;
+        <a href="/course/{{r.id}}">{{ r.text }}</a>
 
             <div name="title"> </div>  
             <!-- <div class="release_year">{{r.release_year}}</div>  -->
@@ -201,7 +201,9 @@ div[class*="release_year"] {
         </div>
            {% endfor %}
         
-
+<br/><br/>
+<br/><br/>
+<br/><br/>
 
       <div class="row">
        <div class="col-md-8"> <div class="release_year">作业自动评分系统流程和原理：</div>
