@@ -109,9 +109,62 @@ div[class*="release_year"] {
 
   <div class="row">
     <div class="col-md8">
-      test
+      <hr/>
     </div>
   </div>
+
+  <div class="row">
+    <div class="col-sm-4">
+              <figure>
+            <img src="/static/images/ml.png" class="img-fluid" style="height:250px;">
+        </figure>
+    </div>
+
+    <div class="col-sm-8">
+           
+        <p style="width:500px;padding-left:10px;">
+            <span style="font-weight:bold;">Technical Materail Title: </span>
+            <span id="titleLbl" style="border: 1px solid gray; " >
+              <span>
+     {{session['title']}}
+  </span>
+
+       <br/><br/>
+        <span style="font-weight:bold;">Detail: </span>
+        <br/>
+        <div style="border: 1px solid gray; display: inline-block">
+      {{session['detail']}}   
+        </div>
+
+      </p>
+
+    </div>
+
+  </div>
+
+
+
+    <div class="row">
+      <div class="col-sm-4">
+      <hr/>
+      {% if session['isadmin'] and session['logged_in'] %}
+      <button type="button" class="btn btn-primary" onclick="relocate_home()">Assign Work</button>
+      {% else %}
+      <button type="button" class="btn btn-primary" disabled> Assign Work</button>
+      {% endif %}
+      </div>
+
+      <div class="col-sm-4">
+      <hr/>
+      <button type="button" class="btn btn-primary" onclick="relocate_student()">Submit Assignment</button>
+      </div>
+
+      <div class="col-sm-4">
+    <hr/>
+      <button type="button" class="btn btn-primary" onclick="relocate_dashboard()">Dashboard</button>
+      </div>
+    </div>
+
 
 </div>
 
@@ -154,15 +207,7 @@ div[class*="release_year"] {
 <div id="chart"> 
    </div>
 
-<hr>
 
-<!-- <div id="my_dataviz"></div> -->
-
-<hr>
-
-<!-- <div id="relatedword_chart"></div> -->
-
-<hr>
 
 <!-- <div id="who_tweet_chart"></div> -->
   </body>
