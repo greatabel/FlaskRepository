@@ -37,6 +37,9 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True)
     password = db.Column(db.String(80))
+    nickname = db.Column(db.String(80))
+    school_class = db.Column(db.String(80))
+    school_grade = db.Column(db.String(80))
 
     def __init__(self, username, password):
         self.username = username
@@ -45,13 +48,13 @@ class User(db.Model):
 
 class Blog(db.Model):
     '''
-    博文数据模型
+    课程数据模型
     '''
     # 主键ID
     id = db.Column(db.Integer,primary_key = True)
-    # 博文标题
+    # 课程标题
     title = db.Column(db.String(100))
-    # 博文正文
+    # 课程正文
     text = db.Column(db.Text)
     
     def __init__(self,title,text):
@@ -147,7 +150,7 @@ def home(pagenum=1):
 @app.route('/blogs/create',methods = ['GET', 'POST'])
 def create_blog():
     '''
-    创建博客文章
+    创建课程文章
     '''
     if request.method == 'GET':
         # 如果是GET请求，则渲染创建页面
@@ -157,59 +160,59 @@ def create_blog():
         title = request.form['title']
         text = request.form['text']
         
-        # 创建一个博文对象
+        # 创建一个课程对象
         blog = Blog(title = title,text = text)
         db.session.add(blog)
         # 必须提交才能生效
         db.session.commit()
-        # 创建完成之后重定向到博文列表页面
+        # 创建完成之后重定向到课程列表页面
         return redirect('/blogs')
 
 @app.route('/blogs',methods = ['GET'])
 def list_notes():
     '''
-    查询博文列表
+    查询课程列表
     '''
     blogs = Blog.query.all()
-    # 渲染博文列表页面目标文件，传入blogs参数
+    # 渲染课程列表页面目标文件，传入blogs参数
     return rt('list_blogs.html',blogs = blogs)
 
 
 @app.route('/blogs/update/<id>',methods = ['GET', 'POST'])
 def update_note(id):
     '''
-    更新博文
+    更新课程
     '''
     if request.method == 'GET':
-        # 根据ID查询博文详情
+        # 根据ID查询课程详情
         blog = Blog.query.filter_by(id = id).first_or_404()
         # 渲染修改笔记页面HTML模板
         return rt('update_blog.html',blog = blog)
     else:
-        # 获取请求的博文标题和正文
+        # 获取请求的课程标题和正文
         title = request.form['title']
         text = request.form['text']
         
-        # 更新博文
+        # 更新课程
         blog = Blog.query.filter_by(id = id).update({'title':title,'text':text})
         # 提交才能生效
         db.session.commit()
-        # 修改完成之后重定向到博文详情页面
+        # 修改完成之后重定向到课程详情页面
         return redirect('/blogs/{id}'.format(id = id))
 
 
 @app.route('/blogs/<id>',methods = ['GET','DELETE'])
 def query_note(id):
     '''
-    查询博文详情、删除博文
+    查询课程详情、删除课程
     '''
     if request.method == 'GET':
-        # 到数据库查询博文详情
-        blog = Blog.query.filter_by(id = id).first_or_404()
-        # 渲染博文详情页面
+        # 到数据库查询课程详情
+        blog = User.query.filter_by(id = id).first_or_404()
+        # 渲染课程详情页面
         return rt('query_blog.html',blog = blog)
     else:
-        # 删除博文
+        # 删除课程
         blog = Blog.query.filter_by(id = id).delete()
         # 提交才能生效
         db.session.commit()
@@ -217,6 +220,67 @@ def query_note(id):
         return '',204
 
 ### -------------end of home
+
+
+
+
+
+### -------------start of profile
+
+@app.route('/profile',methods = ['GET','DELETE'])
+def query_profile():
+    '''
+    查询课程详情、删除课程
+    '''
+    id = session["userid"]
+    print('id=', id)
+    if request.method == 'GET':
+        print('here-> '*5)
+        # 到数据库查询课程详情
+        user = User.query.filter_by(id = id).first_or_404()
+        print(user.username, user.password, '#'*5)
+        # 渲染课程详情页面
+        return rt('profile.html',user = user)
+    else:
+        # 删除课程
+        user = User.query.filter_by(id = id).delete()
+        # 提交才能生效
+        db.session.commit()
+        # 返回204正常响应，否则页面ajax会报错
+        return '',204
+
+
+
+@app.route('/profiles/update/<id>',methods = ['GET', 'POST'])
+def update_profile(id):
+    '''
+    更新课程
+    '''
+    if request.method == 'GET':
+        # 根据ID查询课程详情
+        user = User.query.filter_by(id = id).first_or_404()
+        # 渲染修改笔记页面HTML模板
+        return rt('update_profile.html',user = user)
+    else:
+        # 获取请求的课程标题和正文
+        password = request.form['password']
+        nickname = request.form['nickname']
+        school_class = request.form['school_class']
+        school_grade = request.form['school_grade']
+        
+        # 更新课程
+        user = User.query.filter_by(id = id).update({'password':password,'nickname':nickname,
+            'school_class':school_class, 'school_grade':school_grade})
+        # 提交才能生效
+        db.session.commit()
+        # 修改完成之后重定向到课程详情页面
+        return redirect('/profile')
+
+
+
+
+### -------------end of profile
+
 
 
 login_manager = flask_login.LoginManager(app)
@@ -264,17 +328,18 @@ def login():
 
             print("login sucess", "#" * 20, session["logged_in"])
 
-            w = TeacherWork.query.get(1)
-            print('w=', w, w.answer, w.title)
-            if w is not None:
-                session['title'] = w.title
-                session['detail'] = w.detail
-                session['answer'] = w.answer
+            # w = TeacherWork.query.get(1)
+            # print('w=', w, w.answer, w.title)
+            # if w is not None:
+            #     session['title'] = w.title
+            #     session['detail'] = w.detail
+            #     session['answer'] = w.answer
 
             return redirect(url_for("home_bp.home", pagenum=1))
         else:
             return "Not Login"
-    except:
+    except Exception as e: 
+        print(e)
         return "Not Login"
     return redirect(url_for("home_bp.home", pagenum=1))
 
