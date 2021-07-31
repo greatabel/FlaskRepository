@@ -26,10 +26,10 @@ def create_app(test_config=None):
 
     
 
-    with app.app_context():
-        # Register blueprints.
-        from .home import home
-        app.register_blueprint(home.home_blueprint)
+    # with app.app_context():
+    #     # Register blueprints.
+    #     from .home import home
+    #     # app.register_blueprint(home.home_blueprint)
     return app
 
 

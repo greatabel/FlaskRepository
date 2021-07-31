@@ -114,7 +114,8 @@ class PageResult:
 @app.route('/home', methods=['GET', 'POST'])
 def home(pagenum=1):
     blogs = Blog.query.all()
-
+    user = User.query.filter_by(id = session["userid"]).first_or_404()
+    print('in home', user, '*'*20)
     if request.method == "POST":
         search_list = []
         keyword = request.form['keyword']
@@ -137,13 +138,13 @@ def home(pagenum=1):
         return rt(
             'home.html',
             listing=PageResult(search_list, pagenum, 100),
-            
+            user=user
         )
 
     return rt(
         'home.html',
         listing=PageResult(blogs, pagenum),
-
+        user=user
         
     )
 
@@ -208,7 +209,8 @@ def query_note(id):
     '''
     if request.method == 'GET':
         # 到数据库查询课程详情
-        blog = User.query.filter_by(id = id).first_or_404()
+        blog = Blog.query.filter_by(id = id).first_or_404()
+        print(id, blog, 'in query_blog','@'*20)
         # 渲染课程详情页面
         return rt('query_blog.html',blog = blog)
     else:
@@ -233,9 +235,9 @@ def query_profile():
     查询课程详情、删除课程
     '''
     id = session["userid"]
-    print('id=', id)
+
     if request.method == 'GET':
-        print('here-> '*5)
+
         # 到数据库查询课程详情
         user = User.query.filter_by(id = id).first_or_404()
         print(user.username, user.password, '#'*5)
