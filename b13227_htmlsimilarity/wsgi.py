@@ -14,7 +14,7 @@ from flask import Flask, Response
 from flask import jsonify
 
 from movie import create_app
-from movie.domain.model import Director, Review, Movie
+# from movie.domain.model import Director, Review, Movie
 
 from html_similarity import style_similarity, structural_similarity, similarity
 from common import set_js_file
@@ -42,6 +42,26 @@ class User(db.Model):
         self.username = username
         self.password = password
 
+
+class Blog(db.Model):
+    '''
+    博文数据模型
+    '''
+    # 主键ID
+    id = db.Column(db.Integer,primary_key = True)
+    # 博文标题
+    title = db.Column(db.String(100))
+    # 博文正文
+    text = db.Column(db.Text)
+    
+    def __init__(self,title,text):
+        '''
+        初始化方法
+        '''
+        self.title = title
+        self.text = text
+
+
 # 老师当前布置作业的表
 class TeacherWork(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -65,6 +85,138 @@ class StudentWork(db.Model):
         self.userid = title
         self.answer = detail
         self.score = answer
+
+### -------------start of home
+
+class PageResult:
+    
+    def __init__(self, data, page=1, number=2):
+        self.__dict__ = dict(zip(['data', 'page', 'number'], [data, page, number]))
+        self.full_listing = [self.data[i:i+number] for i in range(0, len(self.data), number)]
+        self.totalpage = len(data)// number
+        print('totalpage=', self.totalpage)
+
+
+    def __iter__(self):
+        if self.page - 1 < len(self.full_listing):
+            for i in self.full_listing[self.page-1]:
+                yield i
+        else:
+            return None
+
+    def __repr__(self): #used for page linking
+        return "/home/{}".format(self.page+1) #view the next page
+
+@app.route('/home/<int:pagenum>', methods=['GET'])
+@app.route('/home', methods=['GET', 'POST'])
+def home(pagenum=1):
+    blogs = Blog.query.all()
+
+    if request.method == "POST":
+        search_list = []
+        keyword = request.form['keyword']
+        print('keyword=', keyword, '-'*10)
+        if keyword is not None:
+            for movie in notice_list:
+                if movie.director.director_full_name == keyword:
+                    search_list.append(movie)
+
+                for actor in movie.actors:
+                    if actor.actor_full_name == keyword:
+                        search_list.append(movie)
+                        break
+
+                for gene in movie.genres:
+                    if gene.genre_name == keyword:
+                        search_list.append(movie)
+                        break
+        print('search_list=' ,search_list, '#'*5)
+        return rt(
+            'home.html',
+            listing=PageResult(search_list, pagenum, 100),
+            
+        )
+
+    return rt(
+        'home.html',
+        listing=PageResult(blogs, pagenum),
+
+        
+    )
+
+@app.route('/blogs/create',methods = ['GET', 'POST'])
+def create_blog():
+    '''
+    创建博客文章
+    '''
+    if request.method == 'GET':
+        # 如果是GET请求，则渲染创建页面
+        return rt('create_blog.html')
+    else:
+        # 从表单请求体中获取请求数据
+        title = request.form['title']
+        text = request.form['text']
+        
+        # 创建一个博文对象
+        blog = Blog(title = title,text = text)
+        db.session.add(blog)
+        # 必须提交才能生效
+        db.session.commit()
+        # 创建完成之后重定向到博文列表页面
+        return redirect('/blogs')
+
+@app.route('/blogs',methods = ['GET'])
+def list_notes():
+    '''
+    查询博文列表
+    '''
+    blogs = Blog.query.all()
+    # 渲染博文列表页面目标文件，传入blogs参数
+    return rt('list_blogs.html',blogs = blogs)
+
+
+@app.route('/blogs/update/<id>',methods = ['GET', 'POST'])
+def update_note(id):
+    '''
+    更新博文
+    '''
+    if request.method == 'GET':
+        # 根据ID查询博文详情
+        blog = Blog.query.filter_by(id = id).first_or_404()
+        # 渲染修改笔记页面HTML模板
+        return rt('update_blog.html',blog = blog)
+    else:
+        # 获取请求的博文标题和正文
+        title = request.form['title']
+        text = request.form['text']
+        
+        # 更新博文
+        blog = Blog.query.filter_by(id = id).update({'title':title,'text':text})
+        # 提交才能生效
+        db.session.commit()
+        # 修改完成之后重定向到博文详情页面
+        return redirect('/blogs/{id}'.format(id = id))
+
+
+@app.route('/blogs/<id>',methods = ['GET','DELETE'])
+def query_note(id):
+    '''
+    查询博文详情、删除博文
+    '''
+    if request.method == 'GET':
+        # 到数据库查询博文详情
+        blog = Blog.query.filter_by(id = id).first_or_404()
+        # 渲染博文详情页面
+        return rt('query_blog.html',blog = blog)
+    else:
+        # 删除博文
+        blog = Blog.query.filter_by(id = id).delete()
+        # 提交才能生效
+        db.session.commit()
+        # 返回204正常响应，否则页面ajax会报错
+        return '',204
+
+### -------------end of home
 
 
 login_manager = flask_login.LoginManager(app)
