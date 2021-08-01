@@ -1,0 +1,13 @@
+click
+coverage
+Flask
+html-similarity
+itsdangerous
+pandas
+pytest
+python-dotenv
+pytest-cov
+flask-wtf
+Flask-Login
+flask_sqlalchemy
+requests
