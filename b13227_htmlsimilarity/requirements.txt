@@ -10,3 +10,4 @@ pytest-cov
 flask-wtf
 Flask-Login
 flask_sqlalchemy
+requests

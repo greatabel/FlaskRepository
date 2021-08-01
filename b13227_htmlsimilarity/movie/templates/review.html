@@ -135,8 +135,8 @@ div[class*="release_year"] {
 <script src="/static/student.js" ></script>
 <script type="text/javascript">
   var DATA = {
-  'not_pass':5, 'pass':4,'num_positive':3, 'num_neural':1,'num_nagtive':3 };
-  
+  'not_pass': '{{ my_notpass }}', 'pass': '{{mypass }}','num_positive':'{{ num_positive }}', 'num_neural':'{{ num_neural }}','num_nagtive':'{{ num_nagtive }}' };
+
     function SimpleWidget(spec) {
         var instance = {}; // <-- A
 

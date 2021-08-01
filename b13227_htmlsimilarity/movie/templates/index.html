@@ -34,6 +34,8 @@
 <input type="title" class="form-control" name="title" id="title" 
         aria-describedby="emailHelp" placeholder="Enter title">
 
+<input type="course_id" class="form-control" name="course_id" id="course_id" 
+        aria-describedby="emailHelp" >
     </div>
 
   </div>
@@ -105,7 +107,8 @@
 
         var url = new URL(window.location.href);
         var course_id = url.searchParams.get("course_id");
-
+        $('#course_id').val(course_id);
+        $("#course_id").hide();
 
         var uploader = WebUploader.create({
             swf: './static/webuploader/Uploader.swf',

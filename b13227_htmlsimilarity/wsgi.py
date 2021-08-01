@@ -86,10 +86,10 @@ class StudentWork(db.Model):
     score =  db.Column(db.DECIMAL(10,2))
     course_id = db.Column(db.Integer)
 
-    def __init__(self, title, detail, answer, course_id):
-        self.userid = title
-        self.answer = detail
-        self.score = answer
+    def __init__(self, userid, answer,score, course_id):
+        self.userid = userid
+        self.answer = answer
+        self.score = score
         self.course_id = course_id
 
 ### -------------start of home
@@ -116,10 +116,13 @@ class PageResult:
 @app.route('/home/<int:pagenum>', methods=['GET'])
 @app.route('/home', methods=['GET', 'POST'])
 def home(pagenum=1):
+    print('home '*10)
     blogs = Blog.query.all()
     user = None
     if "userid" in session:
-        user = User.query.filter_by(id = session["userid"]).first_or_404()
+        user = User.query.filter_by(id = session["userid"]).first()
+    else:
+        print('userid not in session')
     print('in home', user, 'blogs=', len(blogs),'*'*20)
     if request.method == "POST":
         search_list = []
@@ -298,7 +301,7 @@ def course_home(id):
     if request.method == 'GET':
         # 到数据库查询课程详情
         blog = Blog.query.filter_by(id = id).first_or_404()
-        teacherWork = TeacherWork.query.filter_by(course_id = id).first_or_404()
+        teacherWork = TeacherWork.query.filter_by(course_id = id).first()
         print(id, blog, 'in query_blog','@'*20)
         # 渲染课程详情页面
         return rt('course.html',blog = blog, teacherWork=teacherWork)
@@ -416,10 +419,38 @@ def review():
         html_2 = f.read()
     # print(html_1, '#'*20, html_2)
     myscore = similarity(html_1, html_2)
+    mypass = 0
+    my_notpass = 0
+
+    num_positive = 0
+    num_neural = 0
+    num_nagtive = 0
+    if 'userid' in session:
+        scores  = StudentWork.query.filter_by(userid=session['userid']).all()
+
+        for r in scores:
+            if r.score > 0.8:
+                mypass += 1
+            else:
+                my_notpass += 1
+
+            if r.score > 0.8:
+                num_positive += 1
+            if r.score <= 0.8 and r.score > 0.4:
+                num_neural += 1
+            if r.score <= 0.4:
+                num_nagtive += 1
+
+        print(mypass, my_notpass)
     return rt(
         "review.html",
       
-        myscore=round(myscore, 2)
+        myscore=round(myscore, 2),
+        mypass=mypass,
+        my_notpass=my_notpass,
+        num_positive=num_positive,
+        num_neural=num_neural,
+        num_nagtive=num_nagtive
     )
 
 
@@ -436,19 +467,22 @@ def assignwork():
 
 @app.route("/teacher_work", methods=["POST"])
 def teacher_work():
+
     title = request.form.get("title")
     detail = request.form.get("detail")
-
+    course_id = request.form.get("course_id")
+    # print(title,detail, 'course_id=', course_id, '#'*10, 'teacher_work')
     # salt = PH.get_salt()
     # hashed = PH.get_hash(pw1 + salt)
-    print("teacher_work ===>", title, detail)
-    w = TeacherWork.query.get(1)
-    print(w.id, w.answer)
-    w.title = title
-    w.detail = detail
-    db.session.commit()
-    session['title'] = title
-    session['detail'] = detail
+    # print("teacher_work ===>", title, detail)
+    w = TeacherWork.query.filter_by(course_id=course_id).first()
+    if w is not None:
+        print(w.id, w.answer)
+        w.title = title
+        w.detail = detail
+        db.session.commit()
+        session['title'] = title
+        session['detail'] = detail
 
     return redirect(url_for("assignwork"))
 
@@ -480,7 +514,7 @@ def upload_part():  # 接收前端上传的一个分片
 @app.route("/file/merge", methods=["GET"])
 def upload_success():  # 按序读出分片内容，并写入新文件
     course_id = request.args.get("course_id")  
-    print('course_id in upload= ', course_id)
+    print('course_id in upload= ', course_id, '*'*30)
     target_filename = request.args.get("filename")  # 获取上传文件的文件名
     task = request.args.get("task_id")  # 获取文件的唯一标识符
     chunk = 0  # 分片序号
@@ -500,8 +534,13 @@ def upload_success():  # 按序读出分片内容，并写入新文件
         print('admin upload assignwork=', target_filename)
         with open(r'upload/'+target_filename, "r") as f:
             html_1 = f.read()
-            w = TeacherWork.query.get(1)
+            # w = TeacherWork.query.get(1)
+            w = TeacherWork.query.filter_by(course_id=course_id).first()
             print('w=',w)
+        # self.title = title
+        # self.detail = detail
+        # self.answer = answer
+        # self.course_id = course_id
 
             if w is None:
                 w = TeacherWork(title='', detail='',answer=html_1, course_id=course_id)
@@ -515,9 +554,22 @@ def upload_success():  # 按序读出分片内容，并写入新文件
         with open(r'upload/'+target_filename, "r") as f:
             html_2 = f.read()
             # print(html_2, '*'*20, session['answer'])
-            myscore = similarity(html_2, session['answer'])
+            w1 = TeacherWork.query.filter_by(course_id=course_id).first()
+            correct_answer = w1.answer
+            myscore = similarity(html_2, correct_answer)
             print('#'*20, 'myscore=', myscore)
             set_js_file(myscore)
+            s = StudentWork.query.filter_by(course_id=course_id).first()
+            print(w1,'s=',s)
+
+            if s is None:
+                w = StudentWork(userid=session['userid'],answer=html_2, score=myscore,course_id=course_id)
+                db.session.add(w)
+                db.session.commit()
+            else:
+                s.answer = html_2
+                s.score = myscore
+                db.session.commit()
     return rt("index.html")
 
 
