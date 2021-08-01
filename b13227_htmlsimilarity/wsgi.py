@@ -405,21 +405,21 @@ def review():
         movie_id = request.form["movie_id"]
         rtext = request.form["rtext"]
         rating = request.form["rating"]
+    import glob
+    files = glob.glob("upload/*.html")
+    files.sort(key=os.path.getmtime)
+    # print(files, '#'*30,files[-2],files[-1], '@'*5)
 
-        movie = Movie(movie_name, 1990, int(movie_id))
-        review = Review(movie, rtext, int(rating))
-        reviews.append(review)
-
-    with open(r'upload/a.html', "r") as f:
+    with open(files[-2], "r") as f:
         html_1 = f.read()
-    with open(r'upload/b.html', "r") as f:
+    with open(files[-1], "r") as f:
         html_2 = f.read()
-    print(html_1, '#'*20, html_2)
+    # print(html_1, '#'*20, html_2)
     myscore = similarity(html_1, html_2)
     return rt(
         "review.html",
-        reviews=reviews,
-        myscore=myscore
+      
+        myscore=round(myscore, 2)
     )
 
 
