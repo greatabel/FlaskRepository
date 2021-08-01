@@ -1,13 +1,12 @@
-
 click
 coverage
 Flask
 html-similarity
 itsdangerous
 pandas
-pytest==6.0.1
+pytest
 python-dotenv
 pytest-cov
 flask-wtf
-Flask-Login==0.4.1
+Flask-Login
 flask_sqlalchemy

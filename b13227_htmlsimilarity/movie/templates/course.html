@@ -126,14 +126,14 @@ div[class*="release_year"] {
             <span style="font-weight:bold;">Technical Materail Title: </span>
             <span id="titleLbl" style="border: 1px solid gray; " >
               <span>
-     {{session['title']}}
+     {{teacherWork.title}}
   </span>
 
        <br/><br/>
         <span style="font-weight:bold;">Detail: </span>
         <br/>
         <div style="border: 1px solid gray; display: inline-block">
-      {{session['detail']}}   
+      {{teacherWork.detail}}   
         </div>
 
       </p>
@@ -148,7 +148,7 @@ div[class*="release_year"] {
       <div class="col-sm-4">
       <hr/>
       {% if session['isadmin'] and session['logged_in'] %}
-      <button type="button" class="btn btn-primary" onclick="relocate_home()">Assign Work</button>
+      <button type="button" class="btn btn-primary" onclick="relocate_assignwork()">Assign Work</button>
       {% else %}
       <button type="button" class="btn btn-primary" disabled> Assign Work</button>
       {% endif %}
@@ -196,12 +196,22 @@ div[class*="release_year"] {
 <!--     <script type="text/javascript" src="/static/d3/d3.js"></script>
 <script src="/static/student.js" ></script> -->
 <script type="text/javascript">
+var course_id = '{{ blog.id }}';
+console.log('course_id=', course_id);
+function relocate_assignwork()
+{
+     location.href = "http://localhost:5000/assignwork?course_id="+course_id;
+} 
 
+function relocate_student()
+{
+     location.href = "http://localhost:5000/student_index?course_id="+course_id;
+} 
 
-
- 
-
-
+function relocate_dashboard()
+{
+     location.href = "http://localhost:5000/review?course_id="+course_id;
+} 
 </script>
 
 <div id="chart"> 

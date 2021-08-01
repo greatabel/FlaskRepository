@@ -71,23 +71,26 @@ class TeacherWork(db.Model):
     title = db.Column(db.String(80), unique=True)
     detail = db.Column(db.String(500))
     answer = db.Column(db.String(5000))
+    course_id = db.Column(db.Integer)
 
-    def __init__(self, title, detail, answer):
+    def __init__(self, title, detail, answer, course_id):
         self.title = title
         self.detail = detail
         self.answer = answer
-
+        self.course_id = course_id
 
 class StudentWork(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     userid = db.Column(db.Integer)
     answer = db.Column(db.String(5000))
     score =  db.Column(db.DECIMAL(10,2))
+    course_id = db.Column(db.Integer)
 
-    def __init__(self, title, detail, answer):
+    def __init__(self, title, detail, answer, course_id):
         self.userid = title
         self.answer = detail
         self.score = answer
+        self.course_id = course_id
 
 ### -------------start of home
 
@@ -114,8 +117,10 @@ class PageResult:
 @app.route('/home', methods=['GET', 'POST'])
 def home(pagenum=1):
     blogs = Blog.query.all()
-    user = User.query.filter_by(id = session["userid"]).first_or_404()
-    print('in home', user, '*'*20)
+    user = None
+    if "userid" in session:
+        user = User.query.filter_by(id = session["userid"]).first_or_404()
+    print('in home', user, 'blogs=', len(blogs),'*'*20)
     if request.method == "POST":
         search_list = []
         keyword = request.form['keyword']
@@ -137,7 +142,7 @@ def home(pagenum=1):
         print('search_list=' ,search_list, '#'*5)
         return rt(
             'home.html',
-            listing=PageResult(search_list, pagenum, 100),
+            listing=PageResult(search_list, pagenum, 2),
             user=user
         )
 
@@ -234,6 +239,7 @@ def query_profile():
     '''
     查询课程详情、删除课程
     '''
+
     id = session["userid"]
 
     if request.method == 'GET':
@@ -292,9 +298,10 @@ def course_home(id):
     if request.method == 'GET':
         # 到数据库查询课程详情
         blog = Blog.query.filter_by(id = id).first_or_404()
+        teacherWork = TeacherWork.query.filter_by(course_id = id).first_or_404()
         print(id, blog, 'in query_blog','@'*20)
         # 渲染课程详情页面
-        return rt('course.html',blog = blog)
+        return rt('course.html',blog = blog, teacherWork=teacherWork)
     else:
         return '',204
 
@@ -303,10 +310,10 @@ login_manager = flask_login.LoginManager(app)
 user_pass = {}
 
 
-@app.route("/call_bash", methods=["GET"])
-def call_bash():
-    i0bash_caller.open_client("")
-    return {}, 200
+# @app.route("/call_bash", methods=["GET"])
+# def call_bash():
+#     i0bash_caller.open_client("")
+#     return {}, 200
 
 
 @app.route("/statistics", methods=["GET"])
@@ -340,7 +347,7 @@ def login():
 
             if email in admin_list:
                 session["isadmin"] = True
-                session["userid"] = data.id
+            session["userid"] = data.id
 
             print("login sucess", "#" * 20, session["logged_in"])
 
@@ -351,13 +358,13 @@ def login():
             #     session['detail'] = w.detail
             #     session['answer'] = w.answer
 
-            return redirect(url_for("home_bp.home", pagenum=1))
+            return redirect(url_for("home", pagenum=1))
         else:
             return "Not Login"
     except Exception as e: 
         print(e)
         return "Not Login"
-    return redirect(url_for("home_bp.home", pagenum=1))
+    return redirect(url_for("home", pagenum=1))
 
 
 @app.route("/register", methods=["POST"])
@@ -366,11 +373,11 @@ def register():
     pw1 = request.form.get("password")
     pw2 = request.form.get("password2")
     if not pw1 == pw2:
-        return redirect(url_for("home_bp.home", pagenum=1))
+        return redirect(url_for("home", pagenum=1))
     # if DB.get_user(email):
     if email in user_pass:
         print("already existed user")
-        return redirect(url_for("home_bp.home", pagenum=1))
+        return redirect(url_for("home", pagenum=1))
     # salt = PH.get_salt()
     # hashed = PH.get_hash(pw1 + salt)
     print("register", email, pw1)
@@ -378,13 +385,13 @@ def register():
     db.session.add(new_user)
     db.session.commit()
 
-    return redirect(url_for("home_bp.home", pagenum=1))
+    return redirect(url_for("home", pagenum=1))
 
 
 @app.route("/logout")
 def logout():
     session["logged_in"] = False
-    return redirect(url_for("home_bp.home", pagenum=1))
+    return redirect(url_for("home", pagenum=1))
 
 
 reviews = []
@@ -472,6 +479,8 @@ def upload_part():  # 接收前端上传的一个分片
 
 @app.route("/file/merge", methods=["GET"])
 def upload_success():  # 按序读出分片内容，并写入新文件
+    course_id = request.args.get("course_id")  
+    print('course_id in upload= ', course_id)
     target_filename = request.args.get("filename")  # 获取上传文件的文件名
     task = request.args.get("task_id")  # 获取文件的唯一标识符
     chunk = 0  # 分片序号
@@ -495,7 +504,7 @@ def upload_success():  # 按序读出分片内容，并写入新文件
             print('w=',w)
 
             if w is None:
-                w = TeacherWork(title='', detail='',answer=html_1)
+                w = TeacherWork(title='', detail='',answer=html_1, course_id=course_id)
                 db.session.add(w)
                 db.session.commit()
             else:
