@@ -17,6 +17,7 @@ from flask import Flask, Response
 from flask import jsonify
 from flask_cors import CORS
 from movie import create_app
+
 # from movie.domain.model import Director, Review, Movie
 
 from html_similarity import style_similarity, structural_similarity, similarity
@@ -43,10 +44,11 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///campus_data.db"
 db = SQLAlchemy(app)
 
 # --- end   数据库 ---
-admin_list = ['admin@126.com']
+admin_list = ["admin@126.com"]
+
 
 class User(db.Model):
-    """ Create user table"""
+    """Create user table"""
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True)
@@ -61,20 +63,21 @@ class User(db.Model):
 
 
 class Blog(db.Model):
-    '''
+    """
     课程数据模型
-    '''
+    """
+
     # 主键ID
-    id = db.Column(db.Integer,primary_key = True)
+    id = db.Column(db.Integer, primary_key=True)
     # 课程标题
     title = db.Column(db.String(100))
     # 课程正文
     text = db.Column(db.Text)
-    
-    def __init__(self,title,text):
-        '''
+
+    def __init__(self, title, text):
+        """
         初始化方法
-        '''
+        """
         self.title = title
         self.text = text
 
@@ -93,56 +96,59 @@ class TeacherWork(db.Model):
         self.answer = answer
         self.course_id = course_id
 
+
 class StudentWork(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     userid = db.Column(db.Integer)
     answer = db.Column(db.String(5000))
-    score =  db.Column(db.DECIMAL(10,2))
+    score = db.Column(db.DECIMAL(10, 2))
     course_id = db.Column(db.Integer)
 
-    def __init__(self, userid, answer,score, course_id):
+    def __init__(self, userid, answer, score, course_id):
         self.userid = userid
         self.answer = answer
         self.score = score
         self.course_id = course_id
 
+
 ### -------------start of home
 
 
 class PageResult:
-    
     def __init__(self, data, page=1, number=2):
-        self.__dict__ = dict(zip(['data', 'page', 'number'], [data, page, number]))
-        self.full_listing = [self.data[i:i+number] for i in range(0, len(self.data), number)]
-        self.totalpage = len(data)// number
-        print('totalpage=', self.totalpage)
-
+        self.__dict__ = dict(zip(["data", "page", "number"], [data, page, number]))
+        self.full_listing = [
+            self.data[i : i + number] for i in range(0, len(self.data), number)
+        ]
+        self.totalpage = len(data) // number
+        print("totalpage=", self.totalpage)
 
     def __iter__(self):
         if self.page - 1 < len(self.full_listing):
-            for i in self.full_listing[self.page-1]:
+            for i in self.full_listing[self.page - 1]:
                 yield i
         else:
             return None
 
-    def __repr__(self): #used for page linking
-        return "/home/{}".format(self.page+1) #view the next page
+    def __repr__(self):  # used for page linking
+        return "/home/{}".format(self.page + 1)  # view the next page
 
-@app.route('/home/<int:pagenum>', methods=['GET'])
-@app.route('/home', methods=['GET', 'POST'])
+
+@app.route("/home/<int:pagenum>", methods=["GET"])
+@app.route("/home", methods=["GET", "POST"])
 def home(pagenum=1):
-    print('home '*10)
+    print("home " * 10)
     blogs = Blog.query.all()
     user = None
     if "userid" in session:
-        user = User.query.filter_by(id = session["userid"]).first()
+        user = User.query.filter_by(id=session["userid"]).first()
     else:
-        print('userid not in session')
-    print('in home', user, 'blogs=', len(blogs),'*'*20)
+        print("userid not in session")
+    print("in home", user, "blogs=", len(blogs), "*" * 20)
     if request.method == "POST":
         search_list = []
-        keyword = request.form['keyword']
-        print('keyword=', keyword, '-'*10)
+        keyword = request.form["keyword"]
+        print("keyword=", keyword, "-" * 10)
         if keyword is not None:
             for movie in notice_list:
                 if movie.director.director_full_name == keyword:
@@ -157,171 +163,166 @@ def home(pagenum=1):
                     if gene.genre_name == keyword:
                         search_list.append(movie)
                         break
-        print('search_list=' ,search_list, '#'*5)
-        return rt(
-            'home.html',
-            listing=PageResult(search_list, pagenum, 2),
-            user=user
-        )
+        print("search_list=", search_list, "#" * 5)
+        return rt("home.html", listing=PageResult(search_list, pagenum, 2), user=user)
 
-    return rt(
-        'home.html',
-        listing=PageResult(blogs, pagenum),
-        user=user
-        
-    )
+    return rt("home.html", listing=PageResult(blogs, pagenum), user=user)
 
-@app.route('/blogs/create',methods = ['GET', 'POST'])
+
+@app.route("/blogs/create", methods=["GET", "POST"])
 def create_blog():
-    '''
+    """
     创建课程文章
-    '''
-    if request.method == 'GET':
+    """
+    if request.method == "GET":
         # 如果是GET请求，则渲染创建页面
-        return rt('create_blog.html')
+        return rt("create_blog.html")
     else:
         # 从表单请求体中获取请求数据
-        title = request.form['title']
-        text = request.form['text']
-        
+        title = request.form["title"]
+        text = request.form["text"]
+
         # 创建一个课程对象
-        blog = Blog(title = title,text = text)
+        blog = Blog(title=title, text=text)
         db.session.add(blog)
         # 必须提交才能生效
         db.session.commit()
         # 创建完成之后重定向到课程列表页面
-        return redirect('/blogs')
+        return redirect("/blogs")
 
-@app.route('/blogs',methods = ['GET'])
+
+@app.route("/blogs", methods=["GET"])
 def list_notes():
-    '''
+    """
     查询课程列表
-    '''
+    """
     blogs = Blog.query.all()
     # 渲染课程列表页面目标文件，传入blogs参数
-    return rt('list_blogs.html',blogs = blogs)
+    return rt("list_blogs.html", blogs=blogs)
 
 
-@app.route('/blogs/update/<id>',methods = ['GET', 'POST'])
+@app.route("/blogs/update/<id>", methods=["GET", "POST"])
 def update_note(id):
-    '''
+    """
     更新课程
-    '''
-    if request.method == 'GET':
+    """
+    if request.method == "GET":
         # 根据ID查询课程详情
-        blog = Blog.query.filter_by(id = id).first_or_404()
+        blog = Blog.query.filter_by(id=id).first_or_404()
         # 渲染修改笔记页面HTML模板
-        return rt('update_blog.html',blog = blog)
+        return rt("update_blog.html", blog=blog)
     else:
         # 获取请求的课程标题和正文
-        title = request.form['title']
-        text = request.form['text']
-        
+        title = request.form["title"]
+        text = request.form["text"]
+
         # 更新课程
-        blog = Blog.query.filter_by(id = id).update({'title':title,'text':text})
+        blog = Blog.query.filter_by(id=id).update({"title": title, "text": text})
         # 提交才能生效
         db.session.commit()
         # 修改完成之后重定向到课程详情页面
-        return redirect('/blogs/{id}'.format(id = id))
+        return redirect("/blogs/{id}".format(id=id))
 
 
-@app.route('/blogs/<id>',methods = ['GET','DELETE'])
+@app.route("/blogs/<id>", methods=["GET", "DELETE"])
 def query_note(id):
-    '''
+    """
     查询课程详情、删除课程
-    '''
-    if request.method == 'GET':
+    """
+    if request.method == "GET":
         # 到数据库查询课程详情
-        blog = Blog.query.filter_by(id = id).first_or_404()
-        print(id, blog, 'in query_blog','@'*20)
+        blog = Blog.query.filter_by(id=id).first_or_404()
+        print(id, blog, "in query_blog", "@" * 20)
         # 渲染课程详情页面
-        return rt('query_blog.html',blog = blog)
+        return rt("query_blog.html", blog=blog)
     else:
         # 删除课程
-        blog = Blog.query.filter_by(id = id).delete()
+        blog = Blog.query.filter_by(id=id).delete()
         # 提交才能生效
         db.session.commit()
         # 返回204正常响应，否则页面ajax会报错
-        return '',204
+        return "", 204
+
 
 ### -------------end of home
 
 
-
-
-
 ### -------------start of profile
 
-@app.route('/profile',methods = ['GET','DELETE'])
+
+@app.route("/profile", methods=["GET", "DELETE"])
 def query_profile():
-    '''
+    """
     查询课程详情、删除课程
-    '''
+    """
 
     id = session["userid"]
 
-    if request.method == 'GET':
+    if request.method == "GET":
 
         # 到数据库查询课程详情
-        user = User.query.filter_by(id = id).first_or_404()
-        print(user.username, user.password, '#'*5)
+        user = User.query.filter_by(id=id).first_or_404()
+        print(user.username, user.password, "#" * 5)
         # 渲染课程详情页面
-        return rt('profile.html',user = user)
+        return rt("profile.html", user=user)
     else:
         # 删除课程
-        user = User.query.filter_by(id = id).delete()
+        user = User.query.filter_by(id=id).delete()
         # 提交才能生效
         db.session.commit()
         # 返回204正常响应，否则页面ajax会报错
-        return '',204
+        return "", 204
 
 
-
-@app.route('/profiles/update/<id>',methods = ['GET', 'POST'])
+@app.route("/profiles/update/<id>", methods=["GET", "POST"])
 def update_profile(id):
-    '''
+    """
     更新课程
-    '''
-    if request.method == 'GET':
+    """
+    if request.method == "GET":
         # 根据ID查询课程详情
-        user = User.query.filter_by(id = id).first_or_404()
+        user = User.query.filter_by(id=id).first_or_404()
         # 渲染修改笔记页面HTML模板
-        return rt('update_profile.html',user = user)
+        return rt("update_profile.html", user=user)
     else:
         # 获取请求的课程标题和正文
-        password = request.form['password']
-        nickname = request.form['nickname']
-        school_class = request.form['school_class']
-        school_grade = request.form['school_grade']
-        
+        password = request.form["password"]
+        nickname = request.form["nickname"]
+        school_class = request.form["school_class"]
+        school_grade = request.form["school_grade"]
+
         # 更新课程
-        user = User.query.filter_by(id = id).update({'password':password,'nickname':nickname,
-            'school_class':school_class, 'school_grade':school_grade})
+        user = User.query.filter_by(id=id).update(
+            {
+                "password": password,
+                "nickname": nickname,
+                "school_class": school_class,
+                "school_grade": school_grade,
+            }
+        )
         # 提交才能生效
         db.session.commit()
         # 修改完成之后重定向到课程详情页面
-        return redirect('/profile')
-
-
+        return redirect("/profile")
 
 
 ### -------------end of profile
 
 
-@app.route('/course/<id>',methods = ['GET'])
+@app.route("/course/<id>", methods=["GET"])
 def course_home(id):
-    '''
+    """
     查询课程详情、删除课程
-    '''
-    if request.method == 'GET':
+    """
+    if request.method == "GET":
         # 到数据库查询课程详情
-        blog = Blog.query.filter_by(id = id).first_or_404()
-        teacherWork = TeacherWork.query.filter_by(course_id = id).first()
-        print(id, blog, 'in query_blog','@'*20)
+        blog = Blog.query.filter_by(id=id).first_or_404()
+        teacherWork = TeacherWork.query.filter_by(course_id=id).first()
+        print(id, blog, "in query_blog", "@" * 20)
         # 渲染课程详情页面
-        return rt('course.html',blog = blog, teacherWork=teacherWork)
+        return rt("course.html", blog=blog, teacherWork=teacherWork)
     else:
-        return '',204
+        return "", 204
 
 
 login_manager = flask_login.LoginManager(app)
@@ -346,7 +347,7 @@ def relationship():
 
 @login_manager.user_loader
 def load_user(email):
-    print('$'*30)
+    print("$" * 30)
     return user_pass.get(email, None)
 
 
@@ -360,8 +361,6 @@ def login():
         if data is not None:
             print("test login")
             session["logged_in"] = True
-
-
 
             if email in admin_list:
                 session["isadmin"] = True
@@ -379,7 +378,7 @@ def login():
             return redirect(url_for("home", pagenum=1))
         else:
             return "Not Login"
-    except Exception as e: 
+    except Exception as e:
         print(e)
         return "Not Login"
     return redirect(url_for("home", pagenum=1))
@@ -424,6 +423,7 @@ def review():
         rtext = request.form["rtext"]
         rating = request.form["rating"]
     import glob
+
     files = glob.glob("upload/*.html")
     files.sort(key=os.path.getmtime)
     # print(files, '#'*30,files[-2],files[-1], '@'*5)
@@ -440,8 +440,8 @@ def review():
     num_positive = 0
     num_neural = 0
     num_nagtive = 0
-    if 'userid' in session:
-        scores  = StudentWork.query.filter_by(userid=session['userid']).all()
+    if "userid" in session:
+        scores = StudentWork.query.filter_by(userid=session["userid"]).all()
 
         for r in scores:
             if r.score > 0.8:
@@ -459,13 +459,12 @@ def review():
         print(mypass, my_notpass)
     return rt(
         "review.html",
-      
         myscore=round(myscore, 2),
         mypass=mypass,
         my_notpass=my_notpass,
         num_positive=num_positive,
         num_neural=num_neural,
-        num_nagtive=num_nagtive
+        num_nagtive=num_nagtive,
     )
 
 
@@ -483,10 +482,9 @@ def assignwork():
 @app.route("/teacher_work", methods=["POST"])
 def teacher_work():
 
-
     detail = request.form.get("detail")
-    print('#'*20, detail, '@'*20)
-    with open("movie/static/data.js", 'w') as file:
+    print("#" * 20, detail, "@" * 20)
+    with open("movie/static/data.js", "w") as file:
         file.write(detail)
 
     return redirect(url_for("assignwork"))
@@ -500,6 +498,8 @@ def student_work():
 @app.route("/student_index", methods=["GET"])
 def student_index():
     return rt("student_index.html")
+
+
 # @app.route("/", methods=["GET"])
 # def index():
 #     return rt("index.html")
@@ -510,7 +510,7 @@ def upload_part():  # 接收前端上传的一个分片
     task = request.form.get("task_id")  # 获取文件的唯一标识符
     chunk = request.form.get("chunk", 0)  # 获取该分片在所有分片中的序号
     filename = "%s%s" % (task, chunk)  # 构造该分片的唯一标识符
-    print('filename=', filename)
+    print("filename=", filename)
     upload_file = request.files["file"]
     upload_file.save("./upload/%s" % filename)  # 保存分片到本地
     return rt("index.html")
@@ -518,7 +518,6 @@ def upload_part():  # 接收前端上传的一个分片
 
 @app.route("/file/merge", methods=["GET"])
 def upload_success():  # 按序读出分片内容，并写入新文件
-  
 
     target_filename = request.args.get("filename")  # 获取上传文件的文件名
     task = request.args.get("task_id")  # 获取文件的唯一标识符
@@ -552,7 +551,7 @@ def file_list():
 def file_download(filename):
     def send_chunk():  # 流式读取
         store_path = "./upload/%s" % filename
-        print('store_path=', store_path)
+        print("store_path=", store_path)
         with open(store_path, "rb") as target_file:
             while True:
                 chunk = target_file.read(20 * 1024 * 1024)
@@ -564,14 +563,16 @@ def file_download(filename):
 
 
 # Custom static data
-@app.route('/cdn/<path:filename>')
+@app.route("/cdn/<path:filename>")
 def custom_static(filename):
-    print('#'*20, filename, ' in custom_static',app.root_path)
-    return send_from_directory('/Users/abel/Downloads/AbelProject/FlaskRepository/b13596campus_navigation/upload/', filename)
+    print("#" * 20, filename, " in custom_static", app.root_path)
+    return send_from_directory(
+        "/Users/abel/Downloads/AbelProject/FlaskRepository/b13596campus_navigation/upload/",
+        filename,
+    )
+
+
 # --------------------------
-
-
-
 
 
 if __name__ == "__main__":
