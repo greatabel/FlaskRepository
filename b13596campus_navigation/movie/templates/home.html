@@ -73,7 +73,7 @@ div[class*="release_year"] {
 
         {% if session['isadmin'] %}
       <li class="nav-item active">
-        <a class="nav-link" href="/blogs"> CourseManagement <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="/assignwork"> place_graph <span class="sr-only">(current)</span></a>
       </li>
       {% endif %}
 
@@ -81,7 +81,7 @@ div[class*="release_year"] {
         <form class="form-inline my-2 my-lg-0 navbar-right" action="/home" method="POST">
 
                 <div class="form-group">
-                  <input type="text" name="keyword" placeholder="算法类型/数据集" class="form-control" autofocus>&nbsp;
+                  <input type="text" name="keyword" placeholder="places/path" class="form-control" autofocus>&nbsp;
                 </div>
           
               <input type="submit" value="Search" class="btn btn-success">
@@ -93,9 +93,9 @@ div[class*="release_year"] {
       <li class="nav-item active">
          <a class="nav-link" href="/logout">logout <span class="sr-only">(current)</span></a>
         </li>
-       <li class="nav-item active">
+ <!--       <li class="nav-item active">
          <a class="nav-link" href="/review">review <span class="sr-only">(current)</span></a>
-      </li>
+      </li> -->
     {% endif %}
      
 
@@ -139,7 +139,7 @@ div[class*="release_year"] {
     <div class="container">
 
        <div class="row">
-       <div class="col-md-8"> <div class="release_year">Courses</div>
+       <div class="col-md-8"> <div class="release_year">Places</div>
        </div>
        </div>
 
@@ -149,7 +149,7 @@ div[class*="release_year"] {
       <div class="row">
         <div class="col-md-12">
         <span>{{ r.title }}</span> &nbsp;
-        <a href="/course/{{r.id}}">{{ r.text }}</a>
+        <a href="/blogs/{{r.id}}">{{ r.text }}</a>
 
             <div name="title"> </div>  
             <!-- <div class="release_year">{{r.release_year}}</div>  -->
@@ -162,7 +162,7 @@ div[class*="release_year"] {
 <br/><br/>
 
       <div class="row">
-       <div class="col-md-8"> <div class="release_year">campus自动评分系统流程和原理：</div>
+       <div class="col-md-8"> <div class="release_year">campus navigation theory：</div>
        </div>
        </div>
       <!-- Example row of columns -->

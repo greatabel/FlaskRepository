@@ -1,4 +1,4 @@
-# HXDataScience
+# b13596campus_navigation
 
 1.
 安装python3.6 以上版本
@@ -47,8 +47,11 @@ python3 wsgi.py
 设置了默认管理员账号：admin@126.com 密码：admin
 只有管理员账号才可以分配作业
 
-其余学生账号请正常注册，登录
+默认place的封面图片 的folder在：upload/ 下面
+默认path的folder在：upload/paths
 
 数据库使用sqlchemy使用sqlite3，位于：
-b13227_htmlsimilarity/movie/hs_data.db 
+b13227_htmlsimilarity/movie/campus_data.db
 
+9.
+wsgi.py的570行 需改成本地自己的绝对路径

@@ -32,10 +32,9 @@
 
     <div class="col-sm-8">
 <input type="title" class="form-control" name="title" id="title" 
-        aria-describedby="emailHelp" placeholder="Enter title">
+        aria-describedby="emailHelp" placeholder="Enter title" value="latest connections"> 
 
-<input type="course_id" class="form-control" name="course_id" id="course_id" 
-        aria-describedby="emailHelp" >
+
     </div>
 
   </div>
@@ -60,7 +59,7 @@
     </div>
     <div class="col-sm-8">
            <div >
-        <div id="picker" style="float:left;">upload-correct-answer</div>
+        <div id="picker" style="float:left;">upload-image-cover</div>
         <div id="progress" class="progress" style="width:500px;float:left;margin:10px 0 0 20px;">
             <div class="progress-bar progress-bar-striped active" role="progressbar" style="width:0%;"></div>
         </div>
@@ -139,7 +138,7 @@
         });
 
         uploader.on('uploadSuccess', function(file) { // 整个文件的所有分片都上传成功后，调用该方法
-            var data = { 'task_id': task_id, 'filename': file.source['name'] , 'course_id': course_id};
+            var data = { 'task_id': task_id, 'filename': file.source['name'] };
             $.get('{{ url_for("upload_success") }}', data);
             $('.progress-bar').css('width', '100%');
             $('.progress-bar').text('100%');

@@ -1,5 +1,5 @@
-<h3><a href="/blogs">< 回到课程列表</a></h3>
-<h1>课程详情</h1>
+<h3><a href="/blogs">< place list</a></h3>
+<h1>place detail</h1>
 <div>
     <a href="/blogs/update/{{blog.id}}" id="{{blog.id}}">更新</a>
     <h3>{{blog.title}}</h3>
@@ -30,7 +30,7 @@
             // 删除失败响应函数
             error:function(resp){
                 // 删除失败，给出错误提示
-                alert("删除课程失败！详情：" + resp.message);
+                alert("delete place fail！详情：" + resp.message);
             }
         })
     });

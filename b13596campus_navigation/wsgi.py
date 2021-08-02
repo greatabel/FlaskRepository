@@ -6,6 +6,7 @@ import json
 import flask_login
 from flask_cors import CORS
 
+from flask import send_from_directory
 from flask import request
 from flask import url_for
 from flask import redirect, session
@@ -106,6 +107,7 @@ class StudentWork(db.Model):
         self.course_id = course_id
 
 ### -------------start of home
+
 
 class PageResult:
     
@@ -481,21 +483,11 @@ def assignwork():
 @app.route("/teacher_work", methods=["POST"])
 def teacher_work():
 
-    title = request.form.get("title")
+
     detail = request.form.get("detail")
-    course_id = request.form.get("course_id")
-    # print(title,detail, 'course_id=', course_id, '#'*10, 'teacher_work')
-    # salt = PH.get_salt()
-    # hashed = PH.get_hash(pw1 + salt)
-    # print("teacher_work ===>", title, detail)
-    w = TeacherWork.query.filter_by(course_id=course_id).first()
-    if w is not None:
-        print(w.id, w.answer)
-        w.title = title
-        w.detail = detail
-        db.session.commit()
-        session['title'] = title
-        session['detail'] = detail
+    print('#'*20, detail, '@'*20)
+    with open("movie/static/data.js", 'w') as file:
+        file.write(detail)
 
     return redirect(url_for("assignwork"))
 
@@ -518,7 +510,7 @@ def upload_part():  # 接收前端上传的一个分片
     task = request.form.get("task_id")  # 获取文件的唯一标识符
     chunk = request.form.get("chunk", 0)  # 获取该分片在所有分片中的序号
     filename = "%s%s" % (task, chunk)  # 构造该分片的唯一标识符
-
+    print('filename=', filename)
     upload_file = request.files["file"]
     upload_file.save("./upload/%s" % filename)  # 保存分片到本地
     return rt("index.html")
@@ -526,8 +518,8 @@ def upload_part():  # 接收前端上传的一个分片
 
 @app.route("/file/merge", methods=["GET"])
 def upload_success():  # 按序读出分片内容，并写入新文件
-    course_id = request.args.get("course_id")  
-    print('course_id in upload= ', course_id, '*'*30)
+  
+
     target_filename = request.args.get("filename")  # 获取上传文件的文件名
     task = request.args.get("task_id")  # 获取文件的唯一标识符
     chunk = 0  # 分片序号
@@ -543,46 +535,7 @@ def upload_success():  # 按序读出分片内容，并写入新文件
 
             chunk += 1
             os.remove(filename)  # 删除该分片，节约空间
-    if 'isadmin' in session and session['isadmin']:
-        print('admin upload assignwork=', target_filename)
-        with open(r'upload/'+target_filename, "r") as f:
-            html_1 = f.read()
-            # w = TeacherWork.query.get(1)
-            w = TeacherWork.query.filter_by(course_id=course_id).first()
-            print('w=',w)
-        # self.title = title
-        # self.detail = detail
-        # self.answer = answer
-        # self.course_id = course_id
 
-            if w is None:
-                w = TeacherWork(title='', detail='',answer=html_1, course_id=course_id)
-                db.session.add(w)
-                db.session.commit()
-            else:
-                w.answer = html_1
-                db.session.commit()
-    else:
-        # student submit
-        with open(r'upload/'+target_filename, "r") as f:
-            html_2 = f.read()
-            # print(html_2, '*'*20, session['answer'])
-            w1 = TeacherWork.query.filter_by(course_id=course_id).first()
-            correct_answer = w1.answer
-            myscore = similarity(html_2, correct_answer)
-            print('#'*20, 'myscore=', myscore)
-            set_js_file(myscore)
-            s = StudentWork.query.filter_by(course_id=course_id).first()
-            print(w1,'s=',s)
-
-            if s is None:
-                w = StudentWork(userid=session['userid'],answer=html_2, score=myscore,course_id=course_id)
-                db.session.add(w)
-                db.session.commit()
-            else:
-                s.answer = html_2
-                s.score = myscore
-                db.session.commit()
     return rt("index.html")
 
 
@@ -599,6 +552,7 @@ def file_list():
 def file_download(filename):
     def send_chunk():  # 流式读取
         store_path = "./upload/%s" % filename
+        print('store_path=', store_path)
         with open(store_path, "rb") as target_file:
             while True:
                 chunk = target_file.read(20 * 1024 * 1024)
@@ -609,6 +563,11 @@ def file_download(filename):
     return Response(send_chunk(), content_type="application/octet-stream")
 
 
+# Custom static data
+@app.route('/cdn/<path:filename>')
+def custom_static(filename):
+    print('#'*20, filename, ' in custom_static',app.root_path)
+    return send_from_directory('/Users/abel/Downloads/AbelProject/FlaskRepository/b13596campus_navigation/upload/', filename)
 # --------------------------
 
 
