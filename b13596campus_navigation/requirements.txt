@@ -8,6 +8,7 @@ pytest
 python-dotenv
 pytest-cov
 flask-wtf
+flask-cors
 Flask-Login
 flask_sqlalchemy
 requests

@@ -4,6 +4,8 @@ import sys
 import json
 
 import flask_login
+from flask_cors import CORS
+
 from flask import request
 from flask import url_for
 from flask import redirect, session
@@ -12,7 +14,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 from flask import Flask, Response
 from flask import jsonify
-
+from flask_cors import CORS
 from movie import create_app
 # from movie.domain.model import Director, Review, Movie
 
@@ -22,7 +24,7 @@ from common import set_js_file
 app = create_app()
 app.secret_key = "ABCabc123"
 app.debug = True
-
+CORS(app)
 # --- total requirement ----
 # 1. 应该实现一个flask 的web服务和 redis等非关系型数据库通讯，
 # 存储原来的地点之间键值对关系，存储以前的临接点相邻边的存储结构
