@@ -2,6 +2,7 @@
 import os
 import sys
 import json
+import math 
 
 import flask_login
 from flask import request
@@ -99,7 +100,7 @@ class PageResult:
     def __init__(self, data, page=1, number=2):
         self.__dict__ = dict(zip(['data', 'page', 'number'], [data, page, number]))
         self.full_listing = [self.data[i:i+number] for i in range(0, len(self.data), number)]
-        self.totalpage = len(data)// number
+        self.totalpage = math.ceil(len(data)/ number)
         print('totalpage=', self.totalpage)
 
 
