@@ -2,7 +2,7 @@ import abc
 from typing import List
 from datetime import date
 
-from movie.domain.model import Movie
+
 
 repo_instance = None
 
@@ -16,6 +16,6 @@ class RepositoryException(Exception):
 class AbstractRepository(abc.ABC):
 
     @abc.abstractmethod
-    def load_movies(self) -> List[Movie]:
+    def load_movies(self) -> List[None]:
         """ Returns the Tags stored in the repository. """
         raise NotImplementedError

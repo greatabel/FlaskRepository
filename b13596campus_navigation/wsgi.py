@@ -20,8 +20,8 @@ from movie import create_app
 
 # from movie.domain.model import Director, Review, Movie
 
-from html_similarity import style_similarity, structural_similarity, similarity
-from common import set_js_file
+# from html_similarity import style_similarity, structural_similarity, similarity
+# from common import set_js_file
 
 app = create_app()
 app.secret_key = "ABCabc123"
@@ -414,58 +414,7 @@ def logout():
 reviews = []
 
 
-@app.route("/review", methods=["GET", "POST"])
-def review():
-    if request.method == "POST":
 
-        movie_name = request.form["movie_name"]
-        movie_id = request.form["movie_id"]
-        rtext = request.form["rtext"]
-        rating = request.form["rating"]
-    import glob
-
-    files = glob.glob("upload/*.html")
-    files.sort(key=os.path.getmtime)
-    # print(files, '#'*30,files[-2],files[-1], '@'*5)
-
-    with open(files[-2], "r") as f:
-        html_1 = f.read()
-    with open(files[-1], "r") as f:
-        html_2 = f.read()
-    # print(html_1, '#'*20, html_2)
-    myscore = similarity(html_1, html_2)
-    mypass = 0
-    my_notpass = 0
-
-    num_positive = 0
-    num_neural = 0
-    num_nagtive = 0
-    if "userid" in session:
-        scores = StudentWork.query.filter_by(userid=session["userid"]).all()
-
-        for r in scores:
-            if r.score > 0.8:
-                mypass += 1
-            else:
-                my_notpass += 1
-
-            if r.score > 0.8:
-                num_positive += 1
-            if r.score <= 0.8 and r.score > 0.4:
-                num_neural += 1
-            if r.score <= 0.4:
-                num_nagtive += 1
-
-        print(mypass, my_notpass)
-    return rt(
-        "review.html",
-        myscore=round(myscore, 2),
-        mypass=mypass,
-        my_notpass=my_notpass,
-        num_positive=num_positive,
-        num_neural=num_neural,
-        num_nagtive=num_nagtive,
-    )
 
 
 @login_manager.unauthorized_handler
