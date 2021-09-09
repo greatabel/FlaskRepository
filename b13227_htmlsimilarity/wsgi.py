@@ -13,6 +13,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 from flask import Flask, Response
 from flask import jsonify
+from sqlalchemy import desc
 
 from movie import create_app
 # from movie.domain.model import Director, Review, Movie
@@ -118,7 +119,7 @@ class PageResult:
 @app.route('/home', methods=['GET', 'POST'])
 def home(pagenum=1):
     print('home '*10)
-    blogs = Blog.query.all()
+    blogs = Blog.query.order_by(desc(Blog.id)).all()
     user = None
     if "userid" in session:
         user = User.query.filter_by(id = session["userid"]).first()
@@ -442,7 +443,7 @@ def review():
             if r.score <= 0.4:
                 num_nagtive += 1
 
-        print(mypass, my_notpass)
+        print(mypass, my_notpass, '#@#@'*5)
     return rt(
         "review.html",
       

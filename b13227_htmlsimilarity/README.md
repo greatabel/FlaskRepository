@@ -48,6 +48,8 @@ python3 wsgi.py
 只有管理员账号才可以分配作业
 
 其余学生账号请正常注册，登录
+greatabel1@126.com abel
+
 
 数据库使用sqlchemy使用sqlite3，位于：
 b13227_htmlsimilarity/movie/hs_data.db 
