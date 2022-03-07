@@ -1,8 +1,0 @@
-Flask
-Flask_MySQLdb
-Flask_SQLAlchemy
-WTForms
-Flask_WTF
-Flask_Script
-
-
