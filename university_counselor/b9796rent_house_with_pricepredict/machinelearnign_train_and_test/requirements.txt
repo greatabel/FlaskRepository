@@ -1,4 +1,4 @@
-ipython==7.16.1
+ipython==8.10.0
 pandas
 numpy
 seaborn
