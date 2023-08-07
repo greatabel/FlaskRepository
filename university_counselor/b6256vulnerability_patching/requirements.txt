@@ -1,4 +1,0 @@
-jinja2
-WebOb
-Paste
-webapp2
